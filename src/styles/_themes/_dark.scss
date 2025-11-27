@@ -1,0 +1,34 @@
+[data-theme="dark"] {
+  /* --- Тексты --- */
+  $color-text: #e4e8df; /* основной текст */
+  $color-caption: #b2b9a9; /* второстепенный текст */
+  $color-disabled-text: #69735d; /* неактивный текст */
+
+  /* --- Элементы управления --- */
+  $color-toggle: #9ca197; /* переключатели, тумблеры */
+  $color-disabled: #3a3f35; /* фон/бордеры для отключённых элементов */
+  $color-input: #2c2f27; /* поля ввода */
+  $color-card: #2c2f27; /* карточки */
+
+  /* --- Акценты и интерактив --- */
+  $color-text-link: #abd27a; /* ссылки */
+  $color-button-pressed: #abd27a; /* нажатая кнопка */
+  $color-accent: #a5d67a; /* общий акцентный цвет */
+  $color-button-hover: #4d5a3d; /* hover кнопок */
+
+  /* --- Фон --- */
+  $color-background: #111512; /* фон страницы / общего контейнера */
+
+  /* --- Ошибки / предупреждения --- */
+  $color-alarm: #e0796e; /* предупреждение */
+  $color-error: #ff5c3b; /* ошибка */
+
+  /* --- Теги / категории --- */
+  $color-tag-business-career: #3c3250;
+  $color-tag-creativity-art: #4c3249;
+  $color-tag-foreign-languages: #47452f;
+  $color-tag-education-development: #304954;
+  $color-tag-home-comfort: #4a3d37;
+  $color-tag-health-lifestyle: #304833;
+  $color-tag-plus: #323a4d;
+}
