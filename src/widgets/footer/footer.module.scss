@@ -1,8 +1,7 @@
 @use "../../styles/mixins" as *;
 
 .footerContainer {
-  min-width: 1440px;
-  min-height: 232px;
+  width: 100%;
 
   @include grid(
     $columns: repeat(2, auto),
