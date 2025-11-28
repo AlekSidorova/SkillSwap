@@ -1,5 +1,6 @@
 import styles from "./styles/app.module.scss";
 import { Link, Outlet } from "react-router-dom";
+import { Footer } from "../widgets/footer/footer.tsx";
 
 type AppProps = {
   title?: string;
@@ -22,9 +23,12 @@ export default function App({ title = "SkillSwap" }: AppProps) {
 
       <main className={styles.main}></main>
       <Outlet />
-      <footer className={styles.footer}>
-        <span>© {new Date().getFullYear()} SkillSwap</span>
-      </footer>
+      <Footer />
     </div>
   );
 }
+
+/*
+<footer className={styles.footer}>
+    <span>© {new Date().getFullYear()} SkillSwap</span>
+</footer>*/
