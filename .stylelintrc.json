@@ -24,6 +24,9 @@
     "property-no-vendor-prefix": null,
     "font-family-no-duplicate-names": null,
     "declaration-property-value-keyword-no-deprecated": null,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "scss/at-extend-no-missing-placeholder": null,
+    "scss/load-partial-extension": null
   }
 }
