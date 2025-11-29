@@ -1,6 +1,7 @@
 import styles from "./styles/app.module.scss";
 import { Link, Outlet } from "react-router-dom";
 import { Footer } from "../widgets/footer/footer.tsx";
+import { SelectorUI } from "@/shared/ui/selector/selector.tsx";
 
 type AppProps = {
   title?: string;
@@ -34,6 +35,14 @@ export default function App({ title = "SkillSwap" }: AppProps) {
         </nav>
       </header>
       <main className={styles.main}>
+        <SelectorUI
+          selectionTitle="Выберите категорию"
+          selectionOptions={[
+            "Бизнес и карьера",
+            "Творчество и искусство",
+            "Иностранные языки",
+          ]}
+        />
         <Outlet />
       </main>
       <Footer />
