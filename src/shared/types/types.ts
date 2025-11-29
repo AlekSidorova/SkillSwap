@@ -8,8 +8,6 @@ export type TUser = {
   gender: Gender; // пол пользователя
   dateOfRegistration: Date; // дата регистрации пользователя на платформе
   lastLoginDatetime: Date; // дата и время последнего входа пользователя
-  skillsCanTeach: number[]; // массив ID навыков, которыми пользователь может делиться
-  skillsWantToLearn: number[]; // массив ID навыков, которые пользователь хочет изучить
   images?: string[]; // опциональный массив URL-адресов дополнительных изображений пользователя
 };
 
