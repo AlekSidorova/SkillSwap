@@ -1,25 +1,25 @@
 import type { InputProps } from "./input.types";
-import style from "./styles/input.module.scss";
+import styles from "./input.module.scss";
 
 export const Input = (props: InputProps) => {
   const { type, children, isOpenList = false, ...restProps } = props;
 
   if (type === "radio" || type === "checkbox") {
     const inputClass =
-      type === "radio" ? style.inputRadio : style.inputCheckbox;
+      type === "radio" ? styles.inputRadio : styles.inputCheckbox;
 
     const labelClass =
-      type === "radio" ? style.labelRadio : style.labelCheckbox;
+      type === "radio" ? styles.labelRadio : styles.labelCheckbox;
 
     const inputCustom =
       type === "radio"
-        ? style.inputRadioCustom
-        : `${style.inputCheckboxCustom} ${isOpenList ? style.isList : style.nonList}`;
+        ? styles.inputRadioCustom
+        : `${styles.inputCheckboxCustom} ${isOpenList ? styles.isList : styles.nonList}`;
 
     return (
       <label className={labelClass}>
         <input
-          className={`${inputClass} ${style.visuallyHidden}`}
+          className={`${inputClass} ${styles.visuallyHidden}`}
           type={type}
           {...restProps}
         />
@@ -31,9 +31,9 @@ export const Input = (props: InputProps) => {
 
   if (type === "search") {
     return (
-      <label className={style.inputSearchWrapper}>
+      <label className={styles.inputSearchWrapper}>
         <input
-          className={style.inputSearch}
+          className={styles.inputSearch}
           type={type}
           placeholder={props.placeholder || "Искать навык"}
           {...restProps}
@@ -42,7 +42,7 @@ export const Input = (props: InputProps) => {
     );
   }
 
-  return <input className={style.input} type={type} {...restProps} />;
+  return <input className={styles.input} type={type} {...restProps} />;
 };
 
 // Универсальный компонент, который покрывает всё использование импутов в приложении. В качестве обязательного пропса необходимо передать тип инпута (type). Далее остальные пропсы передаются по мере необходимости.
