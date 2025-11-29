@@ -1,0 +1,52 @@
+.errorWrapper {
+  inline-size: 100%;
+  block-size: 100%;
+  @include flex(column, center, center);
+
+  .errorPage {
+    inline-size: 460px;
+    @include flex(column, center, center, 40px);
+
+    .errorImage {
+      inline-size: 460px;
+      block-size: 304px;
+      object-fit: cover;
+    }
+
+    .errorContainer {
+      inline-size: 100%;
+      @include flex(column, center, center, 32px);
+
+      .errorInfo {
+        @include flex(column, center, center, 4px);
+
+        .errorTitle,
+        .errorDescription {
+          inline-size: 100%;
+          text-align: center;
+        }
+
+        .errorTitle {
+          font: {
+            family: "Jost", sans-serif;
+            size: 24px;
+            weight: 500;
+          }
+        }
+
+        .errorDescription {
+          font: {
+            family: "Roboto", sans-serif;
+            size: 16px;
+            weight: 400;
+          }
+        }
+      }
+
+      .errorButtons {
+        inline-size: 100%;
+        @include flex(row, space-between, center, 24px);
+      }
+    }
+  }
+}
