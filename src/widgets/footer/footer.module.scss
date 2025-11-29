@@ -37,17 +37,6 @@
   .footerLogoContainer {
     @include flex(column, space-evenly, start, 112px);
 
-    .linkContainer {
-      @include flex(row, space-evenly, start, 12px);
-    }
-
-    .logoIcon {
-      width: 40px;
-      height: 40px;
-      opacity: 1;
-      border-radius: 60px;
-    }
-
     .subtitleLogo {
       font-family: Roboto, sans-serif;
       font-style: normal;
