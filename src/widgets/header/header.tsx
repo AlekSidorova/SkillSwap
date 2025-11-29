@@ -1,35 +1,53 @@
 import styles from "./header.module.scss";
 import { Link } from "react-router-dom";
 import { Logo } from "../../shared/ui/logo/logo.tsx";
+import { Button } from "../../shared/ui/button";
+import clsx from "clsx";
 
 export const Header = () => {
   return (
     <header className={styles.header}>
-      <h1 className={styles.headerTitle}>
+      <nav className={styles.navigation} aria-label="main navigation">
         <Link to="/" className={styles.navLink}>
           <Logo />
         </Link>
-      </h1>
-      <nav className={styles.nav} aria-label="main navigation">
-        <Link to="/" className={styles.navLink}>
-          О проекте
-        </Link>
-        <Link to="/profile" className={styles.navLink}>
-          Все навыки
-        </Link>
-        <Link to="/favorites" className={styles.navLink}>
-          Текстовый инпут для поиска навыка
-        </Link>
-        <Link to="/create-offer" className={styles.navLink}>
-          Кнопка переключения темы
-        </Link>
-        <Link to="/login" className={styles.navLink}>
-          Войти
-        </Link>
-        <Link to="/login" className={styles.navLink}>
-          Зарегистрироваться
-        </Link>
+
+        <ul className={styles.navigationLinkContainer}>
+          <li>
+            <Link to="/" className={styles.navLink}>
+              О проекте
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/profile" className={clsx(styles.navigationDropDownLink)}>
+              Все навыки
+            </Link>
+          </li>
+        </ul>
       </nav>
+
+      <div className={styles.search}>
+        <Link to="/favorites" className={styles.navLink}>
+          <input
+            type="text"
+            placeholder={"Искать навык"}
+            className={styles.input}
+          />
+        </Link>
+      </div>
+
+      <div className={styles.themeToggle}>Кнопка переключения темы</div>
+
+      <div className={styles.auth}>
+        <Link to="/login" className={styles.navLink}>
+          <Button children={"Войти"} variant="secondary"></Button>
+        </Link>
+
+        <Link to="/login" className={styles.navLink}>
+          <Button children={"Зарегистрироваться"}></Button>
+        </Link>
+      </div>
     </header>
   );
 };
