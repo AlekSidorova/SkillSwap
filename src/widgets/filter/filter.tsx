@@ -39,7 +39,7 @@ export const Filter = () => {
     setShowSubcategorys((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId],
+        : [...prev, categoryId]
     );
   };
   const toggleShowAllSkills = () => setShowAllSkills(!showAllSkills);
@@ -73,7 +73,7 @@ export const Filter = () => {
       ...prevFilters,
       skills: prevFilters.skills.includes(subcategoryId)
         ? prevFilters.skills.filter(
-            (subcategory) => subcategory !== subcategoryId,
+            (subcategory) => subcategory !== subcategoryId
           )
         : [...prevFilters.skills, subcategoryId],
     }));
@@ -117,25 +117,28 @@ export const Filter = () => {
           </button>
         )}
       </h2>
-      <div className={styles.filterContainer}>
-        <div className={styles.filterRadio}>
-          {purpose.map((item) => (
-            <Input
-              type="radio"
-              name="purpose"
-              children={item}
-              key={item}
-              value={item}
-              checked={filters.purpose === item}
-              onChange={handlePurposeChange}
-            />
-          ))}
-        </div>
-        <div className={styles.filterSkills}>
+      <ul className={styles.filterContainer}>
+        <li className={styles.filterRadio}>
+          <ul className={styles.filterPurpose}>
+            {purpose.map((item) => (
+              <li className={styles.filterPurposeItems} key={item}>
+                <Input
+                  type="radio"
+                  name="purpose"
+                  children={item}
+                  value={item}
+                  checked={filters.purpose === item}
+                  onChange={handlePurposeChange}
+                />
+              </li>
+            ))}
+          </ul>
+        </li>
+        <li className={styles.filterSkills}>
           <h3 className={styles.filterOtherTitle}>Навыки</h3>
-          <div className={styles.filterCheckbox}>
+          <ul className={styles.filterCheckbox}>
             {displayedSkills.map((category) => (
-              <div className={styles.filterCheckboxContainer} key={category.id}>
+              <li className={styles.filterCheckboxContainer} key={category.id}>
                 <div className={styles.filterCheckboxHeader}>
                   <Input
                     type="checkbox"
@@ -156,81 +159,89 @@ export const Filter = () => {
                   </button>
                 </div>
                 {showSubcategorys.includes(category.id) && (
-                  <div className={styles.filterCheckboxList}>
+                  <ul className={styles.filterCheckboxList}>
                     {getSubcategoriesForCategory(category.id).map((sub) => (
-                      <Input
-                        type="checkbox"
-                        children={sub.name}
-                        key={sub.id}
-                        value={String(sub.id)}
-                        checked={filters.skills.includes(sub.id)}
-                        onChange={handleSubcategoryChange}
-                        isOpenList
-                      />
+                      <li className={styles.filterCheckboxItems} key={sub.id}>
+                        <Input
+                          type="checkbox"
+                          children={sub.name}
+                          value={String(sub.id)}
+                          checked={filters.skills.includes(sub.id)}
+                          onChange={handleSubcategoryChange}
+                          isOpenList
+                        />
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
-              </div>
+              </li>
             ))}
             {categorys.length > 5 && (
-              <button
-                className={styles.showAllButton}
-                onClick={toggleShowAllSkills}
-              >
-                {showAllSkills ? "Скрыть" : "Все категории"}
-                <img
-                  src={showAllSkills ? chevronUp : chevronDown}
-                  alt={`иконка стрелочки ${showAllSkills ? "Вверх" : "Вниз"}`}
-                />
-              </button>
+              <li>
+                {" "}
+                <button
+                  className={styles.showAllButton}
+                  onClick={toggleShowAllSkills}
+                >
+                  {showAllSkills ? "Скрыть" : "Все категории"}
+                  <img
+                    src={showAllSkills ? chevronUp : chevronDown}
+                    alt={`иконка стрелочки ${showAllSkills ? "Вверх" : "Вниз"}`}
+                  />
+                </button>
+              </li>
             )}
-          </div>
-        </div>
-        <div className={styles.filterGender}>
+          </ul>
+        </li>
+        <li className={styles.filterGender}>
           <h3 className={styles.filterOtherTitle}>Пол автора</h3>
-          <div className={styles.filterRadio}>
+          <ul className={styles.filterRadio}>
             {gender.map((item) => (
-              <Input
-                type="radio"
-                name="gender"
-                children={item}
-                key={item}
-                value={item}
-                checked={filters.gender === item}
-                onChange={handleGenderChange}
-              />
+              <li className={styles.filterGenderItems} key={item}>
+                <Input
+                  type="radio"
+                  name="gender"
+                  children={item}
+                  value={item}
+                  checked={filters.gender === item}
+                  onChange={handleGenderChange}
+                />
+              </li>
             ))}
-          </div>
-        </div>
-        <div className={styles.filterCitys}>
+          </ul>
+        </li>
+        <li className={styles.filterCitys}>
           <h3 className={styles.filterOtherTitle}>Город</h3>
-          <div className={styles.filterCheckbox}>
+          <ul className={styles.filterCheckbox}>
             {displayedCities.map((city) => (
-              <Input
-                type="checkbox"
-                children={city.name}
-                isOpenList
-                key={city.id}
-                value={String(city.id)}
-                checked={filters.citys.includes(city.id)}
-                onChange={handleCitysChange}
-              />
+              <li className={styles.filterCitysItems} key={city.id}>
+                <Input
+                  type="checkbox"
+                  children={city.name}
+                  isOpenList
+                  value={String(city.id)}
+                  checked={filters.citys.includes(city.id)}
+                  onChange={handleCitysChange}
+                />
+              </li>
             ))}
             {citys.length > 5 && (
-              <button
-                className={styles.showAllButton}
-                onClick={toggleShowAllCities}
-              >
-                {showAllCities ? "Скрыть" : "Все города"}
-                <img
-                  src={showAllCities ? chevronUp : chevronDown}
-                  alt={`иконка стрелочки ${showAllCities ? "Вверх" : "Вниз"}`}
-                />
-              </button>
+              <li>
+                <button
+                  className={styles.showAllButton}
+                  onClick={toggleShowAllCities}
+                >
+                  {showAllCities ? "Скрыть" : "Все города"}
+                  <img
+                    src={showAllCities ? chevronUp : chevronDown}
+                    alt={`иконка стрелочки ${showAllCities ? "Вверх" : "Вниз"}`}
+                  />
+                </button>
+              </li>
             )}
-          </div>
-        </div>
-      </div>
+          </ul>
+        </li>
+      </ul>
     </div>
   );
 };

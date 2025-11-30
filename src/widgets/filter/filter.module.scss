@@ -28,6 +28,7 @@
     inline-size: 100%;
     @include flex(column, center, flex-start, 32px);
 
+    .filterPurpose,
     .filterRadio,
     .filterCheckbox {
       inline-size: 100%;
@@ -46,7 +47,19 @@
           inline-size: 100%;
           @include flex(column, center, center, 4px);
           padding-left: 20px;
+
+          .filterCheckboxItems {
+            inline-size: 100%;
+            @include flex;
+          }
         }
+      }
+
+      .filterPurposeItems,
+      .filterGenderItems,
+      .filterCitysItems {
+        inline-size: 100%;
+        @include flex;
       }
     }
 
