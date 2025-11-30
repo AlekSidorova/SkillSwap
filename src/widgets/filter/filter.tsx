@@ -39,7 +39,7 @@ export const Filter = () => {
     setShowSubcategorys((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId],
+        : [...prev, categoryId]
     );
   };
   const toggleShowAllSkills = () => setShowAllSkills(!showAllSkills);
@@ -73,7 +73,7 @@ export const Filter = () => {
       ...prevFilters,
       skills: prevFilters.skills.includes(subcategoryId)
         ? prevFilters.skills.filter(
-            (subcategory) => subcategory !== subcategoryId,
+            (subcategory) => subcategory !== subcategoryId
           )
         : [...prevFilters.skills, subcategoryId],
     }));
@@ -108,15 +108,17 @@ export const Filter = () => {
 
   return (
     <div className={styles.filterColumn}>
-      <h2 className={styles.filterColumnTitle}>
-        Фильтры {selectedFilterCounts > 0 && `(${selectedFilterCounts})`}
+      <div className={styles.filterColumnTitle}>
+        <h2 className={styles.filterTitle}>
+          Фильтры {selectedFilterCounts > 0 && `(${selectedFilterCounts})`}
+        </h2>
         {selectedFilterCounts > 0 && (
           <button className={styles.clearButton} onClick={handleClearFilter}>
             Сбросить
             <ClearSVG className={styles.clearButtonSVG} />
           </button>
         )}
-      </h2>
+      </div>
       <ul className={styles.filterContainer}>
         <li className={styles.filterRadio}>
           <ul className={styles.filterPurpose}>

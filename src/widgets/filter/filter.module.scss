@@ -7,14 +7,18 @@
 
   &Title {
     inline-size: 100%;
-    font: {
-      family: "Jost", sans-serif;
-      weight: 600;
-      size: 24px;
-    }
     @include flex(row, space-between);
 
+    .filterTitle {
+      font: {
+        family: "Jost", sans-serif;
+        weight: 600;
+        size: 24px;
+      }
+    }
+
     .clearButton {
+      padding-top: 5px;
       @extend .showAllButton;
 
       &SVG {
@@ -34,27 +38,6 @@
       inline-size: 100%;
       @include flex(column, center, flex-start, 12px);
 
-      .filterCheckboxContainer {
-        inline-size: 100%;
-        @include flex(column, center, center, 12px);
-
-        .filterCheckboxHeader {
-          inline-size: 100%;
-          @include flex(row, space-between);
-        }
-
-        .filterCheckboxList {
-          inline-size: 100%;
-          @include flex(column, center, center, 4px);
-          padding-left: 20px;
-
-          .filterCheckboxItems {
-            inline-size: 100%;
-            @include flex;
-          }
-        }
-      }
-
       .filterPurposeItems,
       .filterGenderItems,
       .filterCitysItems {
@@ -68,6 +51,27 @@
     .filterCitys {
       inline-size: 100%;
       @include flex(column, center, flex-start, 20px);
+    }
+  }
+}
+
+.filterCheckboxContainer {
+  inline-size: 100%;
+  @include flex(column, center, center, 12px);
+
+  .filterCheckboxHeader {
+    inline-size: 100%;
+    @include flex(row, space-between);
+  }
+
+  .filterCheckboxList {
+    inline-size: 100%;
+    @include flex(column, center, center, 4px);
+    padding-left: 20px;
+
+    .filterCheckboxItems {
+      inline-size: 100%;
+      @include flex;
     }
   }
 }
