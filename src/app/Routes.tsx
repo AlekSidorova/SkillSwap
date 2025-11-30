@@ -1,18 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import App from "./App";
 import ProtectedRoute from "./ProtectedRoute";
-import { MainPage } from "@/pages/MainPage/MainPage";
+import { MainPage } from "@pages/mainPage/mainPage.tsx";
+
 //основные страницы приложения - заглушки
 //после создания pages отсюда надо будет удалять
-//
-// function Home() {
-//   return (
-//     <section>
-//       <h2>Главная</h2>
-//       <p>Здесь будут предложения для обмена навыками</p>
-//     </section>
-//   );
-// }
 
 function Login() {
   return (
