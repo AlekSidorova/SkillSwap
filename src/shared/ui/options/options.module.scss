@@ -1,0 +1,36 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 14px;
+  padding: 12px 20px 12px 12px;
+  cursor: default;
+}
+
+.listElement {
+  display: flex;
+  flex-direction: row;
+  column-gap: 32px;
+}
+
+.input {
+  appearance: none;
+}
+
+.input::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-image: url("../../../images/icons/checkbox-empty.svg");
+  background-repeat: no-repeat;
+}
+
+.input_checked::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-image: url("../../../images/icons/checkbox-done.svg");
+  background-repeat: no-repeat;
+}

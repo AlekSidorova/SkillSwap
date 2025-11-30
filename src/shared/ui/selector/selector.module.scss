@@ -1,0 +1,21 @@
+.wrapper {
+  width: 436px; // Наверное, в контейнере нужно будет inline-size
+  //   inline-size: 100%;
+  border: 1px solid $color-caption;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  padding: 12px 20px 11px;
+  color: $color-caption;
+}
+
+.container_open {
+  border-radius: 12px;
+  border-bottom: 1px solid $color-disabled;
+}
