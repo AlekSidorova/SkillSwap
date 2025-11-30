@@ -14,14 +14,20 @@ export const Header = () => {
 
         <ul className={styles.navigationLinkContainer}>
           <li>
-            <Link to="/" className={styles.navLink}>
+            <Link to="/" className={styles.navigationLink}>
               О проекте
             </Link>
           </li>
 
           {/* // TODO: Заменить navigationDropDownLink на компонент DropdownMenu, когда он будет готов */}
           <li>
-            <Link to="/profile" className={clsx(styles.navigationDropDownLink)}>
+            <Link
+              to="/profile"
+              className={clsx(
+                styles.navigationDropDownLink,
+                styles.navigationLink,
+              )}
+            >
               Все навыки
             </Link>
           </li>
@@ -38,7 +44,10 @@ export const Header = () => {
         </Link>
       </div>
 
-      <div className={styles.themeToggle}>Кнопка переключения темы</div>
+      {/* // TODO: Заменить div на компонент кнопки переключения светлой/темной темы */}
+      <button className={styles.themeToggle}>
+        <div className={styles.themeIcon}></div>
+      </button>
 
       <div className={styles.auth}>
         <Link to="/login" className={styles.navLink}>

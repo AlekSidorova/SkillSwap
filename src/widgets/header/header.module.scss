@@ -27,6 +27,11 @@
   column-gap: 24px;
 }
 
+.navigationDropDownLink {
+  position: relative;
+  padding-right: 24px;
+}
+
 .navigationDropDownLink::after {
   content: "";
   display: block;
@@ -36,7 +41,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
-  left: 0;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -53,4 +58,15 @@
 .auth {
   display: flex;
   column-gap: 32px;
+}
+
+.themeIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.themeToggle {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/src/images/icons/moon.svg");
 }
