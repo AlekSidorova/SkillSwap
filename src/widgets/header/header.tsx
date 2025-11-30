@@ -19,6 +19,7 @@ export const Header = () => {
             </Link>
           </li>
 
+          {/* // TODO: Заменить navigationDropDownLink на компонент DropdownMenu, когда он будет готов */}
           <li>
             <Link to="/profile" className={clsx(styles.navigationDropDownLink)}>
               Все навыки
