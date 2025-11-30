@@ -53,6 +53,15 @@
   inline-size: 100%;
   padding: 2px;
   @include flex(row, flex-start, center, 8px);
+  line-height: 20px;
+
+  .inputText {
+    font: {
+      family: "Roboto", sans-serif;
+      weight: 400;
+      size: 16px;
+    }
+  }
 
   .inputRadioCustom {
     inline-size: 20px;

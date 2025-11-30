@@ -1,0 +1,78 @@
+.filterColumn {
+  inline-size: 324px; // Ставлю как в макете. В дальнейшем, если что, поправим.
+  background-color: $color-input;
+  padding: 20px;
+  border-radius: $input-border-radius;
+  @include flex(column, center, flex-start, 40px);
+
+  &Title {
+    inline-size: 100%;
+    font: {
+      family: "Jost", sans-serif;
+      weight: 600;
+      size: 24px;
+    }
+    @include flex(row, space-between);
+
+    .clearButton {
+      @extend .showAllButton;
+
+      &SVG {
+        width: 24px;
+        aspect-ratio: 1;
+      }
+    }
+  }
+
+  .filterContainer {
+    inline-size: 100%;
+    @include flex(column, center, flex-start, 32px);
+
+    .filterRadio,
+    .filterCheckbox {
+      inline-size: 100%;
+      @include flex(column, center, flex-start, 12px);
+
+      .filterCheckboxContainer {
+        inline-size: 100%;
+        @include flex(column, center, center, 12px);
+
+        .filterCheckboxHeader {
+          inline-size: 100%;
+          @include flex(row, space-between);
+        }
+
+        .filterCheckboxList {
+          inline-size: 100%;
+          @include flex(column, center, center, 4px);
+          padding-left: 20px;
+        }
+      }
+    }
+
+    .filterSkills,
+    .filterGender,
+    .filterCitys {
+      inline-size: 100%;
+      @include flex(column, center, flex-start, 20px);
+    }
+  }
+}
+
+.filterOtherTitle {
+  font: {
+    family: "Jost", sans-serif;
+    weight: 600;
+    size: 20px;
+  }
+}
+
+.showAllButton {
+  font: {
+    family: "Roboto", sans-serif;
+    weight: 400;
+    size: 16px;
+  }
+  color: $color-text-link;
+  @include flex(row, center, center, 4px);
+}

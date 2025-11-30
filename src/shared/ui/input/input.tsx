@@ -24,7 +24,7 @@ export const Input = (props: InputProps) => {
           {...restProps}
         />
         <span className={inputCustom}> </span>
-        {children}
+        <span className={styles.inputText}>{children}</span>
       </label>
     );
   }
