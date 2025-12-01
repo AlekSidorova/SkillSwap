@@ -1,9 +1,9 @@
-import { Button } from "@shared/ui/button";
 import styles from "../../ui/SuccessMessage/successMessage.module.scss";
-import { SuccessIcon } from "@shared/ui/icons/SuccessIcon";
-import type { TSuccessMessageProps } from "@shared/ui/SuccessMessage/types";
 import clsx from "clsx";
-import { NotificationIcon } from "@shared/ui/icons/NotificationIcon";
+import type { TSuccessMessageProps } from "@shared/ui/SuccessMessage/types";
+import { SuccessIcon } from "@shared/ui/Icons/SuccessIcon";
+import { NotificationIcon } from "@shared/ui/Icons/NotificationIcon";
+import { Button } from "@shared/ui/Button";
 
 export const SuccessMessage = (props: TSuccessMessageProps) => {
   const { variant = "successMessage", className } = props;
@@ -12,7 +12,6 @@ export const SuccessMessage = (props: TSuccessMessageProps) => {
     <section className={clsx(styles.container, className)}>
       <div className={styles.containerIcon}>
         {variant === "successMessage" && <SuccessIcon />}
-
         {variant === "notificationMessage" && <NotificationIcon />}
       </div>
       <div className={clsx(styles.content, styles.scrollbar)}>

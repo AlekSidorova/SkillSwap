@@ -2,9 +2,9 @@ import { type FC, memo, useState } from "react";
 import type { TSelectorProps } from "./type";
 import styles from "./selector.module.scss";
 import clsx from "clsx";
-import { Arrow } from "../Arrow/Arrow";
-import type { TOption } from "../Options/type";
-import { Options } from "../Options/Options";
+import { Arrow } from "@shared/ui/Arrow/Arrow";
+import type { TOption } from "@shared/ui/Options/type";
+import { Options } from "@shared/ui/Options/Options";
 
 // Данный компонент отображает раскрывающийся список чекбоксов
 
@@ -50,8 +50,8 @@ export const Selector: FC<TSelectorProps> = memo(
           //         key={option}
           //         onClick={() => toggleOption(option)}
           //       >
-          //         <input
-          //           className={clsx(styles.input, {
+          //         <Input
+          //           className={clsx(styles.Input, {
           //             [styles.input_checked]: selectedOptions.includes(option),
           //           })}
           //           type="checkbox"

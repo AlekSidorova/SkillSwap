@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from "react";
-import { Button } from "../button";
+import { Button } from "@shared/ui/Button";
 import type { CardProps } from "./type";
 import styles from "./card.module.scss";
 

@@ -1,10 +1,10 @@
 import styles from "./offerPreview.module.scss";
 import stylesModal from "./offerPreviewModal.module.scss";
 import clsx from "clsx";
-import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton.tsx";
-import { ImagesCarousel } from "@widgets/ImagesCarousel/ImagesCarousel.tsx";
-import { Button } from "@shared/ui/button";
-import { EditIcon } from "@shared/ui/icons/editIcon";
+import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton";
+import { ImagesCarousel } from "@widgets/ImagesCarousel/ImagesCarousel";
+import { Button } from "@shared/ui/Button/Button";
+import { EditIcon } from "@shared/ui/Icons/EditIcon";
 import type { TOfferProps } from "@widgets/OfferPreview/types";
 
 /*эта карточка меняется в зависимости от variant*/
