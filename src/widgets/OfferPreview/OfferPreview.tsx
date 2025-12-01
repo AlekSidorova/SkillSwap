@@ -1,11 +1,11 @@
 import styles from "./offerPreview.module.scss";
 import stylesModal from "./offerPreviewModal.module.scss";
 import clsx from "clsx";
-import type { TOfferProps } from "./types.ts";
-import { DecoratedButton } from "@shared/ui/decoratedButton/decoratedButton.tsx";
-import { ImagesCarousel } from "@widgets/imagesCarousel/imagesCarousel.tsx";
+import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton.tsx";
+import { ImagesCarousel } from "@widgets/ImagesCarousel/ImagesCarousel.tsx";
 import { Button } from "@shared/ui/button";
-import { EditIcon } from "@shared/ui/icons/editIcon.tsx";
+import { EditIcon } from "@shared/ui/icons/editIcon";
+import type { TOfferProps } from "@widgets/OfferPreview/types";
 
 /*эта карточка меняется в зависимости от variant*/
 export const OfferPreview = (props: TOfferProps) => {

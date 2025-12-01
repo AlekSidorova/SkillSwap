@@ -1,8 +1,8 @@
 import styles from "./styles/app.module.scss";
 import { Outlet } from "react-router-dom";
-import { OfferPreview } from "@widgets/offerPreview/offerPreview.tsx";
-import { Header } from "@widgets/header/header.tsx";
-import { Footer } from "@widgets/footer/footer.tsx";
+import { OfferPreview } from "@widgets/OfferPreview/OfferPreview.tsx";
+import { Header } from "@widgets/header/header";
+import { Footer } from "@widgets/Footer/Footer.tsx";
 
 // type AppProps = {
 //   title?: string;
