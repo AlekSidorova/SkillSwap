@@ -15,7 +15,7 @@ export const SignupStepOne = () => {
       <div className={styles.logo}>
         <Logo />
         <div className={styles.backButtonContainer}>
-          <Button variant={"tertiary"} leftIcon={<ArrowLeftIcon />}>
+          <Button to="/" variant={"tertiary"} leftIcon={<ArrowLeftIcon />}>
             Назад
           </Button>
         </div>
@@ -25,11 +25,11 @@ export const SignupStepOne = () => {
       </div>
       <section className={styles.section}>
         <div className={styles.registerContainer}>
-          <Button variant="secondary" leftIcon={<GoogleIcon />}>
-            Продлжить с Google
+          <Button variant="signup" leftIcon={<GoogleIcon />}>
+            Продолжить с Google
           </Button>
-          <Button variant="secondary" leftIcon={<AppleIcon />}>
-            Продлжить с Apple
+          <Button variant="signup" leftIcon={<AppleIcon />}>
+            Продолжить с Apple
           </Button>
 
           <Separator />
