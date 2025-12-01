@@ -1,13 +1,13 @@
 import styles from "./signupStepOne.module.scss";
-import { Button } from "../../../../shared/ui/Button/index.ts";
-import { Separator } from "../../../../shared/ui/Separator/index.ts";
-import { Input } from "../../../../shared/ui/Input/index.ts";
-import { Logo } from "@shared/ui/logo/logo.tsx";
+import { Button } from "@shared/ui/Button/Button";
+import { Separator } from "@shared/ui/Separator/Separator";
+import { Input } from "@shared/ui/input/Input";
+import { Logo } from "@shared/ui/Logo/Logo";
 import lightBulb from "../../../../images/png/light-bulb.png";
-import { AppleIcon } from "../../../../shared/ui/icons/AppleIcon.tsx";
-import { GoogleIcon } from "../../../../shared/ui/icons/GoogleIcon.tsx";
-import { SignupSteps } from "../../../../shared/ui/SignupSteps/index.ts";
-import { ArrowLeftIcon } from "../../../../shared/ui/icons/ArrowLeftIcon.tsx";
+import { AppleIcon } from "@shared/ui/Icons/AppleIcon";
+import { SignupSteps } from "@shared/ui/SignupSteps";
+import { ArrowLeftIcon } from "@shared/ui/Icons/ArrowLeftIcon";
+import { GoogleIcon } from "@shared/ui/Icons/GoogleIcon";
 
 export const SignupStepOne = () => {
   return (

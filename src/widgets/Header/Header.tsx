@@ -1,7 +1,7 @@
 import styles from "./header.module.scss";
 import { Link } from "react-router-dom";
-import { Logo } from "@shared/ui/logo/logo.tsx";
-import { Button } from "@shared/ui/button/button";
+import { Logo } from "@shared/ui/Logo/Logo.tsx";
+import { Button } from "@shared/ui/Button/Button.tsx";
 import clsx from "clsx";
 import { Input } from "@shared/ui/input";
 import { DecoratedButton } from "@shared/ui/decoratedButton/decoratedButton.tsx";
