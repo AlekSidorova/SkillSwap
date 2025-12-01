@@ -1,9 +1,11 @@
 import styles from "./offerPreview.module.scss";
 import stylesModal from "./offerPreviewModal.module.scss";
 import clsx from "clsx";
-import { Button } from "../../shared/ui/Button/index.ts";
 import type { TOfferProps } from "./types.ts";
-import { ImagesCarousel } from "../ImagesCarousel/ImagesCarousel.tsx";
+import { DecoratedButton } from "@shared/ui/decoratedButton/decoratedButton.tsx";
+import { ImagesCarousel } from "@widgets/imagesCarousel/imagesCarousel.tsx";
+import { Button } from "@shared/ui/button";
+import { EditIcon } from "@shared/ui/icons/editIcon.tsx";
 
 /*эта карточка меняется в зависимости от variant*/
 export const OfferPreview = (props: TOfferProps) => {
@@ -65,7 +67,9 @@ export const OfferPreview = (props: TOfferProps) => {
             <div className={styles.btnClamp}>
               {variant === "modalOffer" && (
                 <div className={stylesModal.containerModalButton}>
-                  <Button variant={"secondary"}>{"Редактировать"}</Button>
+                  <Button variant={"secondary"} rightIcon={<EditIcon />}>
+                    {"Редактировать"}
+                  </Button>
                   <Button>{"Готово"}</Button>
                 </div>
               )}
@@ -79,10 +83,9 @@ export const OfferPreview = (props: TOfferProps) => {
           <div className={clsx(styles.cardsContainer)}>
             {variant === "userProfileOffer" && (
               <div className={styles.containerDecorButtons}>
-                <button className={styles.decorButton}></button>{" "}
-                {/*временная заглушка, пока нет декоративных кнопок*/}
-                <button className={styles.decorButton}></button>
-                <button className={styles.decorButton}></button>
+                <DecoratedButton variant={"heart"} />
+                <DecoratedButton variant={"share"} />
+                <DecoratedButton variant={"parameters"} />
               </div>
             )}
             <ImagesCarousel />

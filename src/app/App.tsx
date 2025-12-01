@@ -1,8 +1,8 @@
 import styles from "./styles/app.module.scss";
 import { Outlet } from "react-router-dom";
-import { Footer } from "../widgets/Footer/Footer.tsx";
-import { Header } from "../widgets/Header/Header.tsx";
-import { DecoratedButton } from "@/shared/ui/DecoratedButton/DecoratedButton.tsx";
+import { OfferPreview } from "@widgets/offerPreview/offerPreview.tsx";
+import { Header } from "@widgets/header/header.tsx";
+import { Footer } from "@widgets/footer/footer.tsx";
 
 // type AppProps = {
 //   title?: string;
@@ -16,7 +16,7 @@ export default function App() {
         <Outlet />
       </main>
       <Footer />
-      <DecoratedButton variant={"heart"} />
+      <OfferPreview variant={"modalOffer"} />
     </div>
   );
 }
