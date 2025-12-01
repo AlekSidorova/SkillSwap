@@ -1,8 +1,17 @@
 import type { InputProps } from "./input.types";
 import styles from "./input.module.scss";
+import { useState, type ChangeEvent } from "react";
+import showPasswordSVG from "@images/icons/eye.svg";
+import hidePasswordSVG from "@images/icons/eye-slash.svg";
 
 export const Input = (props: InputProps) => {
-  const { type, children, isOpenList = false, ...restProps } = props;
+  const {
+    type,
+    children,
+    isOpenList = false,
+    isShowPassword = false,
+    ...restProps
+  } = props;
 
   if (type === "radio" || type === "checkbox") {
     const inputClass =
@@ -42,6 +51,60 @@ export const Input = (props: InputProps) => {
     );
   }
 
+  if (type === "date") {
+    const handlePlaceHolderColor = (event: ChangeEvent<HTMLInputElement>) => {
+      event.target.value
+        ? event.target.classList.remove(styles.datePlaceholder)
+        : event.target.classList.add(styles.datePlaceholder);
+    };
+
+    return (
+      <input
+        className={`${styles.input} ${styles.datePlaceholder}`}
+        onChange={handlePlaceHolderColor}
+        type={type}
+        {...restProps}
+      />
+    );
+  }
+
+  if (type === "password") {
+    const [showPassword, setShowPassword] = useState(isShowPassword);
+    const [hasValue, setHasValue] = useState(false);
+
+    const handleShowPassword = () => setShowPassword(!showPassword);
+    const handleHasValue = (event: ChangeEvent<HTMLInputElement>) => {
+      setHasValue(Boolean(event.target.value));
+    };
+
+    return (
+      <div className={styles.inputPasswordWrapper}>
+        <input
+          className={styles.inputPassword}
+          type={showPassword ? "text" : "password"}
+          onChange={handleHasValue}
+          {...restProps}
+        />
+        {hasValue && (
+          <button
+            type="button"
+            className={styles.showPassword}
+            onClick={handleShowPassword}
+            aria-label={showPassword ? "Показать пароль" : "Скрыть пароль"}
+            aria-pressed={showPassword}
+          >
+            <img
+              className={styles.showPasswordImage}
+              src={showPassword ? hidePasswordSVG : showPasswordSVG}
+              alt={showPassword ? "Показать пароль" : "Скрыть пароль"}
+              aria-hidden="true"
+            />
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return <input className={styles.input} type={type} {...restProps} />;
 };
 
@@ -55,3 +118,4 @@ export const Input = (props: InputProps) => {
 // <Input type="radio" children="Хочу играть в батлу" name="Обязательно одинаковое имя!"/>
 // <Input type="text" placeholder="Введите ваше имя" />
 // <Input type="search" placeholder="Искать навык" />
+// Добавлен функционал для type="password". Если передать в пропс флаг isShowPassword, то форма будет сразу с открытым паролем, а если не передать, то с закрытым. Удобно будет использовать для разных задач (авторизация и регистрация).

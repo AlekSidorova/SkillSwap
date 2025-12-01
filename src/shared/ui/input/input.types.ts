@@ -22,4 +22,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   checked?: boolean;
   children?: ReactNode;
   isOpenList?: boolean;
+  isShowPassword?: boolean;
 }

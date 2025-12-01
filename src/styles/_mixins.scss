@@ -23,3 +23,11 @@
   align-items: $align; // не было Если не указан, по умолчанию - stretch
   gap: $row-gap $column-gap; // не было // не было
 }
+
+@mixin input-icon($icon, $size: 24px) {
+  background-image: url($icon);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: $size;
+  cursor: pointer;
+} // Lint требует kebab-case
