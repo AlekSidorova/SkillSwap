@@ -3,6 +3,7 @@ import styles from "./mainPage.module.scss";
 import { Footer } from "@widgets/Footer/Footer";
 import { Filter } from "@widgets/filter/Filter";
 import { Header } from "@widgets/Header/Header";
+import { UserCardsSection } from "@widgets/UserCardsSection/UserCardsSection";
 
 export const MainPage = () => {
   return (
@@ -15,7 +16,7 @@ export const MainPage = () => {
             <Filter />
           </aside>
           <section className={styles.galleryContainer}>
-            Секция для галереи карточек пользователей
+            <UserCardsSection />
           </section>
         </main>
 
