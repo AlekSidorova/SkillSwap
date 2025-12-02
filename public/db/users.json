@@ -2,6 +2,8 @@
   {
     "id": 1,
     "name": "Евгений",
+    "username": "evgeniy95",
+    "email": "evgeniy95@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=1",
     "cityId": 1,
     "dateOfBirth": "1995-05-23",
@@ -12,6 +14,8 @@
   {
     "id": 2,
     "name": "Анна",
+    "username": "anna98",
+    "email": "anna98@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=2",
     "cityId": 25,
     "dateOfBirth": "1998-03-14",
@@ -22,6 +26,8 @@
   {
     "id": 3,
     "name": "Сергей",
+    "username": "sergei90",
+    "email": "sergei90@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=3",
     "cityId": 30,
     "dateOfBirth": "1990-01-14",
@@ -32,6 +38,8 @@
   {
     "id": 4,
     "name": "Екатерина",
+    "username": "ekaterina95",
+    "email": "ekaterina95@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=4",
     "cityId": 18,
     "dateOfBirth": "1995-08-09",
@@ -42,6 +50,8 @@
   {
     "id": 5,
     "name": "Дмитрий",
+    "username": "dmitry88",
+    "email": "dmitry88@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=5",
     "cityId": 3,
     "dateOfBirth": "1988-12-17",
@@ -52,6 +62,8 @@
   {
     "id": 6,
     "name": "Ольга",
+    "username": "olga00",
+    "email": "olga00@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=6",
     "cityId": 21,
     "dateOfBirth": "2000-06-12",
@@ -62,6 +74,8 @@
   {
     "id": 7,
     "name": "Алексей",
+    "username": "alexey93",
+    "email": "alexey93@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=7",
     "cityId": 14,
     "dateOfBirth": "1993-09-02",
@@ -72,6 +86,8 @@
   {
     "id": 8,
     "name": "Наталья",
+    "username": "natalya97",
+    "email": "natalya97@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=8",
     "cityId": 5,
     "dateOfBirth": "1997-02-28",
@@ -82,6 +98,8 @@
   {
     "id": 9,
     "name": "Виктор",
+    "username": "victor91",
+    "email": "victor91@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=9",
     "cityId": 27,
     "dateOfBirth": "1991-04-18",
@@ -92,6 +110,8 @@
   {
     "id": 10,
     "name": "Людмила",
+    "username": "ludmila96",
+    "email": "ludmila96@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=10",
     "cityId": 9,
     "dateOfBirth": "1996-10-21",
@@ -102,6 +122,8 @@
   {
     "id": 11,
     "name": "Константин",
+    "username": "konstantin89",
+    "email": "konstantin89@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=11",
     "cityId": 2,
     "dateOfBirth": "1989-03-17",
@@ -112,6 +134,8 @@
   {
     "id": 12,
     "name": "Вероника",
+    "username": "veronika01",
+    "email": "veronika01@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=12",
     "cityId": 26,
     "dateOfBirth": "2001-05-30",
@@ -122,6 +146,8 @@
   {
     "id": 13,
     "name": "Андрей",
+    "username": "andrey94",
+    "email": "andrey94@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=13",
     "cityId": 14,
     "dateOfBirth": "1994-08-09",
@@ -132,6 +158,8 @@
   {
     "id": 14,
     "name": "Татьяна",
+    "username": "tatyana98",
+    "email": "tatyana98@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=14",
     "cityId": 19,
     "dateOfBirth": "1998-12-12",
@@ -142,6 +170,8 @@
   {
     "id": 15,
     "name": "Евгений",
+    "username": "evgeniy90",
+    "email": "evgeniy90@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=15",
     "cityId": 6,
     "dateOfBirth": "1990-09-04",
@@ -152,6 +182,8 @@
   {
     "id": 16,
     "name": "Алина",
+    "username": "alina95",
+    "email": "alina95@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=16",
     "cityId": 12,
     "dateOfBirth": "1995-07-18",
@@ -162,6 +194,8 @@
   {
     "id": 17,
     "name": "Владислав",
+    "username": "vladislav88",
+    "email": "vladislav88@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=17",
     "cityId": 29,
     "dateOfBirth": "1988-11-29",
@@ -172,6 +206,8 @@
   {
     "id": 18,
     "name": "Светлана",
+    "username": "svetlana00",
+    "email": "svetlana00@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=18",
     "cityId": 4,
     "dateOfBirth": "2000-02-14",
@@ -182,6 +218,8 @@
   {
     "id": 19,
     "name": "Максим",
+    "username": "maksim92",
+    "email": "maksim92@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=19",
     "cityId": 8,
     "dateOfBirth": "1992-05-27",
@@ -192,6 +230,8 @@
   {
     "id": 20,
     "name": "Оксана",
+    "username": "oksana97",
+    "email": "oksana97@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=20",
     "cityId": 17,
     "dateOfBirth": "1997-10-11",
@@ -202,6 +242,8 @@
   {
     "id": 21,
     "name": "Никита",
+    "username": "nikita97",
+    "email": "nikita97@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=21",
     "cityId": 25,
     "dateOfBirth": "1993-03-03",
@@ -212,6 +254,8 @@
   {
     "id": 22,
     "name": "Дарья",
+    "username": "daria02",
+    "email": "daria02@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=22",
     "cityId": 13,
     "dateOfBirth": "2002-06-05",
@@ -222,6 +266,8 @@
   {
     "id": 23,
     "name": "Игорь",
+    "username": "igor87",
+    "email": "igor87@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=23",
     "cityId": 22,
     "dateOfBirth": "1987-08-19",
@@ -232,6 +278,8 @@
   {
     "id": 24,
     "name": "Анастасия",
+    "username": "anastasia99",
+    "email": "anastasia99@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=24",
     "cityId": 20,
     "dateOfBirth": "1999-12-02",
@@ -242,6 +290,8 @@
   {
     "id": 25,
     "name": "Кирилл",
+    "username": "kirill91",
+    "email": "kirill91@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=25",
     "cityId": 3,
     "dateOfBirth": "1991-04-17",
@@ -252,6 +302,8 @@
   {
     "id": 26,
     "name": "Марина",
+    "username": "marina96",
+    "email": "marina96@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=26",
     "cityId": 11,
     "dateOfBirth": "1996-07-09",
@@ -262,6 +314,8 @@
   {
     "id": 27,
     "name": "Артём",
+    "username": "artem89",
+    "email": "artem89@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=27",
     "cityId": 28,
     "dateOfBirth": "1989-12-23",
@@ -272,6 +326,8 @@
   {
     "id": 28,
     "name": "Полина",
+    "username": "polina00",
+    "email": "polina00@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=28",
     "cityId": 16,
     "dateOfBirth": "2000-06-02",
@@ -282,6 +338,8 @@
   {
     "id": 29,
     "name": "Николай",
+    "username": "nikolay93",
+    "email": "nikolay93@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=29",
     "cityId": 7,
     "dateOfBirth": "1993-03-10",
@@ -292,6 +350,8 @@
   {
     "id": 30,
     "name": "Елена",
+    "username": "elena98",
+    "email": "elena98@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=30",
     "cityId": 13,
     "dateOfBirth": "1998-08-22",
@@ -302,6 +362,8 @@
   {
     "id": 31,
     "name": "Вячеслав",
+    "username": "vyacheslav87",
+    "email": "vyacheslav87@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=31",
     "cityId": 22,
     "dateOfBirth": "1987-05-06",
@@ -312,6 +374,8 @@
   {
     "id": 32,
     "name": "Дарина",
+    "username": "darina01",
+    "email": "darina01@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=32",
     "cityId": 5,
     "dateOfBirth": "2001-09-14",
@@ -322,6 +386,8 @@
   {
     "id": 33,
     "name": "Илья",
+    "username": "ilya94",
+    "email": "ilya94@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=33",
     "cityId": 19,
     "dateOfBirth": "1994-11-12",
@@ -332,6 +398,8 @@
   {
     "id": 34,
     "name": "София",
+    "username": "sophia99",
+    "email": "sophia99@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=34",
     "cityId": 21,
     "dateOfBirth": "1999-01-25",
@@ -342,6 +410,8 @@
   {
     "id": 35,
     "name": "Александр",
+    "username": "alexander92",
+    "email": "alexander92@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=35",
     "cityId": 10,
     "dateOfBirth": "1992-06-15",
@@ -352,6 +422,8 @@
   {
     "id": 36,
     "name": "Екатерина",
+    "username": "ekaterina97",
+    "email": "ekaterina97@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=36",
     "cityId": 7,
     "dateOfBirth": "1997-12-03",
@@ -362,6 +434,8 @@
   {
     "id": 37,
     "name": "Денис",
+    "username": "denis88",
+    "email": "denis88@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=37",
     "cityId": 13,
     "dateOfBirth": "1988-09-21",
@@ -372,6 +446,8 @@
   {
     "id": 38,
     "name": "Анна",
+    "username": "anna95",
+    "email": "anna95@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=38",
     "cityId": 18,
     "dateOfBirth": "1995-05-17",
@@ -382,6 +458,8 @@
   {
     "id": 39,
     "name": "Михаил",
+    "username": "michael90",
+    "email": "michael90@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=39",
     "cityId": 5,
     "dateOfBirth": "1990-11-05",
@@ -392,6 +470,8 @@
   {
     "id": 40,
     "name": "Виктория",
+    "username": "victoria98",
+    "email": "victoria98@example.com",
     "avatarUrl": "https://i.pravatar.cc/150?img=40",
     "cityId": 23,
     "dateOfBirth": "1998-02-28",

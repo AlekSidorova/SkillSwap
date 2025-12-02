@@ -2,6 +2,8 @@
 export type TUser = {
   id: number;
   name: string;
+  username: string;
+  email: string;
   avatarUrl: string;
   cityId: number;
   dateOfBirth: Date; // дата рождения пользователя
