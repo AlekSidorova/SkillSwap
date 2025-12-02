@@ -1,21 +1,33 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 import { Input } from "@shared/ui/Input";
 import styles from "./filter.module.scss";
 import { FILTER_CONFIG, type TFilterState } from "./filter.type";
 import { ClearSVG } from "./svg/ClearSvg";
 import chevronUp from "@images/icons/chevron-up.svg";
 import chevronDown from "@images/icons/chevron-down.svg";
-import categoriesData from "../../../public/db/categories.json";
-import subcategorysData from "../../../public/db/subcategories.json";
-import citiesData from "../../../public/db/cities.json";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import {
+  fetchReferenceData,
+  selectReferenceData,
+} from "@store/slices/referenceDataSlice";
+import { FilterSkeleton } from "@widgets/FilterSkeleton/FilterSkeleton";
 
-//На текущий момент, данные тащу прям из public/db
 export const Filter = () => {
+  const dispatch = useAppDispatch();
+  const { categories, subcategories, cities, isLoading } =
+    useAppSelector(selectReferenceData);
+
   const purpose = ["Всё", "Хочу научиться", "Хочу научить"];
-  const categorys = categoriesData;
-  const subcategorys = subcategorysData;
+  const categorys = categories;
+  const subcategorys = subcategories;
   const gender = ["Не имеет значения", "Мужчины", "Женщины"];
-  const citys = citiesData.cities;
+  const citys = cities;
+
+  useEffect(() => {
+    if (categories.length === 0 && !isLoading) {
+      dispatch(fetchReferenceData());
+    }
+  }, [dispatch, categories.length, isLoading]);
 
   const [filters, setFilters] = useState<TFilterState>({
     purpose: "",
@@ -105,6 +117,10 @@ export const Filter = () => {
       citys: [],
     });
   };
+
+  if (isLoading) {
+    return <FilterSkeleton />;
+  }
 
   return (
     <div className={styles.filterColumn}>

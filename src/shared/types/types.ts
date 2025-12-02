@@ -2,7 +2,10 @@
 export type TUser = {
   id: number;
   name: string;
+  username: string;
+  email: string;
   avatarUrl: string;
+  likes: number;
   cityId: number;
   dateOfBirth: Date; // дата рождения пользователя
   gender: Gender; // пол пользователя
@@ -48,9 +51,12 @@ export type TCity = {
 // Пол пользователя (для компактности хранения)
 export type Gender = "M" | "F";
 
-// Лайки
-export type TLike = {
-  id: number; //уникальный идентификатор лайка
-  userId: number; //ID пользователя, который поставил лайк
-  skillId: number; //ID навыка, который лайкнули
-};
+// Лайки (ПОКА НЕАКТУАЛЬНО)
+// export type TLike = {
+//   id: number; //уникальный идентификатор лайка
+//   userId: number; //ID пользователя, который поставил лайк
+//   skillId: number; //ID навыка, который лайкнули
+// };
+
+// Пользователь с количеством лайков
+export type UserWithLikes = TUser & { likesCount: number };
