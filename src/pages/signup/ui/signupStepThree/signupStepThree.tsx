@@ -141,8 +141,8 @@ export const SignupStepThree = () => {
     if (!files) return;
 
     Array.from(files).forEach((file) => {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Файл слишком большой. Максимальный размер - 5 МБ");
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Файл слишком большой. Максимальный размер - 2 МБ");
         return;
       }
 
@@ -187,8 +187,8 @@ export const SignupStepThree = () => {
       if (files.length > 0) {
         const file = files[0];
 
-        if (file.size > 5 * 1024 * 1024) {
-          alert("Файл слишком большой. Максимальный размер - 5 МБ");
+        if (file.size > 2 * 1024 * 1024) {
+          alert("Файл слишком большой. Максимальный размер - 2 МБ");
           return;
         }
 

@@ -12,7 +12,7 @@
   min-inline-size: 1020px;
   max-inline-size: 1024px;
   border-radius: 12px;
-  background-color: white;
+  background-color: vars.$color-background;
 }
 
 .contentContainer {
@@ -28,7 +28,7 @@
   max-inline-size: 1024px;
   padding-block: 40px;
   padding-inline: 60px;
-  background-color: white;
+  background-color: vars.$color-background;
 
   .leftColumn {
     @include flex(

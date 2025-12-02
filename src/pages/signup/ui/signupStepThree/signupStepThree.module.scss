@@ -350,7 +350,7 @@
     block-size: 20px;
     border-radius: 50%;
     background-color: rgba(vars.$color-error, 0.8);
-    color: white;
+    color: vars.$color-background;
     border: none;
     font-size: 14px;
     cursor: pointer;
@@ -468,7 +468,7 @@
     inset-block-start: 100%;
     inset-inline: 0;
     z-index: 1000;
-    background-color: white;
+    background-color: vars.$color-background;
     border: 1px solid vars.$color-border-input;
     border-radius: vars.$input-border-radius;
     margin-block-start: 4px;
@@ -519,7 +519,12 @@
 
 // Скелетон-загрузка для полей ввода
 .skeleton {
-  background: linear-gradient(90deg, #b2b9a9 25%, #e4e8df 50%, #b2b9a9 75%);
+  background: linear-gradient(
+    90deg,
+    vars.$color-toggle 25%,
+    vars.$color-disabled 50%,
+    vars.$color-toggle 75%
+  );
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
   border-radius: inherit;
