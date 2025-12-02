@@ -1,0 +1,32 @@
+.likelrapper {
+  @include flex(row, center, center, 4px);
+
+  .likeCount {
+    font: {
+      family: "Roboto", sans-serif;
+      weight: 500;
+      size: 16px;
+    }
+    color: $color-text;
+    line-height: 1.1;
+    transition: 0.1s;
+  }
+
+  .likeCountActive {
+    color: $color-accent;
+  }
+
+  .likeButton {
+    inline-size: 24px;
+    block-size: 24px;
+    background-image: url("@images/icons/like.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: 0.1s;
+  }
+
+  .likeActive {
+    background-image: url("@images/icons/like-painted-over.svg");
+  }
+}
