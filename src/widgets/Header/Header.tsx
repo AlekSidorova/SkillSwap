@@ -16,6 +16,8 @@ import { Input } from "@shared/ui/Input/Input";
 import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton";
 import { useAppSelector } from "@store/hooks";
 import { selectReferenceData } from "@store/slices/referenceDataSlice";
+import { DropDown } from "@/shared/ui/DropDown";
+import { DropDownListCategory } from "@/shared/ui/DropDownListCategory";
 
 export const Header = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -24,6 +26,7 @@ export const Header = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isCategoriesMenuOpen, setIsCategoriesMenuOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showCategory, setShowCategory] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchRef = useRef<HTMLDivElement>(null);
@@ -102,14 +105,34 @@ export const Header = () => {
           </li>
 
           {/* // TODO: Заменить navigationDropDownLink на компонент DropdownMenu, когда он будет готов */}
-          <li
-            className={clsx(
-              styles.navigationDropDownLink,
-              styles.navigationLink,
+          <li>
+            <Link
+              to="/"
+              className={clsx(
+                styles.navigationDropDownLink,
+                {
+                  [styles.navigationDropDownLinkOpen]: !showCategory,
+                  [styles.navigationDropDownLinkClose]: showCategory,
+                },
+                styles.navigationLink,
+              )}
+              data-trigger-dropdown="category"
+              onClick={() => setShowCategory(!showCategory)}
+            >
+              {/* Для работы компонента DropDown компоненту контроллеру нужно указать атрибут data-trigger-dropdown */}
+              Все навыки
+            </Link>
+            {showCategory && (
+              <DropDown
+                top="22px"
+                left="-330px"
+                onClose={() => {
+                  setShowCategory(false);
+                }}
+              >
+                <DropDownListCategory />
+              </DropDown>
             )}
-            onClick={() => setIsCategoriesMenuOpen(!isCategoriesMenuOpen)}
-          >
-            Все навыки
           </li>
         </ul>
       </nav>
