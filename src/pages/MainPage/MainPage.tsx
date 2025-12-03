@@ -3,10 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import styles from "./mainPage.module.scss";
 
 import { Footer } from "@widgets/Footer/Footer";
-import { Filter } from "@widgets/filter/Filter";
+import { Filter } from "@widgets/Filter/Filter";
 import { Header } from "@widgets/Header/Header";
 import { UserCardsSection } from "@widgets/UserCardsSection/UserCardsSection";
-import type { TFilterState } from "@widgets/filter/filter.type";
+import type { TFilterState } from "@widgets/Filter/filter.type";
 import { useAppSelector } from "@store/hooks";
 import { selectReferenceData } from "@store/slices/referenceDataSlice";
 

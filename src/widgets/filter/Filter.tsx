@@ -6,8 +6,8 @@ import {
 } from "react";
 import { Input } from "@shared/ui/Input";
 import styles from "./filter.module.scss";
-import { FILTER_CONFIG, type TFilterState } from "./filter.type";
-import { ClearSVG } from "./svg/ClearSvg";
+import { FILTER_CONFIG, type TFilterState } from "@widgets/Filter/filter.type";
+import { ClearSVG } from "@widgets/Filter/svg/ClearSvg";
 import chevronUp from "@images/icons/chevron-up.svg";
 import chevronDown from "@images/icons/chevron-down.svg";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
@@ -89,17 +89,23 @@ export const Filter = ({
     return allSubcategoryIds.some((id) => filters.skills.includes(id));
   };
 
+  const hasAllSelectedSubcategories = (categoryId: number) => {
+    const categorySubcategories = getSubcategoriesForCategory(categoryId);
+    const allSubcategoryIds = categorySubcategories.map((sub) => sub.id);
+    return allSubcategoryIds.every((id) => filters.skills.includes(id));
+  };
+
   const handleCategoryChange = (categoryId: number) => {
     const categorySubcategories = getSubcategoriesForCategory(categoryId);
     const allSubcategoryIds = categorySubcategories.map((sub) => sub.id);
 
-    const hasSelected = allSubcategoryIds.some((id) =>
+    const hasAllSelected = allSubcategoryIds.every((id) =>
       filters.skills.includes(id),
     );
 
     let currentSkills: number[] = [];
 
-    if (hasSelected) {
+    if (hasAllSelected) {
       currentSkills = filters.skills.filter(
         (id) => !allSubcategoryIds.includes(id),
       );
@@ -208,6 +214,7 @@ export const Filter = ({
                     value={String(category.id)}
                     checked={hasSelectedSubcategories(category.id)}
                     onChange={() => handleCategoryChange(category.id)}
+                    isOpenList={hasAllSelectedSubcategories(category.id)}
                   />
                   <button onClick={() => toggleCategory(category.id)}>
                     <img
