@@ -59,7 +59,7 @@ export const Filter = ({
     setShowSubcategorys((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId]
+        : [...prev, categoryId],
     );
   };
   const toggleShowAllSkills = () => setShowAllSkills(!showAllSkills);
@@ -100,18 +100,18 @@ export const Filter = ({
     const allSubcategoryIds = categorySubcategories.map((sub) => sub.id);
 
     const hasAllSelected = allSubcategoryIds.every((id) =>
-      filters.skills.includes(id)
+      filters.skills.includes(id),
     );
 
     let currentSkills: number[] = [];
 
     if (hasAllSelected) {
       currentSkills = filters.skills.filter(
-        (id) => !allSubcategoryIds.includes(id)
+        (id) => !allSubcategoryIds.includes(id),
       );
     } else {
       const missingSubcategoryIds = allSubcategoryIds.filter(
-        (id) => !filters.skills.includes(id)
+        (id) => !filters.skills.includes(id),
       );
 
       currentSkills = [...filters.skills, ...missingSubcategoryIds];
