@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TFilterState } from "@widgets/filter/filter.type";
+import type { TFilterState } from "@widgets/Filter/filter.type";
 import type { TSkill, UserWithLikes } from "@/shared/types/types";
 
 interface UseFilteredUsersParams {

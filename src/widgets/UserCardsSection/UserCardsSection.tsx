@@ -10,7 +10,7 @@ import {
   selectSkillsData,
 } from "@store/slices/skillsDataSlice";
 import { useFilteredUsers } from "@shared/hooks/useFilteredUsers";
-import type { TFilterState } from "@widgets/filter/filter.type";
+import type { TFilterState } from "@widgets/Filter/filter.type";
 import { ActiveFilters } from "@widgets/ActiveFilters/ActiveFilters";
 import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import styles from "./userCardsSection.module.scss";

@@ -4,6 +4,7 @@ import signupReducer from "./slices/signupSlice";
 import usersDataReducer from "./slices/usersDataSlice";
 import referenceDataReducer from "./slices/referenceDataSlice";
 import skillsDataReducer from "./slices/skillsDataSlice";
+import authReducer from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     usersData: usersDataReducer,
     referenceData: referenceDataReducer,
     skillsData: skillsDataReducer,
+    auth: authReducer,
   },
 });
 

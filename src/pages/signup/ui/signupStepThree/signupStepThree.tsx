@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import type { ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./signupStepThree.module.scss";
-import { SignupSteps } from "@shared/ui/SignupSteps/SignupSteps";
-import { Button } from "@shared/ui/Button/Button";
-import { Logo } from "@shared/ui/Logo/Logo";
+import { SignupSteps } from "@shared/ui/SignupSteps";
+import { Button } from "@shared/ui/Button";
+import { Logo } from "@shared/ui/Logo";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
   updateStep3,

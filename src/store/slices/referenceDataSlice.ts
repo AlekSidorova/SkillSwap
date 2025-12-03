@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { TCity, TCategory, TSubcategory } from "@/shared/types/types";
 import type { RootState } from "@/store/store";
-import { api } from "@/shared/api/mockApi";
+import { api } from "@/shared/api/api";
 
 // Типы для состояния
 type ReferenceDataState = {
@@ -30,22 +30,17 @@ export const fetchReferenceData = createAsyncThunk(
   "referenceData/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      // Последовательная загрузка с задержками для избежания rate limit
-      const citiesData = await api.getCities();
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const categoriesData = await api.getCategories();
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const subcategoriesData = await api.getSubcategories();
-
-      // cities может быть массивом или объектом с полем cities
-      const citiesArray: TCity[] = Array.isArray(citiesData)
-        ? citiesData
-        : (citiesData as { cities: TCity[] }).cities || [];
+      const [citiesResult, categoriesResult, subcategoriesResult] =
+        await Promise.all([
+          api.getCities(),
+          api.getCategories(),
+          api.getSubcategories(),
+        ]);
 
       return {
-        cities: citiesArray,
-        categories: categoriesData as TCategory[],
-        subcategories: subcategoriesData as TSubcategory[],
+        cities: citiesResult as TCity[],
+        categories: categoriesResult as TCategory[],
+        subcategories: subcategoriesResult as TSubcategory[],
       };
     } catch (error) {
       return rejectWithValue(

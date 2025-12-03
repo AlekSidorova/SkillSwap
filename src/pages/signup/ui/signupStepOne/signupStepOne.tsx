@@ -1,11 +1,11 @@
 import styles from "./signupStepOne.module.scss";
-import { Button } from "@shared/ui/Button/Button";
-import { Separator } from "@shared/ui/Separator/Separator";
-import { Input } from "@shared/ui/Input/Input";
+import { Button } from "../../../../shared/ui/Button";
+import { Separator } from "../../../../shared/ui/Separator";
+import { Input } from "../../../../shared/ui/Input";
 import { Logo } from "@shared/ui/Logo/Logo";
 import lightBulb from "../../../../images/png/light-bulb.png";
 import { AppleIcon } from "@shared/ui/Icons/AppleIcon";
-import { SignupSteps } from "@shared/ui/SignupSteps/SignupSteps";
+import { SignupSteps } from "../../../../shared/ui/SignupSteps";
 import { ArrowLeftIcon } from "@shared/ui/Icons/ArrowLeftIcon";
 import { GoogleIcon } from "@shared/ui/Icons/GoogleIcon";
 

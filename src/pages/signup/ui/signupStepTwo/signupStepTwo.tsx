@@ -1,13 +1,13 @@
 import styles from "./signupStepTwo.module.scss";
-import { Button } from "../../../../shared/ui/button";
-import { Input } from "../../../../shared/ui/input";
-import { Logo } from "../../../../shared/ui/logo/logo.tsx";
+import { Button } from "../../../../shared/ui/Button";
+import { Input } from "../../../../shared/ui/Input";
+import { Logo } from "../../../../shared/ui/Logo/Logo.tsx";
 import userInfo from "../../../../images/png/user-info.png";
 import userCircle from "../../../../images/icons/user-circle.svg";
 import add from "../../../../images/icons/add.svg";
-import { SignupSteps } from "../../../../shared/ui/signupSteps";
-import { ArrowLeftIcon } from "../../../../shared/ui/icons/arrowLeftIcon.tsx";
-import { Selector } from "@/shared/ui/selector/selector.tsx";
+import { SignupSteps } from "../../../../shared/ui/SignupSteps";
+import { ArrowLeftIcon } from "../../../../shared/ui/Icons/ArrowLeftIcon.tsx";
+import { Selector } from "@/shared/ui/Selector/Selector.tsx";
 import clsx from "clsx";
 
 export const SignupStepTwo = () => {

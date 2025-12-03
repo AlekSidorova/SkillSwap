@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./OfferPreviewFormData.module.scss";
-import { Button } from "@shared/ui/Button/Button";
+import { Button } from "@shared/ui/Button";
 import editIcon from "@images/icons/edit.svg";
 
 interface OfferPreviewFormDataProps {

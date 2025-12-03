@@ -1,4 +1,4 @@
-import { Button } from "@shared/ui/Button/Button";
+import { Button } from "@shared/ui/Button";
 import chevronRight from "@images/icons/chevron-right.svg";
 import chevronDown from "@images/icons/chevron-down.svg";
 import type { TViewAllButtonProps } from "./type";

@@ -3,7 +3,7 @@ import stylesModal from "./offerPreviewModal.module.scss";
 import clsx from "clsx";
 import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton";
 import { ImagesCarousel } from "@widgets/ImagesCarousel/ImagesCarousel";
-import { Button } from "@shared/ui/Button/Button";
+import { Button } from "@shared/ui/Button";
 import { EditIcon } from "@shared/ui/Icons/EditIcon";
 import type { TOfferProps } from "@widgets/OfferPreview/types";
 
