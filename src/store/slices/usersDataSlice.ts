@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { TUser } from "@/shared/types/types";
 import type { RootState } from "@/store/store";
-import { api } from "@/shared/api/mockApi";
+import { api } from "@/shared/api/api";
 
 // Типы для состояния
 type UsersDataState = {
@@ -26,9 +26,9 @@ export const fetchUsersData = createAsyncThunk(
   "usersData/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const usersData = await api.fetchAllUsersData();
+      const users = await api.getUsers();
       return {
-        users: usersData.users,
+        users: users as TUser[],
       };
     } catch (error) {
       return rejectWithValue(

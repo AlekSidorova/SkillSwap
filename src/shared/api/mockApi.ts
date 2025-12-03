@@ -7,14 +7,15 @@ import type {
   TSubcategory,
 } from "@/shared/types/types";
 
-// URL внешнего API через прокси Vite (для обхода CORS)
+// Используем локальные моки из public/db/
+// Для переключения на JSONBin API замените пути на /api/jsonbin/v3/b/...
 export const MOCK_API = {
-  categories: "/api/jsonbin/v3/b/692dcfe6ae596e708f7cb637",
-  cities: "/api/jsonbin/v3/b/692dd00343b1c97be9d0f6af",
-  likes: "/api/jsonbin/v3/b/692dd01f43b1c97be9d0f6dc",
-  skills: "/api/jsonbin/v3/b/692dd04343b1c97be9d0f721",
-  subcategories: "/api/jsonbin/v3/b/692dd05bae596e708f7cb6fc",
-  users: "/api/jsonbin/v3/b/692dd074ae596e708f7cb721",
+  categories: "/db/categories.json",
+  cities: "/db/cities.json",
+  likes: "/db/likes.json",
+  skills: "/db/skills.json",
+  subcategories: "/db/subcategories.json",
+  users: "/db/users.json",
 };
 
 // Тип для ответа API с данными пользователей
@@ -32,7 +33,7 @@ export async function fetchMock<T>(url: string, retryCount = 0): Promise<T> {
   const res = await fetch(url);
 
   if (!res.ok) {
-    // Retry при 429 с экспоненциальной задержкой
+    // Retry при 429 с экспоненциальной задержкой (для JSONBin API)
     if (res.status === 429 && retryCount < 3) {
       const delayMs = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
       await delay(delayMs);
@@ -44,8 +45,14 @@ export async function fetchMock<T>(url: string, retryCount = 0): Promise<T> {
   //превращаем ответ сервера в json файлы
   const data = await res.json();
 
-  //JSONBin ВСЕГДА кладёт реальный объект внутрь поля record - поэтому возвращаем именно data.record
-  return data.record;
+  // Для JSONBin API данные находятся в data.record, для локальных файлов - напрямую data
+  // Проверяем, есть ли поле record (JSONBin формат)
+  if (data && typeof data === "object" && "record" in data) {
+    return data.record;
+  }
+
+  // Для локальных файлов возвращаем данные напрямую
+  return data;
 }
 
 export const api = {
