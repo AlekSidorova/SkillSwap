@@ -3,20 +3,24 @@ import styles from "./like.module.scss";
 import type { ILikeProps } from "./like.type";
 
 export const Like = (props: ILikeProps) => {
-  const { idCard, currentLikeCount, onLikeToggle } = props;
-
+  const { currentLikeCount, className = "" } = props;
+  const [likeCount, setLikeCount] = useState(currentLikeCount);
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleliked: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
-    setIsLiked((prev) => !prev);
-    onLikeToggle(idCard, likeCount);
+
+    const newIsLike = !isLiked;
+    const newLikeCount = newIsLike ? likeCount + 1 : likeCount - 1;
+
+    setIsLiked(newIsLike);
+    setLikeCount(newLikeCount);
+
+    // onLikeToggle(newLikeCount); // Функция которая будет писать актуальное кол-во лайков в стор, если будет такой функционал
   };
 
-  const likeCount = isLiked ? currentLikeCount + 1 : currentLikeCount;
-
   return (
-    <div className={styles.likeWrapper}>
+    <div className={`${styles.likeWrapper} ${className}`}>
       <span
         className={`${styles.likeCount} ${isLiked && styles.likeCountActive}`}
       >

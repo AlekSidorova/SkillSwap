@@ -45,7 +45,13 @@
 }
 
 .userInfo {
+  inline-size: 100%;
   flex: 1;
+  @include flex(column, center, flex-start, 4px);
+}
+
+.like {
+  align-self: flex-end;
 }
 
 .name {
