@@ -1,7 +1,7 @@
 import styles from "./CalendarContainer.module.scss";
 import { Button } from "@shared/ui/Button";
 import clsx from "clsx";
-import type { TCalendarContainer } from "@shared/ui/Calendar/CalendarContainer/type.ts";
+import type { TCalendarContainer } from "@shared/ui/Calendar/CalendarContainer/type";
 
 //Контейнер, в который передается календарь datepicker через соответствующий пропс.
 //Служит в качестве "обертки", в которой внизу есть 2 кнопки.

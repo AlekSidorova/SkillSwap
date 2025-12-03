@@ -5,7 +5,7 @@ import "./Calendar.scss";
 import { ru } from "date-fns/locale";
 import { CalendarContainer } from "@shared/ui/Calendar/CalendarContainer";
 import { CalendarInput } from "@shared/ui/Calendar/CalendarInput";
-import type { TCalendarProps } from "@shared/ui/Calendar/type.ts";
+import type { TCalendarProps } from "@shared/ui/Calendar/type";
 
 //Карта сокращений дней недели для отображения по макету. По умолчанию datepicker сокращает не совсем правильно,
 //к примеру, Понедельник - По, Четверг - Че.

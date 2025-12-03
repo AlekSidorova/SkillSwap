@@ -1,1 +1,1 @@
-export { CalendarInput } from "./CalendarInput.tsx";
+export { CalendarInput } from "./CalendarInput";
