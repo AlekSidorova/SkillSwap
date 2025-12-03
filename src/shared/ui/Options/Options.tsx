@@ -9,6 +9,7 @@ export const Options: FC<TOptionsProps> = ({
   selectionOptions,
   toggleOption,
   selectedOptions,
+  selectorType,
 }) => {
   return (
     <ul className={clsx(styles.list)}>

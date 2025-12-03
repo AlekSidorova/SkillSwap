@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { MainPage } from "@pages/MainPage/MainPage";
 import { SignupStepOne } from "@pages/signup/ui/signupStepOne";
 import { SignupStepThree } from "@pages/signup/ui/signupStepThree";
+import { SignupStepTwo } from "@/pages/signup/ui/signupStepTwo";
 
 //основные страницы приложения - заглушки
 //после создания pages отсюда надо будет удалять
@@ -13,15 +14,6 @@ function Login() {
     <section>
       <h2>Вход</h2>
       <p>Форма входа в аккаунт</p>
-    </section>
-  );
-}
-
-function RegistrationStep2() {
-  return (
-    <section>
-      <h2>Регистрация - Шаг 2</h2>
-      <p>Личная информация</p>
     </section>
   );
 }
@@ -80,7 +72,7 @@ export default function AppRoutes() {
         {/* публичные роуты, нужно ли оборачивать их в PublicRoute? */}
         <Route path="login" element={<Login />} />
         <Route path="registration/step1" element={<SignupStepOne />} />
-        <Route path="registration/step2" element={<RegistrationStep2 />} />
+        <Route path="registration/step2" element={<SignupStepTwo />} />
         <Route path="registration/step3" element={<SignupStepThree />} />
 
         {/* защищенные роуты */}
