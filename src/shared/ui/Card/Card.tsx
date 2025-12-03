@@ -100,7 +100,7 @@ export const Card: React.FC<CardProps> = memo(
       return skills.filter(
         (skill) =>
           skill.userId === user.id &&
-          skill.type_of_proposal === (type === "canTeach" ? "учу" : "учусь")
+          skill.type_of_proposal === (type === "canTeach" ? "учу" : "учусь"),
       );
     };
 
@@ -233,7 +233,7 @@ export const Card: React.FC<CardProps> = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Card.displayName = "Card";
