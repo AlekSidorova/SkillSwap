@@ -1,0 +1,86 @@
+@use "../../styles/variables" as vars;
+
+.panelContainer {
+  border-radius: 12px;
+  padding: 60px;
+  inline-size: 556px;
+  block-size: 616px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: Jost, sans-serif;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  color: vars.$color-text;
+}
+
+.readEverything {
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: vars.$color-text-link;
+}
+
+.icon {
+  inline-size: 40px;
+  block-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationMessage {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: vars.$color-text;
+}
+
+.notificationDetails {
+  font-family: Roboto, sans-serif;
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: 0.02em;
+  color: vars.$color-text;
+}
+
+.notificationDate {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: vars.$color-caption;
+}
+
+.notificationContent {
+  display: flex;
+  gap: 10px;
+}
+
+.messageContainer {
+  display: flex;
+  justify-content: space-between;
+  inline-size: 100%;
+}
+
+.actionButton {
+  inline-size: 114px;
+  margin-top: 16px;
+}
+
+.notificationCard {
+  margin-bottom: 24px;
+}
+
+.viewedCard {
+  margin-top: 40px;
+}

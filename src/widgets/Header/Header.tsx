@@ -19,6 +19,7 @@ import { useAppSelector } from "@store/hooks";
 import { selectReferenceData } from "@store/slices/referenceDataSlice";
 import { DropDown } from "@/shared/ui/DropDown";
 import { DropDownListCategory } from "@/shared/ui/DropDownListCategory";
+import NotificationPanel from "../NotificationPanel/NotificationPanel";
 
 export const Header = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -167,8 +168,12 @@ export const Header = () => {
           <div className={styles.decorateButtonsWrapper}>
             <DecoratedButton variant={"moon"} onClick={() => toggle()} />
             <DecoratedButton
-              variant={"bell"}
-              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              variant="bell"
+              data-trigger-dropdown="notifications"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsNotificationsOpen((prev) => !prev);
+              }}
             />
             <DecoratedButton variant={"heart"} />
           </div>
@@ -231,14 +236,13 @@ export const Header = () => {
 
       {/* // ToDo Заменить на окно с уведомлениями когда оно будет готово */}
       {isNotificationsOpen && (
-        <div className={styles.notifications}>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda
-            dolore dolorem doloremque, enim error exercitationem fugiat modi
-            numquam porro quasi rerum sit tempore unde. Doloremque, maiores
-            placeat! Magni, repellat, repudiandae?
-          </p>
-        </div>
+        <DropDown
+          top="20px"
+          left="812px"
+          onClose={() => setIsNotificationsOpen(false)}
+        >
+          <NotificationPanel />
+        </DropDown>
       )}
       {/* // ToDo Заменить на окно с категориями когда оно будет готово */}
       {isCategoriesMenuOpen && (
