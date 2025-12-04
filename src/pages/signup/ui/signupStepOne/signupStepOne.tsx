@@ -103,6 +103,7 @@ export const SignupStepOne = () => {
 
             <div className={styles.passwordContainer}>
               <label htmlFor="password">Пароль</label>
+              {/* // TODO: в компоненте инпута нужно сделать кнопку "показать пароль" */}
               <Input
                 type="password"
                 id="password"
