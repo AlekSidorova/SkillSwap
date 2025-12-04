@@ -23,10 +23,9 @@ import NotificationPanel from "../NotificationPanel/NotificationPanel";
 
 export const Header = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [isAuth] = useState(true);
+  const [isAuth] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isCategoriesMenuOpen, setIsCategoriesMenuOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [notificationsCount, setNotificationsCount] = useState(1);
