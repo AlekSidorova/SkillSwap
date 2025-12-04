@@ -160,14 +160,14 @@ input {
   font-size: 16px;
   line-height: 150%;
   letter-spacing: 0.02em;
-  color: var(--text);
+  color: $color-text;
 }
 
 .profileMenuList {
   inline-size: 260px;
   padding: 40px;
   border-radius: 12px;
-  background-color: white;
+  background-color: $color-card;
 }
 
 .profileMenuItem {
@@ -204,6 +204,6 @@ input {
   padding: 15px;
   border-radius: 20px;
   z-index: 1;
-  background-color: white;
+  background-color: $color-card;
   max-inline-size: 300px;
 }
