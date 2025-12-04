@@ -1,25 +1,19 @@
+import type { TSubcategory } from "@/shared/types/types";
 // Утилиты для работы с категориями и подкатегориями
 
 //
 //  Получает ID категории по ID подкатегории
-//  На вход принимает ubcategoryId - ID подкатегории (от 1 до 42)
+//  На вход принимает subcategoryId - ID подкатегории (от 1 до 42)
+//  и массив subcategories
 //  Возвращает ID категории (1-6) или 0, если не найдено
 //
-// subcategoryId от 1 до 8 -> категория 1 (Бизнес)
-// subcategoryId от 9 до 16 -> категория 2 (Творчество)
-// subcategoryId от 17 до 23 -> категория 3 (Языки)
-// subcategoryId от 24 до 29 -> категория 4 (Образование)
-// subcategoryId от 30 до 35 -> категория 5 (Дом)
-// subcategoryId от 36 до 42 -> категория 6 (Здоровье)
 
-export const getCategoryIdBySubcategory = (subcategoryId: number): number => {
-  if (subcategoryId >= 1 && subcategoryId <= 8) return 1;
-  if (subcategoryId >= 9 && subcategoryId <= 16) return 2;
-  if (subcategoryId >= 17 && subcategoryId <= 23) return 3;
-  if (subcategoryId >= 24 && subcategoryId <= 29) return 4;
-  if (subcategoryId >= 30 && subcategoryId <= 35) return 5;
-  if (subcategoryId >= 36 && subcategoryId <= 42) return 6;
-  return 0;
+export const getCategoryIdBySubcategory = (
+  subcategoryId: number,
+  subcategories: TSubcategory[],
+): number => {
+  const subcategory = subcategories.find((s) => s.id === subcategoryId);
+  return subcategory ? subcategory.categoryId : 0;
 };
 
 //

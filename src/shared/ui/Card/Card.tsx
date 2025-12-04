@@ -11,28 +11,39 @@ import {
   getCategoryIdBySubcategory,
 } from "../../../../public/utils/categoryUtils";
 import { getCityNameById } from "../../../../public/utils/cityUtils";
+import type { TSubcategory } from "@/shared/types/types";
 
 export const Card: React.FC<CardProps> = memo(
   ({ user, cities, onDetailsClick, className = "", isLoading = false }) => {
     const [skills, setSkills] = useState<TSkill[]>([]);
     const [skillsLoading, setSkillsLoading] = useState(true);
+    const [subcategories, setSubcategories] = useState<TSubcategory[]>([]);
+    const [subcategoriesLoading, setSubcategoriesLoading] = useState(true);
 
-    // Загружаем навыки при монтировании компонента
+    // Загружаем навыки и подкатегории при монтировании компонента
     useEffect(() => {
-      const loadSkills = async () => {
+      const loadData = async () => {
         try {
-          const response = await fetch("/db/skills.json");
-          const data: TSkill[] = await response.json(); // data - это массив навыков
-          setSkills(data);
+          const skillsResponse = await fetch("/db/skills.json");
+          const skillsData: TSkill[] = await skillsResponse.json();
+          setSkills(skillsData);
+
+          const subcategoriesResponse = await fetch("/db/subcategories.json");
+          //subcategoriesData - массив подкатегорий
+          const subcategoriesData: TSubcategory[] =
+            await subcategoriesResponse.json();
+          setSubcategories(subcategoriesData);
         } catch (error) {
           console.error("Error loading skills:", error);
           setSkills([]);
+          setSubcategories([]);
         } finally {
           setSkillsLoading(false);
+          setSubcategoriesLoading(false);
         }
       };
 
-      loadSkills();
+      loadData();
     }, []);
 
     // Получаем навыки пользователя
@@ -40,12 +51,12 @@ export const Card: React.FC<CardProps> = memo(
     const wantToLearnSkills = getUserSkillsByType(skills, user.id, "учусь");
 
     const handleDetailsClick = React.useCallback(() => {
-      if (!isLoading && !skillsLoading) {
+      if (!isLoading && !skillsLoading && !subcategoriesLoading) {
         onDetailsClick?.(user);
       }
-    }, [isLoading, skillsLoading, onDetailsClick, user]);
+    }, [isLoading, skillsLoading, subcategoriesLoading, onDetailsClick, user]);
 
-    const isCardLoading = isLoading || skillsLoading;
+    const isCardLoading = isLoading || skillsLoading || subcategoriesLoading;
 
     return (
       <div
@@ -88,6 +99,7 @@ export const Card: React.FC<CardProps> = memo(
                 {canTeachSkills.slice(0, 1).map((skill) => {
                   const categoryId = getCategoryIdBySubcategory(
                     skill.subcategoryId,
+                    subcategories,
                   );
                   const tagClassName = getTagClassName(categoryId, styles);
 
@@ -123,6 +135,7 @@ export const Card: React.FC<CardProps> = memo(
             {wantToLearnSkills.slice(0, 2).map((skill) => {
               const categoryId = getCategoryIdBySubcategory(
                 skill.subcategoryId,
+                subcategories,
               );
               const tagClassName = getTagClassName(categoryId, styles);
 
