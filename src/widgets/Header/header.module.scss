@@ -1,18 +1,19 @@
 @use "/src/styles/variables" as *;
 
 .header {
-  display: grid;
-  grid-template-columns:
-    minmax(min-content, 414px) minmax(min-content, 648px)
-    minmax(min-content, 112px) minmax(min-content, 308px);
-  column-gap: 32px;
+  //display: grid;
+  //grid-template-columns:
+  //  minmax(min-content, 414px) minmax(min-content, 648px)
+  //  minmax(min-content, 112px) minmax(min-content, 308px);
+  display: flex;
+  column-gap: 38px;
   align-items: center;
-  inline-size: 100%;
   padding: 36px 36px 20px;
 }
 
 .navigation {
   display: flex;
+  column-gap: 32px;
   justify-content: space-between;
   align-items: center;
 }
@@ -25,10 +26,11 @@
   cursor: pointer;
 }
 
-.navigationLinkContainer {
+.navigationList {
   display: flex;
-  column-gap: 27px;
-  inline-size: 222px;
+  column-gap: 29px;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .navigationDropDownLink {
@@ -62,7 +64,7 @@
 
 .searchWrapper {
   position: relative;
-  inline-size: 100%;
+  flex-grow: 1;
 }
 
 .search {
@@ -118,10 +120,17 @@ input {
   }
 }
 
-.decorateButtonsWrapper {
+.ButtonsProfileWrapper {
   display: flex;
-  column-gap: 32px;
+  align-items: center;
+  column-gap: 26px;
   justify-content: end;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
 }
 
 .themeIcon {
@@ -144,14 +153,13 @@ input {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: end;
-  column-gap: 8px;
   cursor: pointer;
 }
 
 .userImage {
   inline-size: 48px;
   block-size: 48px;
+  margin-inline-start: 8px;
   border-radius: 50%;
 }
 
