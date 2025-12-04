@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import styles from "./mainPage.module.scss";
 
 import { Footer } from "@widgets/Footer/Footer";
-import { Filter } from "@widgets/Filter/Filter";
+import { Filter } from "@widgets/filter/Filter";
 import { Header } from "@widgets/Header/Header";
 import { UserCardsSection } from "@widgets/UserCardsSection/UserCardsSection";
 import type { TFilterState } from "@widgets/filter/filter.type";
