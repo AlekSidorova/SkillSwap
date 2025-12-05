@@ -1,17 +1,17 @@
 import { useSelector } from "react-redux";
 import styles from "./dropDownListCategory.module.scss";
-import { selectReferenceData } from "@/store/slices/referenceDataSlice";
+import { selectCategoryData } from "@entities/category/model/slice";
 import bussinessCareerImg from "@images/png/Business-career.png";
 import creativeAndArtImg from "@images/png/Creativity-and-Art.png";
 import educationAndDevelopmentImg from "@images/png/Education-and-Development.png";
 import foreignLanguagesImg from "@images/png/Foreig-languages.png";
 import healthAndLifestyleImg from "@images/png/Health-and-Lifestyle.png";
 import homeAndComfortImg from "@images/png/Home-and-comfort.png";
-import DropDownListCategorySkeleton from "./dropDownListCategorySkeleton";
+import DropDownListCategorySkeleton from "./DropDownListCategorySkeleton";
 
 export const DropDownListCategory = () => {
   const { categories, subcategories, isLoading } =
-    useSelector(selectReferenceData);
+    useSelector(selectCategoryData);
 
   //Простая функция заглушка, пока нет api с подтягиванием изображений. В дальнейшем нужно изображение будет тянуть прям из json
   const setImagesCategory = (categoriesId: number) => {

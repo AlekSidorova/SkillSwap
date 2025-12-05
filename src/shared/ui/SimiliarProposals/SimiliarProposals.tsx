@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "@shared/ui/Card";
+import { Card } from "@shared/ui/Card/Card";
 import { CardSkeleton } from "@shared/ui/CardSkeleton/CardSkeleton";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { selectReferenceData } from "@store/slices/referenceDataSlice";
-import { fetchUsersData, selectUsersData } from "@store/slices/usersDataSlice";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import { selectCities } from "@entities/city/model/slice";
+import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
 import styles from "./similiarProposals.module.scss";
 import leftArrow from "@images/icons/chevron-right.svg";
 import rightArrow from "@images/icons/chevron-right.svg";
@@ -25,7 +25,7 @@ export const SimiliarProposals: React.FC<SimiliarProposalsProps> = ({
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const { users, isLoading: usersLoading } = useAppSelector(selectUsersData);
-  const { cities } = useAppSelector(selectReferenceData);
+  const { cities } = useAppSelector(selectCities);
 
   // Загрузка пользователей
   useEffect(() => {

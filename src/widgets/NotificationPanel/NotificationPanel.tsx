@@ -14,7 +14,7 @@ export interface INotification {
 const NotificationPanel: React.FC = () => {
   //делаем начальное состояние уведомления
   //так же добавляем тестовые данные
-  const [notifications, setNotifications] = useState<INotification[]>([
+  const [notifications] = useState<INotification[]>([
     {
       id: "1",
       message: "Николай принял ваш обмен",

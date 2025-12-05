@@ -1,17 +1,15 @@
+import type { TUser } from "@entities/user/types";
+import type { TCategory, TSubcategory } from "@entities/category/types";
+import type { TCity } from "@entities/city/types";
+import type { TSkill } from "@entities/skill/types";
 import type {
-  TUser,
-  TCity,
-  TSkill,
-  TLike,
-  TCategory,
-  TSubcategory,
   RegisterRequest,
   LoginRequest,
   AuthResponse,
-  User,
   RefreshTokenRequest,
   RefreshTokenResponse,
-} from "@/shared/types/types";
+} from "@features/auth/types";
+import type { User } from "@entities/user/types";
 
 // Конфигурация API из переменных окружения
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -29,7 +27,7 @@ export class ApiError extends Error {
   }
 }
 
-import { getCookie, setCookie, removeCookie } from "@/shared/lib/cookies";
+import { getCookie, setCookie, removeCookie } from "@shared/lib/cookies";
 
 // Функция для получения токена из cookies
 const getToken = () => {
@@ -111,11 +109,23 @@ async function fetchApi<T>(
 
 export const api = {
   // ========== АВТОРИЗАЦИЯ ==========
-  register: (body: RegisterRequest): Promise<AuthResponse> =>
-    fetchApi<AuthResponse>("/api/auth/register", {
+  register: (body: RegisterRequest): Promise<AuthResponse> => {
+    const formData = new FormData();
+    formData.append("email", body.email);
+    formData.append("password", body.password);
+    formData.append("name", body.name);
+    formData.append("avatar", body.avatar);
+    if (body.firstName) formData.append("firstName", body.firstName);
+    if (body.lastName) formData.append("lastName", body.lastName);
+    if (body.dateOfBirth) formData.append("dateOfBirth", body.dateOfBirth);
+    if (body.gender) formData.append("gender", body.gender);
+    if (body.cityId) formData.append("cityId", body.cityId.toString());
+
+    return fetchApi<AuthResponse>("/api/auth/register", {
       method: "POST",
-      body: JSON.stringify(body),
-    }),
+      body: formData,
+    });
+  },
 
   login: (body: LoginRequest): Promise<AuthResponse> =>
     fetchApi<AuthResponse>("/api/auth/login", {
@@ -233,23 +243,32 @@ export const api = {
   getCity: (id: number): Promise<TCity> => fetchApi<TCity>(`/api/cities/${id}`),
 
   // ========== ЛАЙКИ ==========
-  getLikes: (params?: {
-    userId?: number;
-    skillId?: number;
-  }): Promise<TLike[]> => {
-    const searchParams = new URLSearchParams();
-    if (params?.userId) searchParams.append("userId", params.userId.toString());
-    if (params?.skillId)
-      searchParams.append("skillId", params.skillId.toString());
+  // Получить информацию о лайках для списка пользователей
+  // Возвращает только счетчик лайков и статус лайка текущего пользователя
+  getUsersLikesInfo: (
+    userIds: number[],
+  ): Promise<import("@entities/like/types").TUserLikesInfo[]> =>
+    fetchApi<import("@entities/like/types").TUserLikesInfo[]>(
+      "/api/likes/users-info",
+      {
+        method: "POST",
+        body: JSON.stringify({ userIds }),
+      },
+    ),
 
-    const query = searchParams.toString();
-    return fetchApi<TLike[]>(`/api/likes${query ? `?${query}` : ""}`);
-  },
+  // Получить информацию о лайках одного пользователя
+  getUserLikesInfo: (
+    userId: number,
+  ): Promise<import("@entities/like/types").TUserLikesInfo> =>
+    fetchApi<import("@entities/like/types").TUserLikesInfo>(
+      `/api/likes/users-info/${userId}`,
+    ),
 
-  getLike: (id: number): Promise<TLike> => fetchApi<TLike>(`/api/likes/${id}`),
-
-  createLike: (body: { skillId: number }): Promise<TLike> =>
-    fetchApi<TLike>("/api/likes", {
+  // Создать лайк от пользователя к пользователю
+  createLike: (body: {
+    toUserId: number; // кому ставим лайк
+  }): Promise<void> =>
+    fetchApi<void>("/api/likes", {
       method: "POST",
       body: JSON.stringify(body),
     }),
@@ -259,8 +278,9 @@ export const api = {
       method: "DELETE",
     }),
 
-  deleteLikeBySkillId: (skillId: number): Promise<void> =>
-    fetchApi<void>(`/api/likes?skillId=${skillId}`, {
+  // Удалить лайк по пользователю (кому ставили лайк)
+  deleteLikeByUserId: (toUserId: number): Promise<void> =>
+    fetchApi<void>(`/api/likes?toUserId=${toUserId}`, {
       method: "DELETE",
     }),
 

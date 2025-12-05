@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import App from "./App";
 import ProtectedRoute from "./ProtectedRoute";
 import { MainPage } from "@pages/MainPage/MainPage";
-import { SignupStepOne } from "@pages/signup/ui/signupStepOne";
-import { SignupStepThree } from "@pages/signup/ui/signupStepThree";
-import { SignupStepTwo } from "@/pages/signup/ui/signupStepTwo";
+import { SignupStepOne } from "@pages/signup/ui/SignupStepOne/SignupStepOne";
+import { SignupStepThree } from "@pages/signup/ui/SignupStepThree/SignupStepThree";
+import { SignupStepTwo } from "@pages/signup/ui/SignupStepTwo/SignupStepTwo";
 
 //основные страницы приложения - заглушки
 //после создания pages отсюда надо будет удалять

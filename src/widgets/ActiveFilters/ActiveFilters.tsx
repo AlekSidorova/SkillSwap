@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import type { TFilterState } from "@widgets/filter/filter.type";
-import type { TCity, TSubcategory } from "@/shared/types/types";
+import type { TFilterState } from "@features/filter-users/types";
+import type { TSubcategory } from "@entities/category/types";
+import type { TCity } from "@entities/city/types";
 import styles from "./activeFilters.module.scss";
 
 interface ActiveFiltersProps {

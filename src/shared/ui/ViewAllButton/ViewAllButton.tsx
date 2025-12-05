@@ -1,7 +1,7 @@
-import { Button } from "@shared/ui/Button";
+import { Button } from "@shared/ui/Button/Button";
 import chevronRight from "@images/icons/chevron-right.svg";
 import chevronDown from "@images/icons/chevron-down.svg";
-import type { TViewAllButtonProps } from "./type";
+import type { TViewAllButtonProps } from "./types";
 import styles from "./viewAllButton.module.scss";
 
 export const ViewAllButton = ({

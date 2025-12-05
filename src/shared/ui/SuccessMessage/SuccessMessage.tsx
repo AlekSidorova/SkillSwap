@@ -1,9 +1,9 @@
-import styles from "../../ui/SuccessMessage/successMessage.module.scss";
+import styles from "./successMessage.module.scss";
 import clsx from "clsx";
 import type { TSuccessMessageProps } from "@shared/ui/SuccessMessage/types";
 import { SuccessIcon } from "@shared/ui/Icons/SuccessIcon";
 import { NotificationIcon } from "@shared/ui/Icons/NotificationIcon";
-import { Button } from "@shared/ui/Button";
+import { Button } from "@shared/ui/Button/Button";
 
 export const SuccessMessage = (props: TSuccessMessageProps) => {
   const { variant = "successMessage", className } = props;

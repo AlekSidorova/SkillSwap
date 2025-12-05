@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./notificationPanel.module.scss";
-import ideaIcon from "../../images/icons/idea.svg?url";
-import { Button } from "@/shared/ui/Button";
+import ideaIcon from "@images/icons/idea.svg?url";
+import { Button } from "@shared/ui/Button/Button";
 import type { INotification } from "./NotificationPanel";
 
 interface INotificationItemProps {

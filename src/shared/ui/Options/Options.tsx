@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { FC } from "react";
-import type { TOptionsProps } from "./type";
+import type { TOptionsProps } from "./types";
 import styles from "./options.module.scss";
 
 // Данный компонент отображает список чекбоксов

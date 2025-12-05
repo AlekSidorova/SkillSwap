@@ -1,11 +1,7 @@
-import type {
-  TUser,
-  TCity,
-  TSkill,
-  TLike,
-  TCategory,
-  TSubcategory,
-} from "@/shared/types/types";
+import type { TUser } from "@entities/user/types";
+import type { TCategory, TSubcategory } from "@entities/category/types";
+import type { TCity } from "@entities/city/types";
+import type { TSkill } from "@entities/skill/types";
 
 // Используем локальные моки из public/db/
 // Для переключения на JSONBin API замените пути на /api/jsonbin/v3/b/...
@@ -59,7 +55,6 @@ export const api = {
   //вызываем fetchMock с сылкой - возвращаем массив
   getCategories: () => fetchMock<TCategory[]>(MOCK_API.categories),
   getCities: () => fetchMock<TCity[] | { cities: TCity[] }>(MOCK_API.cities),
-  getLikes: () => fetchMock<TLike[]>(MOCK_API.likes),
   getSkills: () => fetchMock<TSkill[]>(MOCK_API.skills),
   getSubcategories: () => fetchMock<TSubcategory[]>(MOCK_API.subcategories),
   getUsers: () => fetchMock<TUser[]>(MOCK_API.users),
@@ -90,7 +85,7 @@ export const api = {
 };
 
 //пример использования
-// import { api } from "@/shared/api/mockApi";
+// import { api } from "@shared/api/mockApi";
 
 // api.getUsers().then(users => {
 //   console.log(users);
