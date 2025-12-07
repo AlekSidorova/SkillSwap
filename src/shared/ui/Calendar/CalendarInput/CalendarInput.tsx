@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 import type { ForwardedRef } from "react";
-import styles from "./CalendarInput.module.scss";
+import styles from "./calendarInput.module.scss";
 import { CalendarIcon } from "@shared/ui/Icons/CalendarIcon";
-import type { TCalendarInputProps } from "@shared/ui/Calendar/CalendarInput/type";
+import type { TCalendarInputProps } from "@shared/ui/Calendar/CalendarInput/types";
 
 export const CalendarInput = forwardRef(
   (props: TCalendarInputProps, ref: ForwardedRef<HTMLInputElement>) => {

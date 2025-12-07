@@ -1,5 +1,5 @@
 import styles from "./subcategory.module.scss";
-import type { SubcategoryUIProps } from "./type";
+import type { SubcategoryUIProps } from "./types";
 
 //В компонент передается название подкатегории и id категории для определния цвета
 //Если будет больше 2 навыков, в компоненте юзера где-то будет указываться класс

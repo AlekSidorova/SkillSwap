@@ -1,16 +1,15 @@
 import { type FC, memo, useState } from "react";
-import type { TSelectorProps } from "@shared/ui/Selector/type";
+import type { TSelectorProps } from "@shared/ui/Selector/types";
 import styles from "./selector.module.scss";
 import clsx from "clsx";
 import { Arrow } from "@shared/ui/Arrow/Arrow";
-import type { TOption } from "@shared/ui/Options/type";
+import type { TOption } from "@shared/ui/Options/types";
 import { Options } from "@shared/ui/Options/Options";
-import cross from "../../../images/icons/cross.svg";
 
 // Данный компонент отображает раскрывающийся список чекбоксов
 
 export const Selector: FC<TSelectorProps> = memo(
-  ({ selectionTitle, selectionOptions }) => {
+  ({ selectionTitle, selectionOptions, selectorType }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState<TOption[]>([]);
 
@@ -41,6 +40,7 @@ export const Selector: FC<TSelectorProps> = memo(
               selectionOptions={selectionOptions}
               toggleOption={toggleOption}
               selectedOptions={selectedOptions}
+              selectorType={selectorType}
             />
           )
           // (

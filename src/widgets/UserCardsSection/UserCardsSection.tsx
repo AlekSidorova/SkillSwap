@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { Card } from "@shared/ui/Card";
+import { Card } from "@shared/ui/Card/Card";
 import { CardSkeleton } from "@shared/ui/CardSkeleton/CardSkeleton";
-import type { TUser, UserWithLikes } from "@/shared/types/types";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { fetchUsersData, selectUsersData } from "@store/slices/usersDataSlice";
-import { selectReferenceData } from "@store/slices/referenceDataSlice";
-import {
-  fetchSkillsData,
-  selectSkillsData,
-} from "@store/slices/skillsDataSlice";
-import { useFilteredUsers } from "@shared/hooks/useFilteredUsers";
-import type { TFilterState } from "@widgets/Filter/filter.type";
+import type { UserWithLikes } from "@entities/user/types";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
+import { selectCategoryData } from "@entities/category/model/slice";
+import { selectCities, fetchCities } from "@entities/city/model/slice";
+import { fetchSkillsData, selectSkillsData } from "@entities/skill/model/slice";
+import { selectIsAuthenticated } from "@features/auth/model/slice";
+import { useFilteredUsers } from "@features/filter-users/model/useFilteredUsers";
+import type { TFilterState } from "@features/filter-users/types";
 import { ActiveFilters } from "@widgets/ActiveFilters/ActiveFilters";
 import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import styles from "./userCardsSection.module.scss";
@@ -26,12 +25,10 @@ export const UserCardsSection = ({
 }: UserCardsSectionProps) => {
   const dispatch = useAppDispatch();
   const { users, isLoading: usersLoading } = useAppSelector(selectUsersData);
-  const { cities, subcategories } = useAppSelector(selectReferenceData);
-  const {
-    skills,
-    likes,
-    isLoading: skillsLoading,
-  } = useAppSelector(selectSkillsData);
+  const { subcategories } = useAppSelector(selectCategoryData);
+  const { cities } = useAppSelector(selectCities);
+  const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const isLoading = usersLoading || skillsLoading;
 
@@ -48,30 +45,20 @@ export const UserCardsSection = ({
     if (skills.length === 0 && !skillsLoading) {
       dispatch(fetchSkillsData());
     }
-  }, [dispatch, users.length, usersLoading, skills.length, skillsLoading]);
+    if (cities.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [
+    dispatch,
+    users.length,
+    usersLoading,
+    skills.length,
+    skillsLoading,
+    cities.length,
+  ]);
 
-  // Подсчет лайков для каждого пользователя
-  const usersWithLikes = useMemo(() => {
-    // Создаем Map для подсчета лайков по skillId
-    const likesBySkillId = new Map<number, number>();
-    likes.forEach((like) => {
-      const currentCount = likesBySkillId.get(like.skillId) || 0;
-      likesBySkillId.set(like.skillId, currentCount + 1);
-    });
-
-    // Подсчитываем общее количество лайков для каждого пользователя
-    return users.map((user) => {
-      const userSkills = skills.filter((skill) => skill.userId === user.id);
-      const likesCount = userSkills.reduce((total, skill) => {
-        return total + (likesBySkillId.get(skill.id) || 0);
-      }, 0);
-
-      return {
-        ...user,
-        likesCount,
-      } as UserWithLikes;
-    });
-  }, [users, skills, likes]);
+  // Пользователи уже приходят с информацией о лайках из API
+  const usersWithLikes = users;
 
   // Все популярные пользователи (по количеству лайков)
   const allPopularUsers = useMemo(() => {
@@ -119,7 +106,7 @@ export const UserCardsSection = ({
     skills,
   });
 
-  const handleDetailsClick = (user: TUser) => {
+  const handleDetailsClick = (user: UserWithLikes) => {
     console.log("User details clicked:", user);
     // TODO: Реализовать навигацию к детальной странице пользователя
   };
@@ -196,6 +183,7 @@ export const UserCardsSection = ({
                   key={user.id}
                   user={user}
                   cities={cities}
+                  isAuthenticated={isAuthenticated}
                   onDetailsClick={handleDetailsClick}
                   isLoading={isLoading}
                 />
@@ -232,6 +220,7 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
+              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />
@@ -257,6 +246,7 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
+              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />
@@ -273,6 +263,7 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
+              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />

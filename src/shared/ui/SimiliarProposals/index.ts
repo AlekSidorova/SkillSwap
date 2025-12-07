@@ -1,1 +1,0 @@
-export { SimiliarProposals } from "./SimiliarProposals";

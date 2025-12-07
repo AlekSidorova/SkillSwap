@@ -1,20 +1,27 @@
 import React, { memo, useState, useEffect } from "react";
-import { Button } from "@shared/ui/Button";
-import type { CardProps } from "./type";
-import type { TSkill } from "@/shared/types/types";
+import { Button } from "@shared/ui/Button/Button";
+import type { CardProps } from "./types";
+import type { TSkill } from "@entities/skill/types";
 import styles from "./card.module.scss";
-import { calculateAge } from "../../../../public/utils/ageCalculator";
-import { Like } from "../Like";
-import { getUserSkillsByType } from "../../../../public/utils/skillUtils";
+import { calculateAge } from "@shared/lib/utils/ageCalculator";
+import { Like } from "../Like/Like";
+import { getUserSkillsByType } from "@shared/lib/utils/skillUtils";
 import {
   getTagClassName,
   getCategoryIdBySubcategory,
-} from "../../../../public/utils/categoryUtils";
-import { getCityNameById } from "../../../../public/utils/cityUtils";
-import type { TSubcategory } from "@/shared/types/types";
+} from "@shared/lib/utils/categoryUtils";
+import { getCityNameById } from "@shared/lib/utils/cityUtils";
+import type { TSubcategory } from "@entities/category/types";
 
 export const Card: React.FC<CardProps> = memo(
-  ({ user, cities, onDetailsClick, className = "", isLoading = false }) => {
+  ({
+    user,
+    cities,
+    isAuthenticated = false,
+    onDetailsClick,
+    className = "",
+    isLoading = false,
+  }) => {
     const [skills, setSkills] = useState<TSkill[]>([]);
     const [skillsLoading, setSkillsLoading] = useState(true);
     const [subcategories, setSubcategories] = useState<TSubcategory[]>([]);
@@ -77,7 +84,10 @@ export const Card: React.FC<CardProps> = memo(
           </div>
           <div className={styles.userInfo}>
             <Like
-              currentLikeCount={user.likes}
+              currentLikeCount={user.likesCount ?? 0}
+              isLiked={user.isLikedByCurrentUser ?? false}
+              userId={user.id}
+              isAuthenticated={isAuthenticated}
               className={styles.like}
               onLikeToggle={() => {}}
             />
@@ -96,7 +106,7 @@ export const Card: React.FC<CardProps> = memo(
           <div className={styles.skillItem}>
             <div className={styles.skillInfo}>
               <div className={styles.tags}>
-                {canTeachSkills.slice(0, 1).map((skill) => {
+                {canTeachSkills.slice(0, 1).map((skill: TSkill) => {
                   const categoryId = getCategoryIdBySubcategory(
                     skill.subcategoryId,
                     subcategories,
@@ -132,7 +142,7 @@ export const Card: React.FC<CardProps> = memo(
         <div className={styles.section}>
           <div className={styles.sectionTitle}>Хочет научиться:</div>
           <div className={styles.learnTags}>
-            {wantToLearnSkills.slice(0, 2).map((skill) => {
+            {wantToLearnSkills.slice(0, 2).map((skill: TSkill) => {
               const categoryId = getCategoryIdBySubcategory(
                 skill.subcategoryId,
                 subcategories,

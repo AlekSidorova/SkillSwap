@@ -1,4 +1,4 @@
-import type { TRegisterStepsProps } from "./types.ts";
+import type { TRegisterStepsProps } from "./types";
 import styles from "./signupSteps.module.scss";
 import clsx from "clsx";
 

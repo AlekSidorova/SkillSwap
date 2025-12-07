@@ -1,5 +1,5 @@
 import styles from "./footer.module.scss";
-import { Logo } from "@shared/ui/Logo";
+import { Logo } from "@shared/ui/Logo/Logo";
 
 export const Footer = () => {
   return (

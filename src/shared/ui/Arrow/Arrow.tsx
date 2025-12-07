@@ -1,7 +1,7 @@
 import clsx from "clsx";
-import arrow from "../../../images/icons/chevron-down.svg";
+import arrow from "@images/icons/chevron-down.svg";
 import type { FC } from "react";
-import type { TArrowProps } from "@shared/ui/Arrow/type";
+import type { TArrowProps } from "@shared/ui/Arrow/types";
 import styles from "./arrow.module.scss";
 
 // Данный компонент отображает стрелку для раскрывающегося списка

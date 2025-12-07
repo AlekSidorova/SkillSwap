@@ -10,15 +10,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./header.module.scss";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import { Logo } from "../../shared/ui/Logo";
-import { Button } from "../../shared/ui/Button";
-import { Input } from "../../shared/ui/Input";
-import { DecoratedButton } from "../../shared/ui/DecoratedButton";
+import { Logo } from "@shared/ui/Logo/Logo";
+import { Button } from "@shared/ui/Button/Button";
+import { Input } from "@shared/ui/Input/Input";
+import { DecoratedButton } from "@shared/ui/DecoratedButton/DecoratedButton";
 import { useTheme } from "@shared/hooks/useTheme";
-import { useAppSelector } from "@store/hooks";
-import { selectReferenceData } from "@store/slices/referenceDataSlice";
-import { DropDown } from "@/shared/ui/DropDown";
-import { DropDownListCategory } from "@/shared/ui/DropDownListCategory";
+import { useAppSelector } from "@app/store/hooks";
+import { selectCategoryData } from "@entities/category/model/slice";
+import { DropDown } from "@shared/ui/DropDown/DropDown";
+import { DropDownListCategory } from "@shared/ui/DropDownListCategory/DropDownListCategory";
 import NotificationPanel from "../NotificationPanel/NotificationPanel";
 
 export const Header = () => {
@@ -28,11 +28,13 @@ export const Header = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
-  const [notificationsCount, setNotificationsCount] = useState(1);
+  // TODO: закомментировать после добавления notificationsCount в state
+  const notificationsCount = 1; // TODO: заменить на state
+  // const [notificationsCount, setNotificationsCount] = useState(1);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchRef = useRef<HTMLDivElement>(null);
-  const { subcategories } = useAppSelector(selectReferenceData);
+  const { subcategories } = useAppSelector(selectCategoryData);
   const { toggle } = useTheme();
 
   // Синхронизируем значение поиска с URL параметром

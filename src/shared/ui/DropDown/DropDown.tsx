@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styles from "./dropDown.module.scss";
-import type { IDropDownProps } from "./dropDown.type";
+import type { IDropDownProps } from "./dropDown.types";
 
 export const DropDown = (props: IDropDownProps) => {
   const {
