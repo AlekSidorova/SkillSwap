@@ -29,7 +29,7 @@ interface TFilterState {
   purpose: string; // "Всё" | "Хочу научиться" | "Хочу научить"
   skills: number[]; // Массив ID подкатегорий
   gender: string; // "Не имеет значения" | "Мужчины" | "Женщины"
-  citys: number[]; // Массив ID городов
+  cityAll: number[]; // Массив ID городов
 }
 ```
 
@@ -77,7 +77,7 @@ export const MainPage = () => {
     purpose: '',
     skills: [],
     gender: '',
-    citys: [],
+    cityAll: [],
   });
 
   return (
@@ -100,7 +100,7 @@ export const MainPage = () => {
     purpose: '',
     skills: [],
     gender: '',
-    citys: [],
+    cityAll: [],
   });
 
   const clearSearchQuery = () => {

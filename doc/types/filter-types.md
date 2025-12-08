@@ -11,7 +11,7 @@ export interface TFilterState {
   purpose: string;
   skills: number[];
   gender: string;
-  citys: number[];
+  cityAll: number[];
 }
 ```
 
@@ -20,7 +20,7 @@ export interface TFilterState {
 - `purpose` - цель поиска ("Всё" | "Хочу научиться" | "Хочу научить")
 - `skills` - массив ID подкатегорий
 - `gender` - пол ("Не имеет значения" | "Мужчины" | "Женщины")
-- `citys` - массив ID городов
+- `cityAll` - массив ID городов
 
 ### Начальное состояние
 
@@ -29,7 +29,7 @@ const initialFilters: TFilterState = {
   purpose: "",
   skills: [],
   gender: "",
-  citys: [],
+  cityAll: [],
 };
 ```
 
@@ -42,7 +42,7 @@ export interface TPropsFilter {
   purpose: string[];
   skills: TCategory[];
   gender: string[];
-  citys: TCity[];
+  cityAll: TCity[];
 }
 ```
 
@@ -53,7 +53,7 @@ const filterProps: TPropsFilter = {
   purpose: ["Всё", "Хочу научиться", "Хочу научить"],
   skills: categories,
   gender: ["Не имеет значения", "Мужчины", "Женщины"],
-  citys: cities,
+  cityAll: cities,
 };
 ```
 
@@ -90,7 +90,7 @@ const [filters, setFilters] = useState<TFilterState>({
   purpose: "",
   skills: [],
   gender: "",
-  citys: [],
+  cityAll: [],
 });
 ```
 
@@ -123,7 +123,7 @@ const hasActiveFilters =
   filters.purpose !== "" ||
   filters.skills.length > 0 ||
   filters.gender !== "" ||
-  filters.citys.length > 0;
+  filters.cityAll.length > 0;
 ```
 
 ## Маппинг значений

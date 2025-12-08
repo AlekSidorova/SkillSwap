@@ -25,7 +25,7 @@ export const useFilteredUsers = ({
     filters.purpose !== "" ||
     filters.skills.length > 0 ||
     filters.gender !== "" ||
-    filters.citys.length > 0;
+    filters.cityAll.length > 0;
 
   // Фильтрация предложений (навыков) по критериям фильтра
   const filteredOffers = useMemo(() => {
@@ -33,7 +33,7 @@ export const useFilteredUsers = ({
       return [];
     }
 
-    // Фильтруем пользователей по gender и citys
+    // Фильтруем пользователей по gender и cityAll
     let filteredUsers = usersWithLikes;
 
     if (filters.gender !== "" && filters.gender !== "Не имеет значения") {
@@ -49,8 +49,8 @@ export const useFilteredUsers = ({
       }
     }
 
-    if (filters.citys.length > 0) {
-      const cityIdsSet = new Set(filters.citys);
+    if (filters.cityAll.length > 0) {
+      const cityIdsSet = new Set(filters.cityAll);
       filteredUsers = filteredUsers.filter((user) =>
         cityIdsSet.has(user.cityId),
       );

@@ -41,7 +41,7 @@ const hasActiveFilters =
   filters.purpose !== "" ||
   filters.skills.length > 0 ||
   filters.gender !== "" ||
-  filters.citys.length > 0;
+  filters.cityAll.length > 0;
 ```
 
 ### 2. Фильтрация пользователей
@@ -66,8 +66,8 @@ if (filters.gender !== "" && filters.gender !== "Не имеет значени�
 #### По городам
 
 ```typescript
-if (filters.citys.length > 0) {
-  const cityIdsSet = new Set(filters.citys);
+if (filters.cityAll.length > 0) {
+  const cityIdsSet = new Set(filters.cityAll);
   filteredUsers = filteredUsers.filter((user) => cityIdsSet.has(user.cityId));
 }
 ```
@@ -120,7 +120,7 @@ const MyComponent = () => {
     purpose: '',
     skills: [],
     gender: '',
-    citys: [],
+    cityAll: [],
   });
 
   const { filteredOffers, filteredUsers, hasActiveFilters } = useFilteredUsers({

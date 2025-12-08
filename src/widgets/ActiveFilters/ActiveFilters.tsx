@@ -59,8 +59,8 @@ export const ActiveFilters = ({
       });
     }
 
-    // Citys фильтры
-    filters.citys.forEach((cityId) => {
+    // CityAll фильтры
+    filters.cityAll.forEach((cityId) => {
       const city = cities.find((c) => c.id === cityId);
       if (city) {
         tags.push({
@@ -90,7 +90,7 @@ export const ActiveFilters = ({
         newFilters.gender = "";
         break;
       case "city":
-        newFilters.citys = newFilters.citys.filter((id) => id !== value);
+        newFilters.cityAll = newFilters.cityAll.filter((id) => id !== value);
         break;
     }
 

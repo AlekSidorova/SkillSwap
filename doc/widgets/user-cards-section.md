@@ -74,7 +74,7 @@ export const MainPage = () => {
     purpose: '',
     skills: [],
     gender: '',
-    citys: [],
+    cityAll: [],
   });
 
   return (

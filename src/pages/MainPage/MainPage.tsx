@@ -16,7 +16,7 @@ export const MainPage = () => {
     purpose: "",
     skills: [],
     gender: "",
-    citys: [],
+    cityAll: [],
   });
 
   const { subcategories } = useAppSelector(selectCategoryData);

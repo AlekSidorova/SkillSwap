@@ -57,7 +57,7 @@
 
       .filterPurposeItems,
       .filterGenderItems,
-      .filterCitysItems {
+      .filterCityAllItems {
         inline-size: 100%;
         @include flex;
       }
@@ -65,7 +65,7 @@
 
     .filterSkills,
     .filterGender,
-    .filterCitys {
+    .filterCityAll {
       inline-size: 100%;
       @include flex(column, center, flex-start, 20px);
     }

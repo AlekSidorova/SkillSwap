@@ -2,7 +2,7 @@ export interface TFilterState {
   purpose: string;
   skills: number[];
   gender: string;
-  citys: number[];
+  cityAll: number[];
 }
 
 export const FILTER_CONFIG = {
