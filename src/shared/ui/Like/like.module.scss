@@ -8,7 +8,7 @@
       size: 16px;
     }
     color: $color-text;
-    line-height: 1.1;
+    line-height: normal;
     transition: 0.1s;
   }
 
@@ -19,14 +19,6 @@
   .likeButton {
     inline-size: 24px;
     block-size: 24px;
-    background-image: url("@images/icons/like.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     transition: 0.1s;
-  }
-
-  .likeActive {
-    background-image: url("@images/icons/like-painted-over.svg");
   }
 }

@@ -7,6 +7,7 @@ import {
 } from "@entities/user/model/slice";
 import styles from "./like.module.scss";
 import type { ILikeProps } from "./like.types";
+import { LikeEmpty, LikePaintedOver } from "./likeSvg/LikeSVG";
 
 export const Like = (props: ILikeProps) => {
   const {
@@ -99,12 +100,14 @@ export const Like = (props: ILikeProps) => {
         {likeCount}
       </span>
       <button
-        className={`${styles.likeButton} ${isLiked && styles.likeActive}`}
+        className={styles.likeButton}
         onClick={toggleliked}
         disabled={isLoading}
         aria-label={isLiked ? "Убрать лайк" : "Поставить лайк"}
         aria-busy={isLoading}
-      ></button>
+      >
+        {isLiked ? <LikePaintedOver /> : <LikeEmpty />}
+      </button>
     </div>
   );
 };

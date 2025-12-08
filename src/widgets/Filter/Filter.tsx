@@ -7,7 +7,6 @@ import {
 import { Input } from "@shared/ui/Input/Input";
 import styles from "./filter.module.scss";
 import { FILTER_CONFIG, type TFilterState } from "@features/filter-users/types";
-import { ClearSVG } from "@widgets/Filter/svg/ClearSvg";
 import chevronUp from "@images/icons/chevron-up.svg";
 import chevronDown from "@images/icons/chevron-down.svg";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
@@ -17,6 +16,7 @@ import {
 } from "@entities/category/model/slice";
 import { selectCities, fetchCities } from "@entities/city/model/slice";
 import { FilterSkeleton } from "@widgets/FilterSkeleton/FilterSkeleton";
+import { Chevron, ClearSVG } from "./svg/FilterSvg";
 
 interface FilterProps {
   filters: TFilterState;
@@ -180,9 +180,14 @@ export const Filter = ({
           Фильтры {selectedFilterCounts > 0 && `(${selectedFilterCounts})`}
         </h2>
         {selectedFilterCounts > 0 && (
-          <button className={styles.clearButton} onClick={handleClearFilter}>
+          <button
+            className={styles.clearButton}
+            onClick={handleClearFilter}
+            type="button"
+            aria-label="Сбросить все фильтры"
+          >
             Сбросить
-            <ClearSVG className={styles.clearButtonSVG} />
+            <ClearSVG aria-hidden="true" />
           </button>
         )}
       </div>
@@ -223,14 +228,22 @@ export const Filter = ({
                     isBlockCheckedLabel
                     openListFunction={() => toggleCategory(category.id)}
                   />
-                  <button onClick={() => toggleCategory(category.id)}>
-                    <img
-                      src={
-                        showSubcategorys.includes(category.id)
-                          ? chevronUp
-                          : chevronDown
+                  <button
+                    onClick={() => toggleCategory(category.id)}
+                    type="button"
+                    aria-label={
+                      showSubcategorys.includes(category.id)
+                        ? "Свернуть"
+                        : "Развернуть"
+                    }
+                    aria-expanded={showSubcategorys.includes(category.id)}
+                  >
+                    <Chevron
+                      color="black"
+                      directionArrow={
+                        showSubcategorys.includes(category.id) ? "up" : "down"
                       }
-                      alt={`иконка стрелочки ${showSubcategorys.includes(category.id) ? "Вверх" : "Вниз"}`}
+                      aria-hidden="true"
                     />
                   </button>
                 </div>
@@ -258,11 +271,18 @@ export const Filter = ({
                   className={styles.showAllButton}
                   onClick={toggleShowAllSkills}
                   type="button"
+                  aria-label={
+                    showAllSkills
+                      ? "Скрыть все категории навыков"
+                      : "Показать все категории навыков"
+                  }
+                  aria-expanded={showAllSkills}
                 >
                   {showAllSkills ? "Скрыть" : "Все категории"}
-                  <img
-                    src={showAllSkills ? chevronUp : chevronDown}
-                    alt={`иконка стрелочки ${showAllSkills ? "Вверх" : "Вниз"}`}
+                  <Chevron
+                    color="green"
+                    directionArrow={showAllSkills ? "up" : "down"}
+                    aria-hidden="true"
                   />
                 </button>
               </li>
@@ -306,11 +326,17 @@ export const Filter = ({
                 <button
                   className={styles.showAllButton}
                   onClick={toggleShowAllCities}
+                  type="button"
+                  aria-label={
+                    showAllCities ? "Скрыть все города" : "Показать все города"
+                  }
+                  aria-expanded={showAllCities}
                 >
                   {showAllCities ? "Скрыть" : "Все города"}
-                  <img
-                    src={showAllCities ? chevronUp : chevronDown}
-                    alt={`иконка стрелочки ${showAllCities ? "Вверх" : "Вниз"}`}
+                  <Chevron
+                    color="green"
+                    directionArrow={showAllCities ? "up" : "down"}
+                    aria-hidden="true"
                   />
                 </button>
               </li>

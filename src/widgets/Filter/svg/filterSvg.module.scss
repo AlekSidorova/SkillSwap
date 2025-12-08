@@ -1,0 +1,21 @@
+.clearSvg {
+  inline-size: 11px;
+  block-size: 11px;
+
+  &Path {
+    fill: $color-text-link;
+  }
+}
+
+.chevron {
+  inline-size: 24px;
+  block-size: 24px;
+
+  &Black {
+    fill: $color-text;
+  }
+
+  &Green {
+    fill: $color-text-link;
+  }
+}

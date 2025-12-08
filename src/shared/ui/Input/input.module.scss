@@ -23,24 +23,16 @@
   }
   position: relative;
 
-  &::placeholder {
-    color: $color-border-input;
-  }
-
   &.datePlaceholder {
     color: $color-border-input;
   }
 
   &::-webkit-calendar-picker-indicator {
-    @include input-icon("@images/icons/calendar.svg");
+    display: none;
   }
 
   &::-moz-calendar-picker-indicator {
-    @include input-icon("@images/icons/calendar.svg");
-  }
-
-  &::-webkit-reveal {
-    @include input-icon("@images/icons/eye.svg");
+    display: none;
   }
 }
 
@@ -71,7 +63,7 @@
 
   .showPassword {
     inline-size: 24px;
-    aspect-ratio: 1;
+    block-size: 24px;
     position: absolute;
     background-color: $color-input;
     background-position: center;
@@ -79,16 +71,14 @@
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
+  }
+}
 
-    &Image {
-      inline-size: 24px;
-      aspect-ratio: 1;
-      transition: 0.2s;
+.inputDateWrapper {
+  @extend .inputPasswordWrapper;
 
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+  .buttonDate {
+    @extend .showPassword;
   }
 }
 
@@ -97,15 +87,11 @@
   position: relative;
   inline-size: 100%;
 
-  &::after {
+  .inputSearchSvg {
     position: absolute;
-    left: 0;
-    content: "";
-    @include input-icon("@images/icons/search.svg");
-    @include flex;
-    inline-size: 24px;
-    aspect-ratio: 1;
-    margin-left: 12px;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
     pointer-events: none;
   }
 
@@ -135,44 +121,14 @@
     }
     cursor: pointer;
   }
-
-  .inputRadioCustom {
-    inline-size: 20px;
-    block-size: 20px;
-    @include input-icon("@images/icons/radiobutton-empty.svg");
-    cursor: pointer;
-    @include flex;
-  }
-
-  .inputRadio:checked + .inputRadioCustom {
-    border-color: $color-button-pressed;
-    @include input-icon("@images/icons/radiobutton-active.svg");
-  }
 }
 
 .labelCheckbox {
   @extend .labelRadio;
 
-  .inputCheckboxCustom {
-    inline-size: 24px;
-    block-size: 24px;
-    flex-shrink: 0; // Чекбокс не сжимается
-    @include input-icon("@images/icons/checkbox-empty.svg");
-  }
-
   .inputText {
     flex: 1; // Текст занимает оставшееся пространство
     min-inline-size: 0; // Позволяет тексту переноситься
     overflow-wrap: break-word; // Перенос длинных слов
-  }
-
-  .inputCheckbox:checked + .inputCheckboxCustom {
-    &.isList {
-      @include input-icon("@images/icons/checkbox-done.svg");
-    }
-
-    &.nonList {
-      @include input-icon("@images/icons/checkbox-remove.svg");
-    }
   }
 }
