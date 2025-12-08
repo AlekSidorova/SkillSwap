@@ -19,15 +19,18 @@ import { useAppSelector } from "@app/store/hooks";
 import { selectCategoryData } from "@entities/category/model/slice";
 import { DropDown } from "@shared/ui/DropDown/DropDown";
 import { DropDownListCategory } from "@shared/ui/DropDownListCategory/DropDownListCategory";
-
-//проверить уведомления
-import NotificationPanel from "@features/notifications/ui/NotificationPanel/NotificationPanel";
-import { defaultNotifications } from "@/features/notifications/model/useNotifications";
-import type { INotification } from "@/features/notifications/model/types";
+import NotificationPanel from "../NotificationPanel/NotificationPanel";
+import { selectUser } from "@/features/auth/model/slice";
+import { useAppDispatch } from "@app/store/hooks";
+import { logout } from "@/features/auth/model/slice";
 
 export const Header = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [isAuth] = useState(false);
+  //меняем состояние шапки
+  const user = useAppSelector(selectUser);
+  const isAuth = Boolean(user);
+  const dispatch = useAppDispatch();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -223,10 +226,10 @@ export const Header = () => {
             data-trigger-dropdown="profile"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <span className={styles.userName}>Мария</span>
+            <span className={styles.userName}>{user?.name}</span>
             <img
               className={styles.userImage}
-              src="https://i.pravatar.cc/150?img=17"
+              src={user?.avatarUrl}
               alt="Аватар пользователя"
             />
             {isMenuOpen && (
@@ -249,7 +252,10 @@ export const Header = () => {
                       styles.profileMenuItem,
                       styles.profileMenuItemExit,
                     )}
-                    onClick={() => console.log("Вы вышли из аккаунта")}
+                    onClick={() => {
+                      dispatch(logout());
+                      setIsMenuOpen(false);
+                    }}
                   >
                     Выйти из аккаунта
                   </li>
