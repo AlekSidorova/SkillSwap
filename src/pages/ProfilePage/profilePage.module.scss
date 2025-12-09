@@ -1,0 +1,233 @@
+@use "@styles/variables" as vars;
+
+.wrapper {
+  display: flex;
+  gap: 24px;
+  padding: 32px 0 60px;
+}
+
+.sidebarBackground {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 24px;
+  padding: 40px;
+  background: vars.$color-card;
+  inline-size: 324px;
+  block-size: 752px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menuItem,
+.menuItemActive {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: vars.$color-text;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.menuItemActive {
+  border-radius: 12px;
+  background: vars.$color-button-hover;
+  inline-size: 244px;
+  block-size: 48px;
+}
+
+.profileBackground {
+  box-sizing: border-box;
+  border-radius: 24px;
+  padding: 60px;
+  background: vars.$color-card;
+  inline-size: 1020px;
+  block-size: 752px;
+}
+
+.content {
+  flex: 1;
+}
+
+.grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.fields {
+  flex: 1;
+  max-inline-size: 520px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+  color: vars.$color-text;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  inline-size: 460px;
+  block-size: 48px;
+}
+
+.inputChildrenIcon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.inputBirth {
+  inline-size: 218px;
+}
+
+.genderTrigger {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid vars.$color-border-input;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  cursor: pointer;
+  inline-size: 218px;
+  block-size: 48px;
+}
+
+.genderArrowIcon {
+  flex-shrink: 0;
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.genderWrapper {
+  position: relative;
+  inline-size: 218px;
+}
+
+// .genderMenu {
+//   inline-size: 100%;
+//   font-family: Roboto, sans-serif;
+//   color: vars.$color-text;
+//   font-size: 16px;
+//   line-height: 150%;
+//   letter-spacing: 0.02em;
+//   inline-size: 218px;
+//   padding: 4px 0;
+// }
+
+// .genderItem {
+//   padding: 8px 12px;
+//   cursor: pointer;
+// }
+
+.cityWrapper {
+  position: relative;
+  inline-size: 460px;
+}
+
+.cityTrigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid vars.$color-border-input;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  inline-size: 100%;
+  block-size: 48px;
+}
+
+.changePassword {
+  padding-top: 10px;
+  color: vars.$color-text-link;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.birthGender {
+  display: flex;
+  gap: 24px;
+}
+
+.textareaWrapper {
+  position: relative;
+  inline-size: 460px;
+  block-size: 120px;
+  margin-bottom: 34px;
+
+  textarea {
+    box-sizing: border-box;
+    border: 1px solid vars.$color-border-input;
+    border-radius: 12px;
+    padding: 12px 20px;
+    vertical-align: top;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.02em;
+    inline-size: 100%;
+    block-size: 100%;
+    resize: none;
+  }
+}
+
+.buttonSave {
+  inline-size: 460px;
+}
+
+.avatarWrapper {
+  position: relative;
+  inline-size: 244px;
+  block-size: 244px;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.avatarEditIcon {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  object-fit: contain;
+  cursor: pointer;
+  inline-size: 56px;
+  block-size: 56px;
+}

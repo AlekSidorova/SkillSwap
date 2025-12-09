@@ -7,6 +7,7 @@ import { SignupStepTwo } from "@pages/signup/ui/SignupStepTwo/SignupStepTwo";
 import { Login } from "@/pages/Login/Login";
 import { Layout } from "@/widgets/Layout/Layout";
 import { ErrorPage } from "@/pages/ErrorPage/ErrorPage";
+import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
 import { Favorites } from "@/pages/Favorites/Favorites";
 
 function CreateOffer() {
@@ -35,7 +36,7 @@ export const AppRoutes = () => (
         path="profile"
         element={
           <ProtectedRoute>
-            <Profile />
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
