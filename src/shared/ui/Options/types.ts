@@ -8,4 +8,5 @@ export type TOptionsProps = {
   toggleOption: (option: TOption) => void;
   selectedOptions: TOption[];
   selectorType: TSelector;
+  onClose: () => void;
 };

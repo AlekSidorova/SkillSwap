@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { FC } from "react";
+import { useRef, type FC } from "react";
 import type { TOptionsProps } from "./types";
 import styles from "./options.module.scss";
 
@@ -11,10 +11,13 @@ export const Options: FC<TOptionsProps> = ({
   toggleOption,
   selectedOptions,
   selectorType,
+  onClose,
 }) => {
+  const optionRefs = useRef<HTMLLIElement[]>([]);
+
   return (
     <ul id={id} role="listbox" className={clsx(styles.list)}>
-      {selectionOptions.map((option) => (
+      {selectionOptions.map((option, index) => (
         <li
           className={clsx(
             selectorType === "checkbox"
@@ -25,12 +28,36 @@ export const Options: FC<TOptionsProps> = ({
               styles.inputRadioChecked,
           )}
           key={option}
+          ref={(element) => {
+            optionRefs.current[index] = element!;
+          }}
           role="option"
           aria-selected={selectedOptions.includes(option)}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              toggleOption(option);
+            }
+            if (e.key === "Escape") {
+              e.preventDefault();
+              onClose?.();
+            }
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              const nextIndex = (index + 1) % selectionOptions.length;
+              optionRefs.current[nextIndex]?.focus();
+            }
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              const prevIndex =
+                (index - 1 + selectionOptions.length) % selectionOptions.length;
+              optionRefs.current[prevIndex]?.focus();
+            }
+          }}
           onClick={() => toggleOption(option)}
         >
           <input
-            aria-hidden="true"
             className={clsx(
               selectorType === "checkbox"
                 ? selectedOptions.includes(option)

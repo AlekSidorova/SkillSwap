@@ -89,7 +89,17 @@ export const Selector: FC<TSelectorProps> = memo(
             aria-expanded={isOpen}
             aria-controls={listboxId}
             aria-labelledby={labelId}
+            tabIndex={0}
             onClick={() => onToggle(id)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && isOpen) {
+                onToggle(id);
+              }
+              if (e.key === "Enter" && !isOpen) {
+                e.preventDefault();
+                onToggle(id);
+              }
+            }}
           >
             {/* Поле ввода или просто заголовок в зависимости от значения enableSearch */}
             {enableSearch ? (
@@ -125,6 +135,7 @@ export const Selector: FC<TSelectorProps> = memo(
               toggleOption={toggleOption}
               selectedOptions={selectedOptions}
               selectorType={selectorType}
+              onClose={() => onToggle(id)}
             />
           )}
         </div>
