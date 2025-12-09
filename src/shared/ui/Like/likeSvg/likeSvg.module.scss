@@ -5,6 +5,11 @@
   &Path {
     fill: $color-text;
   }
+
+  &NonUser {
+    fill: $color-disabled;
+    stroke: $color-toggle;
+  }
 }
 
 .likePaintedOver {

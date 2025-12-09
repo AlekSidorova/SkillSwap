@@ -13,6 +13,7 @@ import type { TFilterState } from "@features/filter-users/types";
 import { ActiveFilters } from "@widgets/ActiveFilters/ActiveFilters";
 import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import styles from "./userCardsSection.module.scss";
+import { Button } from "@/shared/ui/Button/Button";
 
 interface UserCardsSectionProps {
   filters: TFilterState;
@@ -35,6 +36,9 @@ export const UserCardsSection = ({
   // Состояния для отслеживания, сколько элементов показывать (по умолчанию 3)
   const [popularCount, setPopularCount] = useState(3);
   const [newCount, setNewCount] = useState(3);
+  const [recommendationsCount, setRecommendationsCount] = useState(6);
+  const [isInfinityScrollActivated, setIsInfinityScrollActivated] =
+    useState(false);
 
   // Загрузка данных при монтировании компонента
   useEffect(() => {
@@ -56,6 +60,33 @@ export const UserCardsSection = ({
     skillsLoading,
     cities.length,
   ]);
+
+  // Бесконечный скролл
+  useEffect(() => {
+    let timeoutDelay: null | number = null;
+    const infinityScroll = () => {
+      if (timeoutDelay) clearTimeout(timeoutDelay);
+
+      timeoutDelay = setTimeout(() => {
+        const scrollTop = document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = window.innerHeight;
+
+        if (
+          scrollHeight - (scrollTop + clientHeight) < 232 &&
+          users.length > 0 &&
+          recommendationsCount < users.length
+        ) {
+          setRecommendationsCount((prev) => prev + 6);
+          setIsInfinityScrollActivated(true);
+        }
+      }, 200);
+    };
+
+    window.addEventListener("scroll", infinityScroll);
+
+    return () => window.removeEventListener("scroll", infinityScroll);
+  }, [users, recommendationsCount]);
 
   // Пользователи уже приходят с информацией о лайках из API
   const usersWithLikes = users;
@@ -85,19 +116,32 @@ export const UserCardsSection = ({
   }, [allNewUsers, newCount]);
 
   // Рекомендуемые пользователи (берем пользователей, которые не входят в популярных и новых)
+  // const recommendedUsers = useMemo(() => {
+  //   // Исключаем пользователей, которые уже есть в показанных популярных и новых
+  //   const popularIds = new Set(popularUsers.map((u) => u.id));
+  //   const newIds = new Set(newUsers.map((u) => u.id));
+  //   const excludedIds = new Set([...popularIds, ...newIds]);
+
+  //   const availableUsers = usersWithLikes.filter((u) => !excludedIds.has(u.id));
+
+  //   // Сортируем по количеству лайков и берем топ-6
+  //   return [...availableUsers]
+  //     .sort((a, b) => b.likesCount - a.likesCount)
+  //     .slice(0, 6);
+  // }, [usersWithLikes, popularUsers, newUsers]);
+
   const recommendedUsers = useMemo(() => {
-    // Исключаем пользователей, которые уже есть в показанных популярных и новых
-    const popularIds = new Set(popularUsers.map((u) => u.id));
-    const newIds = new Set(newUsers.map((u) => u.id));
-    const excludedIds = new Set([...popularIds, ...newIds]);
+    return [...users].slice(0, recommendationsCount);
+  }, [users, recommendationsCount]);
 
-    const availableUsers = usersWithLikes.filter((u) => !excludedIds.has(u.id));
-
-    // Сортируем по количеству лайков и берем топ-6
-    return [...availableUsers]
-      .sort((a, b) => b.likesCount - a.likesCount)
-      .slice(0, 6);
-  }, [usersWithLikes, popularUsers, newUsers]);
+  const hideRecommendations = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setRecommendationsCount(6);
+    setIsInfinityScrollActivated(false);
+  };
 
   // Используем хук для фильтрации пользователей
   const { filteredOffers, filteredUsers, hasActiveFilters } = useFilteredUsers({
@@ -201,7 +245,12 @@ export const UserCardsSection = ({
 
   // Если фильтров нет, показываем стандартные секции
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onScroll={(e) => {
+        console.log(e.target);
+      }}
+    >
       {/* Секция "Популярное" */}
       <section className={styles.section}>
         <div className={styles.sectionTitleRow}>
@@ -269,6 +318,11 @@ export const UserCardsSection = ({
             />
           ))}
         </div>
+        {isInfinityScrollActivated && (
+          <Button variant="secondary" onClick={hideRecommendations}>
+            К началу страницы
+          </Button>
+        )}
       </section>
     </div>
   );
