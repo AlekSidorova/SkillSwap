@@ -211,9 +211,9 @@ export const UserCardsSection = ({
       <div className={styles.container}>
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
+            <h1 className={styles.sectionTitle}>
               Подходящие предложения: {filteredOffers.length}
-            </h2>
+            </h1>
             <ActiveFilters
               filters={filters}
               subcategories={subcategories}
