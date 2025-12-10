@@ -1,3 +1,6 @@
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import { updateStep1, selectSignup } from "@features/signup/model/slice";
+import { useNavigate } from "react-router-dom";
 import styles from "./signupStepOne.module.scss";
 import { Button } from "@shared/ui/Button/Button";
 import { Input } from "@shared/ui/Input/Input";
@@ -13,9 +16,15 @@ import { ExternalLogIn } from "@/widgets/ExternalLogIn/ExternalLogIn";
 import { WelcomeSection } from "@shared/ui/WelcomeSection/WelcomeSection.tsx";
 
 export const SignupStepOne = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  // Получаем сохраненные данные из Redux
+  const { step1 } = useAppSelector(selectSignup);
+
+  // Инициализируем форму данными из Redux
   const [formData, setFormData] = useState<SignupStep1Data>({
-    email: "",
-    password: "",
+    email: step1.email || "",
+    password: step1.password || "",
   });
 
   const [touched, setTouched] = useState({
@@ -66,6 +75,19 @@ export const SignupStepOne = () => {
     setTouched((prev) => ({ ...prev, [id]: true }));
   };
 
+  const handleSubmit = () => {
+    if (isFormValid) {
+      // Сохраняем данные шага 1 в Redux
+      dispatch(
+        updateStep1({
+          email: formData.email,
+          password: formData.password,
+        }),
+      );
+      navigate("/registration/step2");
+    }
+  };
+
   return (
     <>
       <div className={styles.logo}>
@@ -82,7 +104,13 @@ export const SignupStepOne = () => {
       <section className={styles.section}>
         <div className={styles.registerContainer}>
           <ExternalLogIn />
-          <form className={styles.form}>
+          <form
+            className={styles.form}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
             <div className={styles.emailContainer}>
               <label htmlFor="email">Email</label>
               <Input
@@ -112,7 +140,9 @@ export const SignupStepOne = () => {
               )}
             </div>
 
-            <Button disabled={!isFormValid}>Далее</Button>
+            <Button onClick={handleSubmit} disabled={!isFormValid}>
+              Далее
+            </Button>
           </form>
         </div>
         <WelcomeSection
