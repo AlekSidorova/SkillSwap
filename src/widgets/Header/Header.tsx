@@ -28,8 +28,6 @@ import {
   fetchNotifications,
   markAllNotificationsAsRead,
 } from "@entities/notification/model/slice";
-import { Arrow } from "@/shared/ui/Arrow/Arrow";
-import { LogOutSvg } from "./svg/LogoutSvg";
 
 import type { TFilterState } from "@/features/filter-users/types";
 import type { TSubcategory } from "@/entities/category/types";
@@ -138,12 +136,8 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
   };
 
   return (
-    <header role="banner" className={styles.header}>
-      <nav
-        className={styles.navigation}
-        aria-label="main navigation"
-        role="navigation"
-      >
+    <header className={styles.header}>
+      <nav className={styles.navigation} aria-label="Основная навигация">
         <Logo />
 
         <ul className={styles.navigationList}>
@@ -154,7 +148,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
           </li>
 
           <li>
-            <p
+            <button
               className={clsx(
                 styles.navigationDropDownLink,
                 {
@@ -165,11 +159,12 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
               )}
               data-trigger-dropdown="category"
               onClick={() => setShowCategory(!showCategory)}
+              aria-expanded={showCategory}
+              aria-haspopup="menu"
             >
               {/* Для работы компонента DropDown компоненту контроллеру нужно указать атрибут data-trigger-dropdown */}
               Все навыки
-              <Arrow isOpen={showCategory} />
-            </p>
+            </button>
             {showCategory && (
               <DropDown
                 top="22px"
@@ -177,7 +172,6 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
                 triggerGroupe="category"
                 onClose={() => setShowCategory(false)}
                 isOpen={showCategory}
-                role="listbox"
               >
                 <DropDownListCategory
                   subcategories={subcategories}
@@ -215,6 +209,9 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
             value={searchValue}
             onChange={handleSearchChange}
             onFocus={() => setShowSuggestions(true)}
+            id="search-input"
+            aria-autocomplete="list"
+            aria-expanded={showSuggestions}
           />
         </form>
         {showSuggestions && suggestions.length > 0 && (
@@ -238,10 +235,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
           <div className={styles.buttons}>
             <DecoratedButton variant={"moon"} onClick={() => toggle()} />
 
-            <div
-              data-trigger-dropdown="notifications"
-              className={styles.buttonNotifications}
-            >
+            <div data-trigger-dropdown="notifications">
               <DecoratedButton
                 variant="bell"
                 data-trigger-dropdown="notifications"
@@ -263,6 +257,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
                     notifications={notifications}
                     onMarkAllRead={handleMarkAllRead}
                     isOpen={isNotificationsOpen}
+                    aria-expanded={isNotificationsOpen}
                   />
                 </DropDown>
               )}
@@ -309,7 +304,6 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
                     }}
                   >
                     Выйти из аккаунта
-                    <LogOutSvg />
                   </li>
                 </ul>
               </DropDown>
