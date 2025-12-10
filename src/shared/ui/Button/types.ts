@@ -11,4 +11,5 @@ export type TButtonProps = {
   rightIcon?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   to?: string;
+  otherClassNames?: string;
 };

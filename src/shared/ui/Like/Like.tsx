@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, type MouseEventHandler } from "react";
-import { useAppDispatch } from "@app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { createLike, deleteLike } from "@entities/like/model/slice";
 import {
   updateUserInState,
@@ -9,6 +9,7 @@ import styles from "./like.module.scss";
 import type { ILikeProps } from "./like.types";
 import { LikeEmpty, LikePaintedOver } from "./likeSvg/LikeSVG";
 import { useLocation, useNavigate } from "react-router-dom";
+import { selectUser } from "@/features/auth/model/slice";
 
 export const Like = (props: ILikeProps) => {
   const {
@@ -19,6 +20,7 @@ export const Like = (props: ILikeProps) => {
     className = "",
   } = props;
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser);
   const [likeCount, setLikeCount] = useState(currentLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +36,8 @@ export const Like = (props: ILikeProps) => {
 
   const toggleliked: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
+
+    if (currentUser && currentUser?.id === userId) return;
 
     // Если пользователь не авторизован, не позволяем ставить лайки
     if (!isAuthenticated) {
@@ -110,7 +114,11 @@ export const Like = (props: ILikeProps) => {
         aria-label={isLiked ? "Убрать лайк" : "Поставить лайк"}
         aria-busy={isLoading}
       >
-        {isLiked ? <LikePaintedOver /> : <LikeEmpty />}
+        {isLiked ? (
+          <LikePaintedOver />
+        ) : (
+          <LikeEmpty isUser={currentUser?.id === userId} />
+        )}
       </button>
     </div>
   );

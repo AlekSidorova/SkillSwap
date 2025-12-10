@@ -20,6 +20,7 @@ export const Button = (props: TButtonProps) => {
     rightIcon,
     onClick,
     to,
+    otherClassNames,
   } = props;
 
   if (to) {
@@ -42,7 +43,7 @@ export const Button = (props: TButtonProps) => {
 
   return (
     <button
-      className={clsx(styles.button, styles[variant])}
+      className={clsx(styles.button, styles[variant], otherClassNames)}
       type={htmlType}
       disabled={disabled}
       onClick={onClick}
