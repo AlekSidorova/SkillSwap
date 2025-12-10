@@ -78,8 +78,7 @@
 }
 
 .notificationContent {
-  display: flex;
-  gap: 10px;
+  @include flex(row, center, center, 8px);
 }
 
 .messageContainer {
