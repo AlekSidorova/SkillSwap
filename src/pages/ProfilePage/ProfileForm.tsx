@@ -2,199 +2,507 @@ import { Input } from "@/shared/ui/Input/Input";
 import { Button } from "@/shared/ui/Button/Button";
 import { Calendar } from "@shared/ui/Calendar/Calendar";
 import editIcon from "@images/icons/edit.svg?url";
-import chevronDownIcon from "@images/icons/chevron-down.svg?url";
 import editPhotoIcon from "@images/icons/edit-photo.svg";
 import styles from "./profilePage.module.scss";
-import { useAppSelector } from "@app/store/hooks";
-import { selectUser } from "@/features/auth/model/slice";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import {
+  changePassword,
+  selectUser,
+  updateCurrentUser,
+} from "@/features/auth/model/slice";
+import { Selector } from "@/shared/ui/Selector/Selector";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
+import { Loader } from "@/shared/ui/Loader/Loader";
+import { fetchCities, selectCities } from "@/entities/city/model/slice";
+import type { UpdateUserRequest } from "@/shared/lib/types/api";
+import { ModalUI } from "@/shared/ui/Modal/Modal";
 
 export const ProfileForm = () => {
   const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const { cities } = useAppSelector(selectCities);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const editingColor = "#e3e6ddff";
+
+  // Загружаем города при монтировании
+  useEffect(() => {
+    if (cities.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [dispatch, cities.length]);
+
+  const cityNameToId = new Map(cities.map((city) => [city.name, city.id]));
+
+  if (!user) return <Loader />;
+
+  // Инициализация данных пользователя
+  const [userData, setUserData] = useState({
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    dateOfBirth: user?.dateOfBirth
+      ? new Date(user.dateOfBirth)
+      : (null as Date | null),
+    gender: user?.gender ?? ("M" as "M" | "F"),
+    cityId: user?.cityId ?? 0,
+    about: user?.about ?? "",
+  });
+
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        name: user.name ?? "",
+        email: user.email ?? "",
+        dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth) : null,
+        gender: user.gender ?? "M",
+        cityId: user.cityId ?? 0,
+        about: user.about ?? "",
+      });
+      // Сбрасываем preview только если нет выбранного файла
+      // Это позволяет показывать preview выбранного файла до сохранения
+      if (!avatarFile) {
+        setAvatarPreview(null);
+      }
+    }
+  }, [user, avatarFile]);
+
+  const [editing, setEditing] = useState({
+    email: false,
+    name: false,
+    about: false,
+  });
+
+  const [openSelectorId, setOpenSelectorId] = useState<string | null>(null);
+  const selectorsRef = useRef<HTMLFormElement | null>(null);
+
+  // Для закрытия выпадающего списка при открытии другого
+  const handleToggle = (id: string) => {
+    setOpenSelectorId((prev) => (prev === id ? null : id));
+  };
+
+  // Закрытие выпадающих списков при клике вне
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        openSelectorId &&
+        selectorsRef.current &&
+        !selectorsRef.current.contains(event.target as Node)
+      ) {
+        setOpenSelectorId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openSelectorId]);
+
+  // Изменение поля
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // Изменение даты рождения
+  const handleDateChange = (date: Date | null) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      dateOfBirth: date,
+    }));
+  };
+
+  // Обработка выбора пола
+  const handleGenderSelect = (gender: "M" | "F" | "") => {
+    if (gender === "") return;
+    setUserData((prevState) => ({
+      ...prevState,
+      gender: gender as "M" | "F",
+    }));
+  };
+
+  // Обработка выбора города
+  const handleCitySelect = (cityId: number) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      cityId,
+    }));
+  };
+
+  // Изменение аватара
+  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Сохранение изменений
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const hasAvatar = avatarFile !== null;
+      const updateData: UpdateUserRequest | FormData = hasAvatar
+        ? new FormData()
+        : ({} as UpdateUserRequest);
+
+      if (hasAvatar) {
+        const formData = updateData as FormData;
+        if (userData.email) formData.append("email", userData.email);
+        if (userData.name) formData.append("name", userData.name);
+        if (userData.dateOfBirth) {
+          formData.append(
+            "dateOfBirth",
+            userData.dateOfBirth.toISOString().split("T")[0],
+          );
+        }
+        if (userData.gender) formData.append("gender", userData.gender);
+        if (userData.cityId)
+          formData.append("cityId", userData.cityId.toString());
+        if (userData.about !== undefined)
+          formData.append("about", userData.about);
+        formData.append("avatar", avatarFile);
+      } else {
+        const jsonData = updateData as UpdateUserRequest;
+        if (userData.email) jsonData.email = userData.email;
+        if (userData.name) jsonData.name = userData.name;
+        if (userData.dateOfBirth) {
+          jsonData.dateOfBirth = userData.dateOfBirth
+            .toISOString()
+            .split("T")[0];
+        }
+        if (userData.gender) jsonData.gender = userData.gender;
+        if (userData.cityId) jsonData.cityId = userData.cityId;
+        if (userData.about !== undefined) jsonData.about = userData.about;
+      }
+
+      await dispatch(updateCurrentUser(updateData)).unwrap();
+      setAvatarFile(null);
+      setAvatarPreview(null);
+      setEditing({
+        email: false,
+        name: false,
+        about: false,
+      });
+    } catch (error) {
+      console.error("Ошибка обновления профиля:", error);
+      alert("Ошибка при обновлении профиля");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Активация функции редактирования поля
+  const handleEditClick = (field: string) => {
+    setEditing((prev) => ({
+      ...prev,
+      [field]: true,
+    }));
+  };
+
+  // Обработка смены пароля
+  const handlePasswordChange = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("Пароли не совпадают");
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      alert("Пароль должен быть не менее 6 символов");
+      return;
+    }
+
+    try {
+      await dispatch(
+        changePassword({ newPassword: passwordData.newPassword }),
+      ).unwrap();
+      alert("Пароль успешно изменен!");
+      setIsPasswordModalOpen(false);
+      setPasswordData({ newPassword: "", confirmPassword: "" });
+    } catch (error) {
+      console.error("Ошибка изменения пароля:", error);
+      alert("Ошибка при изменении пароля");
+    }
+  };
 
   return (
-    <section className={styles.content}>
-      <div className={styles.profileBackground}>
-        <div className={styles.grid}>
-          {/* тут используются инпут, что сделали ранее */}
-          <div className={styles.fields}>
-            <div className={styles.field}>
-              <label className={styles.label}>Почта</label>
-              <div className={styles.inputWrapper}>
-                <Input
-                  type="text"
-                  value="Mariia@gmail.com"
-                  aria-label="Email пользователя"
-                />
-                <img
-                  src={editIcon}
-                  alt="Редактировать"
-                  className={styles.inputChildrenIcon}
-                />
-              </div>
-              <button className={styles.changePassword}>Изменить пароль</button>
-            </div>
-
-            {/* и тут используются инпут */}
-            <div className={styles.field}>
-              <label className={styles.label}>Имя</label>
-              <div className={styles.inputWrapper}>
-                <Input
-                  type="text"
-                  value="Мария"
-                  aria-label="Имя пользователя"
-                />
-                <img
-                  src={editIcon}
-                  alt="Редактировать"
-                  className={styles.inputChildrenIcon}
-                />
-              </div>
-            </div>
-
-            {/* здесь использую календарь, что сделали тоже - проверь шрифты у него */}
-            <div className={styles.birthGender}>
-              <div className={styles.field}>
-                <label className={styles.label}>Дата рождения</label>
-                <div className={styles.inputBirth}>
-                  <Calendar
-                    value={new Date("1995-10-28")}
-                    onChange={(date) => console.log(date)}
-                  />
-                </div>
-              </div>
-
-              {/* ниже в коментах я указала свою реализацию выбора пола, но я надеюсь,
-              что его уже сделали и можно будет просто вставить сюда */}
-              <div className={styles.field}>
-                <label className={styles.label}>Пол</label>
-                <div className={styles.genderWrapper}>
-                  <button className={styles.genderTrigger} disabled>
-                    Выбор пола
-                    <img
-                      src={chevronDownIcon}
-                      alt="Открыть меню"
-                      className={styles.genderArrowIcon}
+    <>
+      <section className={styles.content}>
+        <div className={styles.profileBackground}>
+          <div className={styles.grid}>
+            <div className={styles.fields}>
+              <form ref={selectorsRef} onSubmit={handleSubmit}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Почта</label>
+                  <div className={styles.inputWrapper}>
+                    <Input
+                      type="text"
+                      placeholder="Mariia@gmail.com"
+                      aria-label="Email пользователя"
+                      onChange={handleInputChange}
+                      value={userData.email}
+                      name={"email"}
+                      readOnly={!editing.email}
+                      style={
+                        editing.email
+                          ? { backgroundColor: editingColor }
+                          : undefined
+                      }
                     />
+                    <img
+                      src={editIcon}
+                      alt="Редактировать"
+                      className={styles.inputChildrenIcon}
+                      onClick={() => handleEditClick("email")}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.changePassword}
+                    onClick={() => setIsPasswordModalOpen(true)}
+                  >
+                    Изменить пароль
                   </button>
                 </div>
-              </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Имя</label>
+                  <div className={styles.inputWrapper}>
+                    <Input
+                      type="text"
+                      placeholder="Мария"
+                      aria-label="Имя пользователя"
+                      value={userData.name}
+                      onChange={handleInputChange}
+                      name={"name"}
+                      readOnly={!editing.name}
+                      style={
+                        editing.name
+                          ? { backgroundColor: editingColor }
+                          : undefined
+                      }
+                    />
+                    <img
+                      src={editIcon}
+                      alt="Редактировать"
+                      className={styles.inputChildrenIcon}
+                      onClick={() => handleEditClick("name")}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.birthGender}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Дата рождения</label>
+                    <div className={styles.inputBirth}>
+                      <Calendar
+                        value={userData.dateOfBirth}
+                        onChange={handleDateChange}
+                      />
+                    </div>
+                  </div>
+
+                  {/* // TODO: поменять в выборе пола и города цвет текста */}
+                  <div className={styles.field}>
+                    <div
+                      className={`${styles.genderWrapper} ${styles.commonWrapper}`}
+                    >
+                      <Selector
+                        id="gender"
+                        isOpen={openSelectorId === "gender"}
+                        onToggle={handleToggle}
+                        selectionTitle={"Пол"}
+                        selectionPlaceholder={"Женский"}
+                        selectionOptions={["Не указан", "Мужской", "Женский"]}
+                        selectorType={"radio"}
+                        value={
+                          userData.gender === "M"
+                            ? "Мужской"
+                            : userData.gender === "F"
+                              ? "Женский"
+                              : ""
+                        }
+                        onChange={(value) =>
+                          handleGenderSelect(value === "Мужской" ? "M" : "F")
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <div
+                    className={`${styles.cityWrapper} ${styles.commonWrapper}`}
+                  >
+                    <Selector
+                      id="city"
+                      isOpen={openSelectorId === "city"}
+                      onToggle={handleToggle}
+                      selectionTitle={"Город"}
+                      selectionPlaceholder={"Москва"}
+                      selectionOptions={cities.map((city) => city.name)}
+                      selectorType={"radio"}
+                      enableSearch={true}
+                      value={
+                        cities.find((city) => city.id === userData.cityId)
+                          ?.name || ""
+                      }
+                      onChange={(value) => {
+                        if (typeof value === "string") {
+                          const cityId = cityNameToId.get(value);
+                          if (cityId !== undefined) {
+                            handleCitySelect(cityId);
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>О себе</label>
+                  <div className={styles.textareaWrapper}>
+                    <textarea
+                      value={userData.about}
+                      onChange={handleInputChange}
+                      name="about"
+                      aria-label="О себе"
+                      readOnly={!editing.about}
+                      style={
+                        editing.about
+                          ? { backgroundColor: editingColor }
+                          : undefined
+                      }
+                    />
+                    <img
+                      src={editIcon}
+                      alt="Редактировать"
+                      className={styles.inputChildrenIcon}
+                      onClick={() => handleEditClick("about")}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.buttonSave}>
+                  <Button htmlType="submit" disabled={isLoading}>
+                    {isLoading ? "Сохранение..." : "Сохранить"}
+                  </Button>{" "}
+                </div>
+              </form>
             </div>
 
-            {/* точно так же и с городом, этот компонент уже должен быть, его тоже надо
-            сюда просто вставить */}
-            <div className={styles.field}>
-              <label className={styles.label}>Город</label>
-              <div className={styles.cityWrapper}>
-                <button className={styles.cityTrigger} disabled>
-                  Москва
-                  <img
-                    src={chevronDownIcon}
-                    alt="Открыть меню"
-                    className={styles.genderArrowIcon}
-                  />
-                </button>
-              </div>
-            </div>
-
-            {/* тут я решила сделать textarea - так можно писать текст в несколько строк */}
-            <div className={styles.field}>
-              <label className={styles.label}>О себе</label>
-              <div className={styles.textareaWrapper}>
-                <textarea
-                  value="Люблю учиться новому, особенно если это можно делать за чаем и в пижаме. Всегда готова пообщаться и обменяться чем‑то интересным!"
-                  aria-label="О себе"
-                />
+            <div className={styles.avatarBlock}>
+              <div className={styles.avatarWrapper}>
                 <img
-                  src={editIcon}
-                  alt="Редактировать"
-                  className={styles.inputChildrenIcon}
+                  src={avatarPreview || user?.avatarUrl || ""}
+                  alt="avatar"
+                  className={styles.avatar}
+                />
+                <label
+                  htmlFor="avatar-input"
+                  className={styles.avatarEditLabel}
+                >
+                  <img
+                    src={editPhotoIcon}
+                    alt="Редактировать фото"
+                    className={styles.avatarEditIcon}
+                  />
+                </label>
+                <input
+                  id="avatar-input"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleAvatarChange}
+                  style={{ display: "none" }}
                 />
               </div>
-            </div>
-
-            {/* кнопка - ну она уже сделана, нужно добавить там ховеры если надо
-            активна кнопка, неактивна - все это надо сделать */}
-            <div className={styles.buttonSave}>
-              <Button onClick={() => console.log("Сохраняем данные")}>
-                Сохранить
-              </Button>
-            </div>
-          </div>
-
-          {/* аватар меняется от useAppSelector(selectUser) - точно так же как и в шапке
-          соответственно надо сделать так, чтобы его можно было менять - сейчас же фото из моков */}
-          <div className={styles.avatarBlock}>
-            <div className={styles.avatarWrapper}>
-              <img
-                src={user?.avatarUrl}
-                alt="avatar"
-                className={styles.avatar}
-              />
-              <img
-                src={editPhotoIcon}
-                alt="Редактировать фото"
-                className={styles.avatarEditIcon}
-              />
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {isPasswordModalOpen && (
+        <ModalUI
+          onClose={() => setIsPasswordModalOpen(false)}
+          titleId="password-modal-title"
+          descriptionId="password-modal-description"
+        >
+          <div className={styles.passwordModal}>
+            <h2 id="password-modal-title">Изменить пароль</h2>
+            <form onSubmit={handlePasswordChange}>
+              <div className={styles.field}>
+                <label className={styles.label}>Новый пароль</label>
+                <Input
+                  type="password"
+                  placeholder="Введите новый пароль"
+                  value={passwordData.newPassword}
+                  onChange={(e) =>
+                    setPasswordData({
+                      ...passwordData,
+                      newPassword: e.target.value,
+                    })
+                  }
+                  minLength={6}
+                  required
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Подтвердите пароль</label>
+                <Input
+                  type="password"
+                  placeholder="Подтвердите новый пароль"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) =>
+                    setPasswordData({
+                      ...passwordData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  minLength={6}
+                  required
+                />
+              </div>
+              <div className={styles.modalButtons}>
+                <Button htmlType="submit">Изменить пароль</Button>
+                <Button
+                  htmlType="button"
+                  variant="secondary"
+                  onClick={() => setIsPasswordModalOpen(false)}
+                >
+                  Отмена
+                </Button>
+              </div>
+            </form>
+          </div>
+        </ModalUI>
+      )}
+    </>
   );
 };
-
-//я реализовала выбор гендера, но, раз уж у нас уже должен быть готовый компонент -
-//просто вставь то, что сделают
-//если же нет, юзай вот этот - он рабочий
-
-// import { DropDown } from "@/shared/ui/DropDown/DropDown";
-
-// const [gender, setGender] = useState("Женский");
-// const [genderOpen, setGenderOpen] = useState(false);
-
-{
-  /* <div className={styles.field}>
-  <label className={styles.label}>Пол</label>
-
-  <div className={styles.genderWrapper}>
-    <button
-      className={styles.genderTrigger}
-      onClick={() => setGenderOpen((prev) => !prev)}
-    >
-      {gender}
-      <img
-        src={chevronDownIcon}
-        alt="Открыть меню"
-        className={styles.genderArrowIcon}
-      />
-    </button>
-
-    <DropDown
-      isOpen={genderOpen}
-      onClose={() => setGenderOpen(false)}
-      triggerGroupe="gender"
-      role="listbox"
-      ariaLabel="Выбор пола"
-      top="100%" // появляется сразу под кнопкой
-      left="0" // выравнивание по левому краю кнопки
-    >
-      <ul className={styles.genderMenu}>
-        {["Не указан", "Мужской", "Женский"].map((item) => (
-          <li
-            key={item}
-            onClick={() => {
-              setGender(item);
-              setGenderOpen(false);
-            }}
-            className={styles.genderItem}
-            role="option"
-            aria-selected={gender === item}
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-    </DropDown>
-  </div>
-</div>; */
-}
