@@ -2,17 +2,20 @@ import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
 import { selectCities, fetchCities } from "@entities/city/model/slice";
-import { selectIsAuthenticated } from "@features/auth/model/slice";
 import { Card } from "@shared/ui/Card/Card";
 import { CardSkeleton } from "@shared/ui/CardSkeleton/CardSkeleton";
 import type { UserWithLikes } from "@entities/user/types";
 import styles from "./favorites.module.scss";
+import {
+  fetchSkillsData,
+  selectSkillsData,
+} from "@/entities/skill/model/slice";
 
 export const Favorites = () => {
   const dispatch = useAppDispatch();
   const { users, isLoading } = useAppSelector(selectUsersData);
   const { cities } = useAppSelector(selectCities);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
 
   // Загружаем данные при монтировании
   useEffect(() => {
@@ -22,7 +25,17 @@ export const Favorites = () => {
     if (cities.length === 0) {
       dispatch(fetchCities());
     }
-  }, [dispatch, users.length, isLoading, cities.length]);
+    if (skills.length === 0 && !skillsLoading) {
+      dispatch(fetchSkillsData());
+    }
+  }, [
+    dispatch,
+    users.length,
+    isLoading,
+    cities.length,
+    skillsLoading,
+    skills.length,
+  ]);
 
   // Фильтруем только лайкнутых пользователей
   const likedUsers = useMemo(() => {
