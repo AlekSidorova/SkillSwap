@@ -23,6 +23,8 @@ import { fetchCities, selectCities } from "@/entities/city/model/slice";
 import type { UpdateUserRequest } from "@/shared/lib/types/api";
 import { ModalUI } from "@/shared/ui/Modal/Modal";
 
+import { Edit } from "@/shared/ui/DecoratedButton/svg/IconSvg";
+
 export const ProfileForm = () => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
@@ -276,12 +278,13 @@ export const ProfileForm = () => {
                           : undefined
                       }
                     />
-                    <img
-                      src={editIcon}
-                      alt="Редактировать"
+                    <div
                       className={styles.inputChildrenIcon}
                       onClick={() => handleEditClick("email")}
-                    />
+                      role="button"
+                    >
+                      <Edit />
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -309,12 +312,13 @@ export const ProfileForm = () => {
                           : undefined
                       }
                     />
-                    <img
-                      src={editIcon}
-                      alt="Редактировать"
+                    <div
                       className={styles.inputChildrenIcon}
                       onClick={() => handleEditClick("name")}
-                    />
+                      role="button"
+                    >
+                      <Edit />
+                    </div>
                   </div>
                 </div>
 
@@ -401,12 +405,13 @@ export const ProfileForm = () => {
                           : undefined
                       }
                     />
-                    <img
-                      src={editIcon}
-                      alt="Редактировать"
+                    <div
                       className={styles.inputChildrenIcon}
                       onClick={() => handleEditClick("about")}
-                    />
+                      role="button"
+                    >
+                      <Edit />
+                    </div>
                   </div>
                 </div>
 

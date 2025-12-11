@@ -1,9 +1,12 @@
 import styles from "./profilePage.module.scss";
-import requestIcon from "@images/icons/request.svg?url";
-import messageTextIcon from "@images/icons/message-text.svg?url";
-import likeIcon from "@images/icons/like.svg?url";
-import ideaIcon from "@images/icons/idea.svg?url";
-import userIcon from "@images/icons/user.svg?url";
+
+import {
+  Request,
+  MessageText,
+  IdeaLK,
+  Like,
+  User,
+} from "@/shared/ui/DecoratedButton/svg/IconSvg";
 
 //тут нужно указать, куда кнопки переходят - но также тут должны быть заглушки
 //в нашем случае активные кнопки это Избранное, вроде Мои навыки и Личные данные
@@ -13,29 +16,28 @@ export const SidebarMenu = () => {
       <div className={styles.sidebarBackground}>
         <nav className={styles.menu} role="navigation">
           <a href="#0" className={styles.menuItem}>
-            <img src={requestIcon} alt="Заявки" width={24} height={24} />
+            <Request />
             Заявки
           </a>
+
           <a href="#0" className={styles.menuItem}>
-            <img
-              src={messageTextIcon}
-              alt="Мои обмены"
-              width={24}
-              height={24}
-            />
+            <MessageText />
             Мои обмены
           </a>
-          <a href="/favorites" className={styles.menuItem}>
-            <img src={likeIcon} alt="Избранное" width={24} height={24} />
-            Избранное
-          </a>
+
           {/* TODO: куда ссылка "Мои навыки" */}
           <a href="/#0" className={styles.menuItem}>
-            <img src={ideaIcon} alt="Мои навыки" width={24} height={24} />
+            <IdeaLK />
             Мои навыки
           </a>
+
+          <a href="/favorites" className={styles.menuItem}>
+            <Like />
+            Избранное
+          </a>
+
           <a href="/profile" className={styles.menuItemActive}>
-            <img src={userIcon} alt="Личные данные" width={24} height={24} />
+            <User />
             Личные данные
           </a>
         </nav>
