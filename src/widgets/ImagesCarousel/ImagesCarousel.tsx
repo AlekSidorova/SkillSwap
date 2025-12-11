@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./imagesCarousel.module.scss";
 import clsx from "clsx";
 
@@ -6,15 +6,22 @@ interface ImagesCarouselProps {
   images?: string[]; // Массив URL изображений (может быть base64 или внешние URL)
   visibleCount?: number; // Количество видимых карточек
   onImageClick?: (index: number) => void;
+  carouselLabel?: string;
+  imageDescriptions?: string[];
 }
 
 export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
   images = [],
   visibleCount = 4,
   onImageClick,
+  carouselLabel = "Карусель изображений",
+  imageDescriptions = [],
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [processedImages, setProcessedImages] = useState<string[]>([]);
+  // announcement - состояние для объявления скринридерам, там будет лежать например "Изображение 2 из 5"
+  const [announcement, setAnnouncement] = useState("");
+  const announcementRef = useRef<HTMLDivElement>(null);
 
   const imagesKey = JSON.stringify(images);
 
@@ -38,6 +45,18 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
     setProcessedImages(validImages);
     setCurrentIndex(0);
   }, [imagesKey]); // Получаем видимые изображения
+
+  // хук с таймером, чтобы очистить обхявление после 1 секунды показа, чтобы скринридер прочитал его только 1 раз
+  useEffect(() => {
+    if (announcement && announcementRef.current) {
+      const timer = setTimeout(() => {
+        setAnnouncement("");
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [announcement]);
+
   const getVisibleImages = () => {
     if (processedImages.length === 0) return [];
 
@@ -59,20 +78,52 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
 
   const handleNext = () => {
     if (!canNavigate) return;
-    setCurrentIndex((prev) => (prev + 1) % processedImages.length);
+    const newIndex = (currentIndex + 1) % processedImages.length; // Сохраняем новый индекс для объявления
+    setCurrentIndex(newIndex);
+    setAnnouncement(`Изображение ${newIndex + 1} из ${processedImages.length}`); // Установка объявления
   };
 
   const handlePrev = () => {
     if (!canNavigate) return;
-    setCurrentIndex(
-      (prev) => (prev - 1 + processedImages.length) % processedImages.length,
-    );
+    const newIndex =
+      (currentIndex - 1 + processedImages.length) % processedImages.length; // Сохраняем новый индекс для объявления
+    setCurrentIndex(newIndex);
+    setAnnouncement(`Изображение ${newIndex + 1} из ${processedImages.length}`); // Установка объявления
   };
 
   const handleImageClick = (index: number) => {
     if (onImageClick) {
       onImageClick(index);
     }
+  };
+
+  // Функция для генерации описательного alt текста
+  const getImageAlt = (index: number): string => {
+    if (imageDescriptions[index]) {
+      return imageDescriptions[index];
+    }
+
+    const imageNumber = index + 1;
+    const totalImages = processedImages.length;
+
+    if (index === currentIndex) {
+      return `Основное изображение ${imageNumber} из ${totalImages}`;
+    }
+
+    return `Изображение ${imageNumber} из ${totalImages}`;
+  };
+
+  // Функция для генерации aria-label для изображения
+  const getImageAriaLabel = (index: number): string => {
+    const imageNumber = index + 1;
+    const totalImages = processedImages.length;
+    const isMain = index === currentIndex;
+
+    if (isMain) {
+      return `Основное изображение ${imageNumber} из ${totalImages}. ${getImageAlt(index)}. Для просмотра нажмите Enter или пробел.`;
+    }
+
+    return `Изображение ${imageNumber} из ${totalImages}. ${getImageAlt(index)}. Для просмотра нажмите Enter или пробел.`;
   };
 
   // Функция для проверки Base64 изображений
@@ -103,12 +154,43 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
     // Можно установить placeholder изображение
     e.currentTarget.src =
       "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-family='sans-serif' font-size='12'%3EИзображение%3C/text%3E%3C/svg%3E";
+    e.currentTarget.alt = `Не удалось загрузить изображение ${index + 1}`; // Обновление alt при ошибке
+  };
+
+  // Обработчик клавиатуры для навигации по карусели
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case "ArrowLeft":
+        e.preventDefault();
+        handlePrev();
+        break;
+      case "ArrowRight":
+        e.preventDefault();
+        handleNext();
+        break;
+      case "Home":
+        e.preventDefault();
+        setCurrentIndex(0);
+        setAnnouncement(`Изображение 1 из ${processedImages.length}`); // Установка объявления
+        break;
+      case "End":
+        e.preventDefault();
+        setCurrentIndex(processedImages.length - 1);
+        setAnnouncement(
+          `Изображение ${processedImages.length} из ${processedImages.length}`,
+        ); // Установка объявления
+        break;
+    }
   };
 
   if (!hasImages) {
     return (
       <div className={styles.cardsContainer}>
-        <div className={styles.noImages}>
+        <div
+          className={styles.noImages}
+          role="region" // role="region" для семантической разметки
+          aria-label={carouselLabel} // aria-label для региона
+        >
           Нет загруженных изображений
           <p className={styles.noImagesHint}>
             Добавьте изображения, чтобы показать ваш навык
@@ -123,14 +205,38 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
   const hiddenCount = Math.max(0, processedImages.length - visibleCount);
 
   return (
-    <div className={styles.cardsContainer}>
+    <div
+      className={styles.cardsContainer}
+      role="region" // role="region" для семантической разметки
+      aria-label={carouselLabel} // aria-label для региона
+      onKeyDown={handleKeyDown} // Обработчик клавиатурных событий
+      tabIndex={0} // Делаем контейнер фокусируемым
+      aria-roledescription="карусель" // Описание роли для скринридеров
+    >
+      {/*Скрытый элемент для объявлений скринридерам */}
+      <div
+        ref={announcementRef}
+        aria-live="polite" // aria-live для объявлений
+        aria-atomic="true" // aria-atomic для полного чтения
+        className={styles.srOnly} // Класс для скрытия визуально
+      >
+        {announcement}
+      </div>
       <div className={styles.cardsSwiper}>
         {canNavigate && (
           <button
             className={clsx(styles.buttonSwap, styles.left)}
             onClick={handlePrev}
             aria-label="Предыдущее изображение"
+            aria-controls="carousel-images" // aria-controls для связи с содержимым
             type="button"
+            onKeyDown={(e) => {
+              // Обработчик клавиатуры для кнопки
+              if (e.key === " ") {
+                e.preventDefault();
+                handlePrev();
+              }
+            }}
           />
         )}
 
@@ -138,19 +244,39 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
           <div
             className={styles.mainImageContainer}
             onClick={() => handleImageClick(mainImage.index)}
+            onKeyDown={(e) => {
+              // Обработчик клавиатуры для изображения
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleImageClick(mainImage.index);
+              }
+            }}
+            tabIndex={0} // Делаем кликабельным с клавиатуры
+            role="button" // role="button" для семантики
+            aria-label={getImageAriaLabel(mainImage.index)} // aria-label с номером слайда
+            aria-describedby={`image-desc-${mainImage.index}`} // Связь с описанием
           >
             <img
               src={mainImage.url}
               className={styles.mainCard}
-              alt="Главное изображение"
+              alt={getImageAlt(mainImage.index)} // Используем функцию для генерации alt
               loading="lazy"
               onError={(e) => handleImageError(mainImage.index, e)}
               crossOrigin="anonymous"
+              id={`carousel-image-${mainImage.index}`} // ID для связи с aria-controls
             />
+            {/*Скрытое описание для скринридеров */}
+            <div id={`image-desc-${mainImage.index}`} className={styles.srOnly}>
+              {`Изображение ${mainImage.index + 1} из ${processedImages.length}. ${getImageAlt(mainImage.index)}`}
+            </div>
           </div>
         )}
 
-        <div className={styles.thumbnailsContainer}>
+        <div
+          className={styles.thumbnailsContainer}
+          aria-label="Миниатюры изображений" // aria-label для группы миниатюр
+          role="group" // role="group" для семантической группировки
+        >
           {otherImages.map((img, idx) => {
             const isLastThumbnail =
               idx === otherImages.length - 1 && hiddenCount > 0;
@@ -160,6 +286,17 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
                 className={styles.thumbnailWrapper}
                 key={idx}
                 onClick={() => handleImageClick(img.index)}
+                onKeyDown={(e) => {
+                  // Обработчик клавиатуры для миниатюры
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleImageClick(img.index);
+                  }
+                }}
+                tabIndex={0} // Делаем кликабельным с клавиатуры
+                role="button" // role="button" для семантики
+                aria-label={getImageAriaLabel(img.index)} // aria-label с номером слайда
+                aria-describedby={`image-desc-${img.index}`} // Связь с описанием
               >
                 <img
                   src={img.url}
@@ -167,14 +304,24 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
                     styles.thumbnail,
                     isLastThumbnail && styles.thumbnailWithOverlay,
                   )}
-                  alt={`Изображение ${idx + 2}`}
+                  alt={getImageAlt(img.index)} // Используем функцию для генерации alt
                   loading="lazy"
                   onError={(e) => handleImageError(img.index, e)}
                   crossOrigin="anonymous"
+                  id={`thumbnail-${img.index}`} // ID для миниатюры
                 />
                 {isLastThumbnail && hiddenCount > 0 && (
-                  <div className={styles.overlayCount}>+{hiddenCount}</div>
+                  <div
+                    className={styles.overlayCount}
+                    aria-hidden="true" // aria-hidden для декоративного элемента
+                  >
+                    +{hiddenCount}
+                  </div>
                 )}
+                {/* Скрытое описание для скринридеров */}
+                <div id={`image-desc-${img.index}`} className={styles.srOnly}>
+                  {`Миниатюра изображения ${img.index + 1} из ${processedImages.length}. ${getImageAlt(img.index)}`}
+                </div>
               </div>
             );
           })}
@@ -183,7 +330,11 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
           {visibleImages.length < visibleCount &&
             Array.from({ length: visibleCount - visibleImages.length }).map(
               (_, idx) => (
-                <div className={styles.thumbnailWrapper} key={`empty-${idx}`}>
+                <div
+                  className={styles.thumbnailWrapper}
+                  key={`empty-${idx}`}
+                  aria-hidden="true" // aria-hidden для пустых заполнителей
+                >
                   <div className={styles.noThumbnail}>Пусто</div>
                 </div>
               ),
@@ -196,8 +347,25 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
             onClick={handleNext}
             aria-label="Следующее изображение"
             type="button"
+            aria-controls="carousel-images" // aria-controls для связи с содержимым
+            onKeyDown={(e) => {
+              // Обработчик клавиатуры для кнопки
+              if (e.key === " ") {
+                e.preventDefault();
+                handleNext();
+              }
+            }}
           />
         )}
+      </div>
+      {/* Индикатор прогресса для скринридеров */}
+      <div
+        className={styles.srOnly} // Класс для скрытия визуально
+        aria-live="polite" // aria-live для динамического контента
+        aria-atomic="true" // aria-atomic для полного чтения
+      >
+        {`Изображение ${currentIndex + 1} из ${processedImages.length}`} //
+        ДОБАВЛЕНО: Текст с номером слайда
       </div>
     </div>
   );
