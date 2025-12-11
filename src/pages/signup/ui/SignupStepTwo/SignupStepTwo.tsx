@@ -181,18 +181,24 @@ export const SignupStepTwo = () => {
     setShowCalendar(false);
   };
 
-  const handleGenderChange = (option: string) => {
-    const genderValue = option === "Не указан" ? "" : option;
+  const handleGenderChange = (value: string | string[]) => {
+    const selectedValue = Array.isArray(value) ? value[0] || "" : value;
+    const genderValue = selectedValue === "Не указан" ? "" : selectedValue;
     dispatch(updateGender(genderValue));
   };
 
-  const handleCityChange = (option: string) => {
-    if (option === "Введите или выберите город" || option === "") {
+  const handleCityChange = (value: string | string[]) => {
+    const selectedValue = Array.isArray(value) ? value[0] || "" : value;
+
+    if (
+      selectedValue === "Введите или выберите город" ||
+      selectedValue === ""
+    ) {
       dispatch(updateStep2({ location: "" }));
       return;
     }
 
-    const selectedCity = citiesData.find((city) => city.name === option);
+    const selectedCity = citiesData.find((city) => city.name === selectedValue);
     const cityId = selectedCity ? selectedCity.id.toString() : "";
 
     dispatch(updateStep2({ location: cityId }));
@@ -206,8 +212,8 @@ export const SignupStepTwo = () => {
         return;
       }
 
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Размер файла не должен превышать 5MB");
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Размер файла не должен превышать 2MB");
         return;
       }
 
@@ -432,6 +438,7 @@ export const SignupStepTwo = () => {
                         selectionOptions={["Не указан", "Мужской", "Женский"]}
                         selectorType={"radio"}
                         onChange={handleGenderChange}
+                        value={gender}
                       />
                     </div>
                   </>
@@ -448,7 +455,6 @@ export const SignupStepTwo = () => {
                   <label>Город</label>
                   <div className={styles.selectorWrapper}>
                     <Selector
-                      key={`city-${selectedCityName || "empty"}`}
                       id="city"
                       isOpen={openSelectorId === "city"}
                       onToggle={handleToggle}
@@ -458,6 +464,7 @@ export const SignupStepTwo = () => {
                       selectorType={"radio"}
                       enableSearch={true}
                       onChange={handleCityChange}
+                      value={selectedCityName}
                     />
                   </div>
                 </>

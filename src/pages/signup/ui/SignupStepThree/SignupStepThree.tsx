@@ -16,8 +16,6 @@ import {
   selectTeachCategories,
   selectTeachSubcategories,
   createSkills,
-  selectIsSubmitting,
-  selectSubmitError,
 } from "@features/signup/model/slice";
 import { ModalUI } from "@shared/ui/Modal/Modal";
 import galleryAddIcon from "@images/icons/gallery-add.svg";
@@ -45,8 +43,6 @@ export const SignupStepThree = () => {
 
   const teachCategories = useAppSelector(selectTeachCategories);
   const teachSubcategories = useAppSelector(selectTeachSubcategories);
-  const isSubmitting = useAppSelector(selectIsSubmitting);
-  const submitError = useAppSelector(selectSubmitError);
 
   const { step3 } = useAppSelector((state) => state.signup);
   const skillName = step3?.skillName || "";

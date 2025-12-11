@@ -113,15 +113,13 @@ export const registerUserAfterStep2 = createAsyncThunk<
       email: state.step1.email,
       password: state.step1.password,
       name: state.step2.firstName.trim(),
-      ...(avatarFile && { avatar: avatarFile }),
+      avatar: avatarFile,
       ...(state.step2.dateOfBirth && { dateOfBirth: state.step2.dateOfBirth }),
-      ...(genderValue && { gender: genderValue }),
-      ...(state.step2.location && {
-        cityId: parseInt(state.step2.location, 10),
-      }),
+      gender: genderValue,
+      cityId: parseInt(state.step2.location, 10),
     };
 
-    // @ts-ignore
+    // @ts-ignore - игнорируем ошибку типов для dispatch
     await dispatch(register(registerData)).unwrap();
 
     // После успешной регистрации создаем навыки "want to learn" для выбранных подкатегорий
@@ -132,7 +130,9 @@ export const registerUserAfterStep2 = createAsyncThunk<
     return;
   } catch (error: any) {
     console.error("Ошибка регистрации:", error);
-    return rejectWithValue(error?.message || "Ошибка регистрации");
+    return rejectWithValue(
+      error?.response?.data?.message || error?.message || "Ошибка регистрации",
+    );
   }
 });
 
@@ -197,12 +197,15 @@ export const createWantToLearnSkills = createAsyncThunk<
     } catch (error: any) {
       console.error("Ошибка создания навыков 'want to learn':", error);
       return rejectWithValue(
-        error?.message || "Ошибка создания навыков 'want to learn'",
+        error?.response?.data?.message ||
+          error?.message ||
+          "Ошибка создания навыков 'want to learn'",
       );
     }
   },
 );
 
+// Создание навыков (шаг 3)
 export const createSkills = createAsyncThunk<
   void,
   void,
@@ -213,8 +216,8 @@ export const createSkills = createAsyncThunk<
 
     // Создание навыков (шаг 3) - регистрация уже выполнена на шаге 2
     if (state.step3.skillName && state.step3.teachSubcategory.length > 0) {
-      const skillPromises = state.step3.teachSubcategory.map(
-        async (subcatId) => {
+      const skillPromises = state.step3.teachSubcategory
+        .map((subcatId) => {
           const subcategoryId = parseInt(subcatId, 10);
           if (!isNaN(subcategoryId)) {
             return api.createSkill({
@@ -222,20 +225,26 @@ export const createSkills = createAsyncThunk<
               title: state.step3.skillName,
               description: state.step3.description || "",
               type_of_proposal: "offer" as const,
-              ...(state.step3.images.length > 0 && {
-                images: state.step3.images,
-              }),
+              images: state.step3.images.length > 0 ? state.step3.images : [],
             });
           }
-        },
-      );
-      await Promise.all(skillPromises);
+          return null;
+        })
+        .filter((promise): promise is Promise<any> => promise !== null);
+
+      if (skillPromises.length > 0) {
+        await Promise.all(skillPromises);
+      }
     }
 
     return;
   } catch (error: any) {
     console.error("Ошибка создания навыков:", error);
-    return rejectWithValue(error?.message || "Ошибка создания навыков");
+    return rejectWithValue(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Ошибка создания навыков",
+    );
   }
 });
 
@@ -313,7 +322,9 @@ const signupSlice = createSlice({
     },
 
     removeImage: (state, action: PayloadAction<number>) => {
-      state.step3.images.splice(action.payload, 1);
+      if (action.payload >= 0 && action.payload < state.step3.images.length) {
+        state.step3.images.splice(action.payload, 1);
+      }
     },
 
     // Очистка
@@ -324,22 +335,30 @@ const signupSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // createSkills (шаг 3)
       .addCase(createSkills.pending, (state) => {
         state.isSubmitting = true;
         state.submitError = null;
       })
       .addCase(createSkills.fulfilled, (state) => {
         state.isSubmitting = false;
-        Object.assign(state, getInitialState());
-        clearAvatarFile();
+        state.submitError = null;
       })
       .addCase(createSkills.rejected, (state, action) => {
         state.isSubmitting = false;
         state.submitError = action.payload as string;
       })
-      // createWantToLearnSkills - ошибки обрабатываются внутри registerUserAfterStep2
+      // createWantToLearnSkills (часть шага 2)
+      .addCase(createWantToLearnSkills.pending, (state) => {
+        // Не меняем флаги регистрации, только флаг отправки
+        state.isSubmitting = true;
+      })
+      .addCase(createWantToLearnSkills.fulfilled, (state) => {
+        state.isSubmitting = false;
+      })
       .addCase(createWantToLearnSkills.rejected, (state, action) => {
-        // Логируем ошибку, но не меняем состояние регистрации
+        state.isSubmitting = false;
+        // Логируем ошибку, но не блокируем переход на шаг 3
         console.error(
           "[createWantToLearnSkills] Ошибка создания навыков 'want to learn':",
           action.payload,
@@ -411,4 +430,5 @@ export const selectTeachSubcategories = (state: RootState) =>
 export const selectStep3Images = (state: RootState) =>
   state.signup.step3.images;
 export const selectStep3Data = (state: RootState) => state.signup.step3;
+
 export const signupReducer = signupSlice.reducer;
