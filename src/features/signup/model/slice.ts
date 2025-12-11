@@ -7,6 +7,7 @@ import type { RootState } from "@app/store/store";
 import { register } from "@features/auth/model/slice";
 import type { AppDispatch } from "@app/store/store";
 import { api } from "@shared/api/api";
+import { fetchCategories } from "@entities/category/model/slice";
 
 interface SignupState {
   step1: {
@@ -118,15 +119,15 @@ export const registerUserAfterStep2 = createAsyncThunk<
       ...(state.step2.location && {
         cityId: parseInt(state.step2.location, 10),
       }),
-      ...(state.step2.learnSubcategory.length > 0 && {
-        desiredCategories: state.step2.learnSubcategory.map((id) =>
-          parseInt(id, 10),
-        ),
-      }),
     };
 
     // @ts-ignore
     await dispatch(register(registerData)).unwrap();
+
+    // После успешной регистрации создаем навыки "want to learn" для выбранных подкатегорий
+    if (state.step2.learnSubcategory.length > 0) {
+      await dispatch(createWantToLearnSkills()).unwrap();
+    }
 
     return;
   } catch (error: any) {
@@ -134,6 +135,73 @@ export const registerUserAfterStep2 = createAsyncThunk<
     return rejectWithValue(error?.message || "Ошибка регистрации");
   }
 });
+
+// Создание навыков "want to learn" (шаг 2) - после регистрации пользователя
+export const createWantToLearnSkills = createAsyncThunk<
+  void,
+  void,
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "signup/createWantToLearnSkills",
+  async (_, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const state = getState().signup;
+      let categoryState = getState().categoryData;
+
+      // Если подкатегории не загружены, загружаем их
+      if (categoryState.subcategories.length === 0) {
+        await dispatch(fetchCategories()).unwrap();
+        categoryState = getState().categoryData;
+      }
+
+      // Создание навыков "want to learn" для выбранных подкатегорий
+      if (state.step2.learnSubcategory.length > 0) {
+        const skillPromises = state.step2.learnSubcategory
+          .map((subcatIdStr) => {
+            const subcategoryId = parseInt(subcatIdStr, 10);
+            if (isNaN(subcategoryId)) {
+              console.warn(
+                `[createWantToLearnSkills] Invalid subcategory ID: ${subcatIdStr}, skipping`,
+              );
+              return null;
+            }
+
+            // Находим подкатегорию по ID, чтобы получить её название
+            const subcategory = categoryState.subcategories.find(
+              (sub) => sub.id === subcategoryId,
+            );
+
+            if (!subcategory) {
+              console.warn(
+                `[createWantToLearnSkills] Subcategory with ID ${subcategoryId} not found, skipping`,
+              );
+              return null;
+            }
+
+            // Создаем навык с типом "request" (want to learn)
+            return api.createSkill({
+              subcategoryId,
+              title: subcategory.name, // Используем название подкатегории как title
+              description: "", // Описание можно оставить пустым или добавить позже
+              type_of_proposal: "request" as const,
+            });
+          })
+          .filter((promise): promise is Promise<any> => promise !== null);
+
+        if (skillPromises.length > 0) {
+          await Promise.all(skillPromises);
+        }
+      }
+
+      return;
+    } catch (error: any) {
+      console.error("Ошибка создания навыков 'want to learn':", error);
+      return rejectWithValue(
+        error?.message || "Ошибка создания навыков 'want to learn'",
+      );
+    }
+  },
+);
 
 export const createSkills = createAsyncThunk<
   void,
@@ -268,6 +336,14 @@ const signupSlice = createSlice({
       .addCase(createSkills.rejected, (state, action) => {
         state.isSubmitting = false;
         state.submitError = action.payload as string;
+      })
+      // createWantToLearnSkills - ошибки обрабатываются внутри registerUserAfterStep2
+      .addCase(createWantToLearnSkills.rejected, (state, action) => {
+        // Логируем ошибку, но не меняем состояние регистрации
+        console.error(
+          "[createWantToLearnSkills] Ошибка создания навыков 'want to learn':",
+          action.payload,
+        );
       })
       // registerUserAfterStep2
       .addCase(registerUserAfterStep2.pending, (state) => {

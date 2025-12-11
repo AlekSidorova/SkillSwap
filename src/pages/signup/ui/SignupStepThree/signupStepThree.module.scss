@@ -12,7 +12,6 @@
   padding-block: 20px 40px;
   padding-inline: 36px;
   max-inline-size: 1440px;
-  block-size: 100vh;
   margin: 0 auto;
 }
 
@@ -43,17 +42,6 @@
   padding-block: 83px 80px;
   margin-block: 32px 0;
   overflow: hidden;
-}
-
-.section::after {
-  content: "";
-  display: block;
-  position: absolute;
-  inset-block-end: 0;
-  inset-inline: 0;
-  block-size: 130px;
-  background-color: vars.$color-background;
-  z-index: 1;
 }
 
 .formContainer {

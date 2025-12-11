@@ -11,6 +11,7 @@ import type {
   RefreshTokenResponse,
 } from "@shared/lib/types/api";
 import type { User } from "@entities/user/types";
+import type { Exchange, CreateExchangeRequest } from "@entities/exchange/types";
 
 // Конфигурация API из переменных окружения
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -170,13 +171,6 @@ export const api = {
     // cityId обязателен на бэкенде и должен быть строкой
     // Если не указан, отправляем пустую строку
     formData.append("cityId", body.cityId ? body.cityId.toString() : "");
-    if (body.desiredCategories && body.desiredCategories.length > 0) {
-      // Отправляем массив как JSON строку или как отдельные поля
-      // Проверяем, что ожидает бэкенд - обычно для FormData массивы отправляются как отдельные поля
-      body.desiredCategories.forEach((categoryId) => {
-        formData.append("desiredCategories[]", categoryId.toString());
-      });
-    }
 
     return fetchApi<AuthResponse>("/api/auth/register", {
       method: "POST",
@@ -425,4 +419,28 @@ export const api = {
   // ========== HEALTH CHECK ==========
   healthCheck: (): Promise<{ status: string; message: string }> =>
     fetchApi<{ status: string; message: string }>("/api/health"),
+
+  // ========== EXCHANGES (ОБМЕНЫ) ==========
+  // Создать запрос на обмен
+  createExchange: (body: CreateExchangeRequest): Promise<Exchange> =>
+    fetchApi<Exchange>("/api/exchanges", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // Получить статус запроса на обмен
+  getExchange: (exchangeId: number): Promise<Exchange> =>
+    fetchApi<Exchange>(`/api/exchanges/${exchangeId}`),
+
+  // Получить статус запроса (для polling)
+  getExchangeStatus: (
+    exchangeId: number,
+  ): Promise<{ status: string; message: string; updatedAt: string }> =>
+    fetchApi<{ status: string; message: string; updatedAt: string }>(
+      `/api/exchanges/${exchangeId}/status`,
+    ),
+
+  // Получить все обмены пользователя
+  getUserExchanges: (userId: number): Promise<Exchange[]> =>
+    fetchApi<Exchange[]>(`/api/users/${userId}/exchanges`),
 };

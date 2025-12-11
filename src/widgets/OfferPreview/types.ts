@@ -11,5 +11,11 @@ export type TOfferProps = {
   onConfirm?: () => void;
   onExchange?: () => void;
   isEditable?: boolean;
-  isExchangeProposed?: boolean; // Добавляем новый пропс
+  isExchangeProposed?: boolean;
+  exchangeStatus?:
+    | "pending"
+    | "accepted"
+    | "rejected"
+    | "completed"
+    | "cancelled";
 };

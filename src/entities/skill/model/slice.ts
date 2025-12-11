@@ -27,8 +27,14 @@ export const fetchSkillsData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const skills = await api.getSkills();
+      // Маппим только title -> name, тип оставляем как есть из API
+      const mappedSkills = (skills as any[]).map((skill) => ({
+        ...skill,
+        name: skill.title || skill.name || "", // Маппим title -> name
+        type_of_proposal: skill.type_of_proposal as "offer" | "request",
+      }));
       return {
-        skills: skills as TSkill[],
+        skills: mappedSkills as TSkill[],
       };
     } catch (error) {
       return rejectWithValue(

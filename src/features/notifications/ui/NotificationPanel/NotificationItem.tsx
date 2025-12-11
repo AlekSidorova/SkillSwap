@@ -35,7 +35,8 @@ export const NotificationItem: React.FC<
         </div>
       </div>
 
-      {!notification.isRead && notification.action && (
+      {/* Временно закомментировано */}
+      {/* {!notification.isRead && notification.action && (
         <div className={styles.actionButton}>
           <Button
             variant="primary"
@@ -55,7 +56,7 @@ export const NotificationItem: React.FC<
             {buttonLabel}
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

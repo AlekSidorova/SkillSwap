@@ -11,4 +11,4 @@ export type TSkill = {
 };
 
 // Типы предложений для навыков
-export type TypeOfProposal = "учу" | "учусь";
+export type TypeOfProposal = "offer" | "request";

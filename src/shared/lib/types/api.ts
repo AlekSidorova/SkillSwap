@@ -7,7 +7,6 @@ export interface RegisterRequest {
   dateOfBirth?: string; // дата рождения в формате ISO (из step2)
   gender?: "M" | "F"; // пол (из step2)
   cityId?: number; // ID города (из step2)
-  desiredCategories?: number[]; // желаемые категории (из step2)
 }
 
 export interface LoginRequest {

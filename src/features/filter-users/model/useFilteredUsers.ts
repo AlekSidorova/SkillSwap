@@ -67,9 +67,9 @@ export const useFilteredUsers = ({
       userSkills.forEach((skill) => {
         // Фильтр по purpose
         if (filters.purpose !== "" && filters.purpose !== "Всё") {
-          const purposeMap: Record<string, "учу" | "учусь"> = {
-            "Хочу научиться": "учу", // Ищем тех, кто может научить
-            "Хочу научить": "учусь", // Ищем тех, кто хочет научиться
+          const purposeMap: Record<string, "offer" | "request"> = {
+            "Хочу научиться": "offer", // Ищем тех, кто может научить
+            "Хочу научить": "request", // Ищем тех, кто хочет научиться
           };
           const targetType = purposeMap[filters.purpose];
           if (targetType && skill.type_of_proposal !== targetType) {

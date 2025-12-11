@@ -44,8 +44,8 @@ export const Card: React.FC<CardProps> = memo(
     // Мемоизированные навыки пользователя
     const { canTeachSkills, wantToLearnSkills } = useMemo(
       () => ({
-        canTeachSkills: getUserSkillsByType(skills, user.id, "учу"),
-        wantToLearnSkills: getUserSkillsByType(skills, user.id, "учусь"),
+        canTeachSkills: getUserSkillsByType(skills, user.id, "offer"),
+        wantToLearnSkills: getUserSkillsByType(skills, user.id, "request"),
       }),
       [skills, user.id],
     );

@@ -12,7 +12,6 @@ import type { SignupStep1Data } from "@shared/lib/zod/types";
 import { signupStep1Schema } from "@shared/lib/zod/schemas/userAuthSchema";
 import styles from "./login.module.scss";
 import { ExternalLogIn } from "@/widgets/ExternalLogIn/ExternalLogIn";
-import { WelcomeSection } from "@shared/ui/WelcomeSection/WelcomeSection.tsx";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -36,9 +35,6 @@ export const Login = () => {
   }>({});
 
   const [isFormValid, setIsFormValid] = useState(false);
-
-  // Логирование состояния формы
-  useEffect(() => {}, [formData, isFormValid, errors, touched]);
 
   // Валидация при каждом изменении формы
   useEffect(() => {

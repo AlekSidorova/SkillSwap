@@ -236,11 +236,28 @@ export const SignupStepTwo = () => {
   };
 
   const handleCategoryChange = (selectedIds: string[]) => {
-    dispatch(setLearnCategories(selectedIds));
+    // Убеждаемся, что сохраняются именно ID, а не названия
+    const validIds = selectedIds.filter((id) => {
+      const isValid = categoriesData.some((cat) => cat.id.toString() === id);
+      if (!isValid) {
+        console.warn(`[SignupStepTwo] Invalid category ID: ${id}, skipping`);
+      }
+      return isValid;
+    });
+    dispatch(setLearnCategories(validIds));
   };
 
   const handleSubcategoryChange = (selectedIds: string[]) => {
-    dispatch(setLearnSubcategories(selectedIds));
+    // Убеждаемся, что сохраняются именно ID подкатегорий, а не названия
+    const filteredSubs = getFilteredSubcategories();
+    const validIds = selectedIds.filter((id) => {
+      const isValid = filteredSubs.some((sub) => sub.id.toString() === id);
+      if (!isValid) {
+        console.warn(`[SignupStepTwo] Invalid subcategory ID: ${id}, skipping`);
+      }
+      return isValid;
+    });
+    dispatch(setLearnSubcategories(validIds));
   };
 
   const getFilteredSubcategories = () => {

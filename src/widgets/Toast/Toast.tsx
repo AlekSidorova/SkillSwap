@@ -53,11 +53,12 @@ export const Toast = () => {
         >
           ×
         </button>
-        {!toast.isRead && toast.action && (
+        {/* Временно закомментировано */}
+        {/* {!toast.isRead && toast.action && (
           <button className={styles.toastAction} onClick={handleMarkAsRead}>
             {toast.action}
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

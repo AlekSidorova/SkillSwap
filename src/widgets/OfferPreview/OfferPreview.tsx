@@ -9,7 +9,20 @@ import type { TOfferProps } from "@widgets/OfferPreview/types";
 
 /*эта карточка меняется в зависимости от variant*/
 export const OfferPreview = (props: TOfferProps) => {
-  const { variant = "userProfileOffer" } = props;
+  const {
+    variant = "userProfileOffer",
+    skillName = "",
+    categoryName = "",
+    subcategoryName = "",
+    description = "",
+    images = [],
+    onEdit,
+    onConfirm,
+    onExchange,
+    isExchangeProposed = false,
+    exchangeStatus,
+  } = props;
+
   return (
     <>
       <div className={stylesModal.wrapper}>
@@ -24,58 +37,52 @@ export const OfferPreview = (props: TOfferProps) => {
         <div className={styles.contentContainer}>
           <div className={styles.previewDescription}>
             <h2 className={styles.contentTittle}>
-              Зависимый{" "}
-              {/*Нужно сделать валидацию на макс. кол-во допустимых символов*/}
+              {skillName || "Название навыка не указано"}
             </h2>
-            <p className={styles.contentContainerSubtitle}>
-              <span className={clsx(styles.category, styles.mainCategory)}>
-                Творчество и искусство{" "}
-              </span>{" "}
-              {/*доп. категория для того, чтоб можно было обратиться к конкретному спану*/}
-              /
-              <span className={clsx(styles.category, styles.subCategory)}>
-                {" "}
-                Арт-терапия
-              </span>{" "}
-              {/*доп. категория для того, чтоб можно было обратиться к конкретному спану*/}
-            </p>
+            {(categoryName || subcategoryName) && (
+              <p className={styles.contentContainerSubtitle}>
+                {categoryName && (
+                  <span className={clsx(styles.category, styles.mainCategory)}>
+                    {categoryName}
+                  </span>
+                )}
+                {categoryName && subcategoryName && " / "}
+                {subcategoryName && (
+                  <span className={clsx(styles.category, styles.subCategory)}>
+                    {subcategoryName}
+                  </span>
+                )}
+              </p>
+            )}
 
-            <p className={clsx(styles.contentDescription, styles.scrollbar)}>
-              Меня зовут Александр Басов. Мне 30 лет, хотя пытаюсь всем наврать,
-              что мне 24 года. Мой дом находится в северо-восточной части
-              Башкирии , в районе КБ. Работаю в офисе, в компании "Башкиры не
-              чурки, их жизни важны" и домой возвращаюсь, в восемь вечера,
-              потому что велосипед сломался, а денег на автобус нет -
-              пожертвовал все бедным башкирам. Не курю, выпиваю изредка 2 по 5
-              светлого нефильтрованного. Ложусь спать в 4 утра и убеждаюсь, что
-              не получаю ровно восемь часов сна, несмотря ни на что. Перед сном
-              я пью тёплое пиво, я мазахист, а также минут двадцать уделяю
-              Женьку, кажется у на все серьезно, поэтому до утра сплю без особых
-              проблем. Утром я просыпаюсь, чувствуя усталость, стресс, словно у
-              нас с Женьком уже есть младенец. На медосмотре мне сказали, что
-              никаких проблем нет, но мне пришлось заплатить за это наркологу. Я
-              пытаюсь донести, что я 100% русский, не башкир, который хочет жить
-              спокойной жизнью среди башкиров. Я не забиваю себе голову
-              проблемами вроде сегодня пива или вина, и не обзавожусь врагами,
-              они меня обходят стороной, впринципе как и все люди из-за моего
-              Женька. Я знаю наверняка: в таком способе взаимодействия с
-              обществом и кроется счастье - летом Крым, на новый год Допы, в
-              остальное время посвящаю себя Женьку. Хотя, если бы обещство
-              попыталось нас разлучить, я бы показал истинную мощь Башкирской
-              чурки.
-            </p>
+            {description && (
+              <p className={clsx(styles.contentDescription, styles.scrollbar)}>
+                {description}
+              </p>
+            )}
+
             <div className={styles.btnClamp}>
               {variant === "modalOffer" && (
                 <div className={stylesModal.containerModalButton}>
-                  <Button variant={"secondary"} rightIcon={<EditIcon />}>
+                  <Button
+                    variant={"secondary"}
+                    rightIcon={<EditIcon />}
+                    onClick={onEdit}
+                  >
                     {"Редактировать"}
                   </Button>
-                  <Button>{"Готово"}</Button>
+                  <Button onClick={onConfirm}>{"Готово"}</Button>
                 </div>
               )}
 
               {variant === "userProfileOffer" && (
-                <Button>{"Предложить обмен"}</Button>
+                <Button onClick={onExchange} disabled={isExchangeProposed}>
+                  {exchangeStatus === "accepted"
+                    ? "Обмен подтвержден"
+                    : exchangeStatus === "pending"
+                      ? "Обмен предложен"
+                      : "Предложить обмен"}
+                </Button>
               )}
             </div>
           </div>
@@ -88,7 +95,7 @@ export const OfferPreview = (props: TOfferProps) => {
                 <DecoratedButton variant={"parameters"} />
               </div>
             )}
-            <ImagesCarousel />
+            <ImagesCarousel images={images} />
           </div>
         </div>
       </div>
