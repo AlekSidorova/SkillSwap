@@ -32,7 +32,6 @@ export const UserCardsSection = ({
   const { subcategories } = useAppSelector(selectCategoryData);
   const { cities } = useAppSelector(selectCities);
   const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const isLoading = usersLoading || skillsLoading;
 
@@ -246,7 +245,6 @@ export const UserCardsSection = ({
                   key={user.id}
                   user={user}
                   cities={cities}
-                  isAuthenticated={isAuthenticated}
                   onDetailsClick={handleDetailsClick}
                   isLoading={isLoading}
                 />
@@ -288,7 +286,6 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
-              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />
@@ -326,7 +323,6 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
-              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />
@@ -355,7 +351,6 @@ export const UserCardsSection = ({
               key={user.id}
               user={user}
               cities={cities}
-              isAuthenticated={isAuthenticated}
               onDetailsClick={handleDetailsClick}
               isLoading={isLoading}
             />

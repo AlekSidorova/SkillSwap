@@ -191,7 +191,7 @@
 
 .tags {
   @include flex(row, flex-start, center, 8px);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .tag {
@@ -203,7 +203,8 @@
   color: $color-text;
   padding: 8px 12px;
   border-radius: 20px;
-  inline-size: 134px;
+
+  // inline-size: 134px;
   block-size: 32px;
   display: inline-block;
   line-height: 16px;
@@ -213,6 +214,7 @@
   text-overflow: ellipsis;
   text-align: center;
   vertical-align: middle;
+  flex-wrap: nowrap;
 
   &.business {
     background: $color-tag-business-career;
@@ -244,11 +246,12 @@
 }
 
 .learnTags {
-  display: grid;
-  grid-template-columns: 1fr 1fr 38px;
-  gap: 8px;
-  inline-size: 100%;
-  align-items: center;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr 38px;
+  // gap: 8px;
+  // inline-size: 100%;
+  // align-items: center;
+  @include flex(row, flex-start, center, 8px);
 }
 
 // Отдельный стиль для профильной страницы
@@ -279,8 +282,9 @@
   text-overflow: ellipsis;
   text-align: center;
   vertical-align: middle;
-  min-inline-size: 80px;
-  max-inline-size: 114px;
+
+  // min-inline-size: 80px;
+  // max-inline-size: 114px;
   justify-self: start;
 
   &.business {
@@ -321,12 +325,11 @@
   color: $color-caption;
   padding: 8px 12px;
   border-radius: 20px;
-  inline-size: 38px;
+  max-inline-size: 38px;
   block-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   background: $color-disabled;
   line-height: 1;
   flex-shrink: 0;

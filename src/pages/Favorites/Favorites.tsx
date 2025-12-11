@@ -83,7 +83,6 @@ export const Favorites = () => {
             key={user.id}
             user={user}
             cities={cities}
-            isAuthenticated={isAuthenticated}
             onDetailsClick={handleDetailsClick}
             isLoading={isLoading}
           />

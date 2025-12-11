@@ -31,6 +31,8 @@ import {
 
 import type { TFilterState } from "@/features/filter-users/types";
 import type { TSubcategory } from "@/entities/category/types";
+import { Arrow } from "@/shared/ui/Arrow/Arrow";
+import { LogOutSvg } from "./svg/LogoutSvg";
 
 interface HeaderProps {
   onFiltersChange: (filters: TFilterState) => void;
@@ -164,6 +166,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
             >
               {/* Для работы компонента DropDown компоненту контроллеру нужно указать атрибут data-trigger-dropdown */}
               Все навыки
+              <Arrow isOpen={showCategory} color="black" />
             </button>
             {showCategory && (
               <DropDown
@@ -305,6 +308,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
                     }}
                   >
                     Выйти из аккаунта
+                    <LogOutSvg />
                   </li>
                 </ul>
               </DropDown>

@@ -20,15 +20,6 @@ function CreateOffer() {
   );
 }
 
-function Profile() {
-  return (
-    <section>
-      <h2>Личный кабинет</h2>
-      <p>Настройки профиля и личные данные</p>
-    </section>
-  );
-}
-
 export const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Layout />}>

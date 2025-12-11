@@ -19,6 +19,7 @@ export const Button = (props: TButtonProps) => {
     leftIcon,
     rightIcon,
     isLoading,
+    otherClassNames,
     ...otherProps
   } = props;
 
@@ -51,7 +52,11 @@ export const Button = (props: TButtonProps) => {
 
   return (
     <button
-      className={clsx(styles.button, styles[variantWithFallback])}
+      className={clsx(
+        styles.button,
+        styles[variantWithFallback],
+        otherClassNames,
+      )}
       type={type}
       onClick={onClick}
       disabled={isDisabled}

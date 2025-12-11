@@ -97,12 +97,7 @@ export const SimiliarProposals: React.FC<SimiliarProposalsProps> = ({
         )}
         {currentSlideUsers.map((user) => (
           <div key={user.id} className={styles.cardWrapper}>
-            <Card
-              user={user}
-              cities={cities}
-              isAuthenticated={isAuthenticated}
-              isLoading={false}
-            />
+            <Card user={user} cities={cities} isLoading={false} />
           </div>
         ))}
         {slidesCount > 1 && (
