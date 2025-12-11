@@ -39,7 +39,7 @@ export const Toast = () => {
 
   return (
     <div className={styles.toastContainer}>
-      <div className={styles.toast}>
+      <div className={styles.toast} role={"status"} aria-live={"polite"}>
         <div className={styles.toastContent}>
           <div className={styles.toastMessage}>{toast.message}</div>
           {toast.details && (
