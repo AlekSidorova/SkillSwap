@@ -1,7 +1,6 @@
 import { Input } from "@/shared/ui/Input/Input";
 import { Button } from "@/shared/ui/Button/Button";
 import { Calendar } from "@shared/ui/Calendar/Calendar";
-import editIcon from "@images/icons/edit.svg?url";
 import editPhotoIcon from "@images/icons/edit-photo.svg";
 import styles from "./profilePage.module.scss";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
@@ -36,8 +35,6 @@ export const ProfileForm = () => {
     newPassword: "",
     confirmPassword: "",
   });
-
-  const editingColor = "#e3e6ddff";
 
   // Загружаем города при монтировании
   useEffect(() => {
@@ -274,7 +271,7 @@ export const ProfileForm = () => {
                       readOnly={!editing.email}
                       style={
                         editing.email
-                          ? { backgroundColor: editingColor }
+                          ? { backgroundColor: "var(--color-editing-color)" }
                           : undefined
                       }
                     />
@@ -308,7 +305,7 @@ export const ProfileForm = () => {
                       readOnly={!editing.name}
                       style={
                         editing.name
-                          ? { backgroundColor: editingColor }
+                          ? { backgroundColor: "var(--color-editing-color)" }
                           : undefined
                       }
                     />
@@ -401,7 +398,7 @@ export const ProfileForm = () => {
                       readOnly={!editing.about}
                       style={
                         editing.about
-                          ? { backgroundColor: editingColor }
+                          ? { backgroundColor: "var(--color-editing-color)" }
                           : undefined
                       }
                     />

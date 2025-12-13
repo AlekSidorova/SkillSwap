@@ -16,6 +16,7 @@
   border: 1px solid $color-border-input;
   border-radius: $input-border-radius;
   background-color: $color-input;
+  color: $color-text; // ← ЭТО САМОЕ ВАЖНОЕ ИСПРАВЛЕНИЕ!
   font: {
     family: "Roboto", sans-serif;
     size: 16px;

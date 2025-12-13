@@ -156,6 +156,8 @@
     inline-size: 100%;
     block-size: 100%;
     resize: none;
+    color: vars.$color-text;
+    background-color: vars.$color-input;
   }
 }
 
