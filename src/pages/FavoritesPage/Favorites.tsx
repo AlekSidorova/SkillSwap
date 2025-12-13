@@ -72,32 +72,32 @@ export const Favorites = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.container}>
+      <>
         <h1 className={styles.title}>Избранное</h1>
         <div className={styles.cardsGrid}>
           {Array.from({ length: 6 }).map((_, index) => (
             <CardSkeleton key={index} />
           ))}
         </div>
-      </div>
+      </>
     );
   }
 
   if (sortedLikedUsers.length === 0) {
     return (
-      <div className={styles.container}>
+      <>
         <h1 className={styles.title}>Избранное</h1>
         <div className={styles.emptyState}>
           <p className={styles.emptyText}>
             Здесь пока пусто. Добавьте карточки в избранное!
           </p>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <h1 className={styles.title}>Избранное</h1>
       <p className={styles.subtitle}>
         Найдено карточек: {sortedLikedUsers.length}
@@ -113,6 +113,6 @@ export const Favorites = () => {
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };

@@ -9,7 +9,7 @@ import UserPage from "@/pages/UserPage/UserPage";
 import { Layout } from "@/widgets/Layout/Layout";
 import { ErrorPage } from "@/pages/ErrorPage/ErrorPage";
 import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
-import { Favorites } from "@/pages/Favorites/Favorites";
+import { FavoritesPage } from "@/pages/FavoritesPage/FavoritesPage";
 
 function CreateOffer() {
   return (
@@ -36,7 +36,7 @@ export const AppRoutes = () => (
         path="favorites"
         element={
           <ProtectedRoute>
-            <Favorites />
+            <FavoritesPage />
           </ProtectedRoute>
         }
       />
