@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styles from "./profilePage.module.scss";
 
 import {
@@ -21,37 +21,37 @@ export const SidebarMenu = () => {
     <aside>
       <div className={styles.sidebarBackground}>
         <nav className={styles.menu} role="navigation">
-          <a href="#0" className={styles.menuItem}>
+          {/* TODO: заменить на реальные пути когда будут готовы компоненты */}
+          <Link to="/requests" className={styles.menuItem}>
             <Request />
             Заявки
-          </a>
+          </Link>
 
-          <a href="#0" className={styles.menuItem}>
+          <Link to="/exchanges" className={styles.menuItem}>
             <MessageText />
             Мои обмены
-          </a>
+          </Link>
 
-          {/* TODO: куда ссылка "Мои навыки" */}
-          <a href="/#0" className={styles.menuItem}>
+          <Link to="/my-skills" className={styles.menuItem}>
             <IdeaLK />
             Мои навыки
-          </a>
+          </Link>
 
-          <a
-            href="/favorites"
+          <Link
+            to="/favorites"
             className={isFavorites ? styles.menuItemActive : styles.menuItem}
           >
             <Like />
             Избранное
-          </a>
+          </Link>
 
-          <a
-            href="/profile"
+          <Link
+            to="/profile"
             className={isProfile ? styles.menuItemActive : styles.menuItem}
           >
             <User />
             Личные данные
-          </a>
+          </Link>
         </nav>
       </div>
     </aside>
