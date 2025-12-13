@@ -44,8 +44,7 @@
 }
 
 .container {
-  @include flex(column, center, start, 6px);
-  min-height: 78px;
+  @include flex(column, start, start, 6px);
 }
 
 .butttonWrapper {
