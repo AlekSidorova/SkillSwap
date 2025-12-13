@@ -135,7 +135,6 @@
 
 .fieldGroup {
   @include flex(column, center, start, 5px);
-  margin-block-end: 12px;
 }
 
 .label {
@@ -371,9 +370,8 @@
 
 .fileItems {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-block-start: 12px;
 }
 
 .fileItem {
@@ -438,7 +436,7 @@
 
 .buttons {
   @include flex(row, space-between, center, 16px);
-  margin-block-start: 32px;
+  margin-block-start: 10px;
   inline-size: 100%;
 
   & > * {
@@ -777,4 +775,10 @@
   min-block-size: 13px;
   font-size: 12px;
   color: vars.$color-error;
+  visibility: hidden;
+  padding-block-end: 5px;
+
+  &:not(:empty) {
+    visibility: visible;
+  }
 }

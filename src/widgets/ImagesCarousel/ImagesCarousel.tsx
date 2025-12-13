@@ -74,7 +74,7 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
 
   const visibleImages = getVisibleImages();
   const hasImages = processedImages.length > 0;
-  const canNavigate = processedImages.length > visibleCount;
+  const canNavigate = processedImages.length > 1;
 
   const handleNext = () => {
     if (!canNavigate) return;
@@ -341,6 +341,7 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
             )}
         </div>
 
+        {/* ИСПРАВЛЕНО: кнопки навигации отображаются всегда, когда можно навигировать */}
         {canNavigate && (
           <button
             className={clsx(styles.buttonSwap, styles.right)}
@@ -364,8 +365,7 @@ export const ImagesCarousel: React.FC<ImagesCarouselProps> = ({
         aria-live="polite" // aria-live для динамического контента
         aria-atomic="true" // aria-atomic для полного чтения
       >
-        {`Изображение ${currentIndex + 1} из ${processedImages.length}`} //
-        ДОБАВЛЕНО: Текст с номером слайда
+        {`Изображение ${currentIndex + 1} из ${processedImages.length}`}
       </div>
     </div>
   );

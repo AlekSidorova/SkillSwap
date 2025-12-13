@@ -436,8 +436,10 @@ export const SignupStepThree = () => {
                     onChange={handleTitleChange}
                     required
                   />
-                  {errors.title && touched.title && (
+                  {errors.title && touched.title ? (
                     <span className={styles.errorText}>{errors.title}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -462,8 +464,10 @@ export const SignupStepThree = () => {
                   onChange={handleCategoryChange}
                   placeholder="Выберите категории навыка"
                 />
-                {errors.category && touched.category && (
+                {errors.category && touched.category ? (
                   <span className={styles.errorText}>{errors.category}</span>
+                ) : (
+                  <span className={styles.errorText}>&nbsp;</span>
                 )}
               </>
             )}
@@ -488,8 +492,10 @@ export const SignupStepThree = () => {
                   placeholder="Выберите подкатегории"
                   disabled={formData.category.length === 0}
                 />
-                {errors.subcategory && touched.subcategory && (
+                {errors.subcategory && touched.subcategory ? (
                   <span className={styles.errorText}>{errors.subcategory}</span>
+                ) : (
+                  <span className={styles.errorText}>&nbsp;</span>
                 )}
               </>
             )}
@@ -517,10 +523,12 @@ export const SignupStepThree = () => {
                     maxLength={500}
                     minLength={10}
                   />
-                  {errors.description && touched.description && (
+                  {errors.description && touched.description ? (
                     <span className={styles.errorText}>
                       {errors.description}
                     </span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -573,8 +581,10 @@ export const SignupStepThree = () => {
                     />
                   </div>
 
-                  {errors.images && touched.images && (
+                  {errors.images && touched.images ? (
                     <span className={styles.errorText}>{errors.images}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
 
                   {localImages.length > 0 && (
