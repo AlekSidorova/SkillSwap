@@ -18,4 +18,8 @@ export type TOfferProps = {
     | "rejected"
     | "completed"
     | "cancelled";
+
+  currentUserId?: string;
+  ownerId?: string;
+  ownerName?: string;
 };

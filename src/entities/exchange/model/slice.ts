@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "@app/store/store";
 import { api } from "@shared/api/api";
 import type { Exchange, CreateExchangeRequest } from "../types";

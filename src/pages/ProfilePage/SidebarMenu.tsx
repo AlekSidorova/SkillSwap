@@ -16,18 +16,26 @@ export const SidebarMenu = () => {
   const location = useLocation();
   const isFavorites = location.pathname === "/favorites";
   const isProfile = location.pathname === "/profile";
+  const isExchanges = location.pathname === "/exchanges";
+  const isRequests = location.pathname === "/requests";
 
   return (
     <aside>
       <div className={styles.sidebarBackground}>
         <nav className={styles.menu} role="navigation">
           {/* TODO: заменить на реальные пути когда будут готовы компоненты */}
-          <Link to="/requests" className={styles.menuItem}>
+          <Link
+            to="/requests"
+            className={isRequests ? styles.menuItemActive : styles.menuItem}
+          >
             <Request />
             Заявки
           </Link>
 
-          <Link to="/exchanges" className={styles.menuItem}>
+          <Link
+            to="/exchanges"
+            className={isExchanges ? styles.menuItemActive : styles.menuItem}
+          >
             <MessageText />
             Мои обмены
           </Link>

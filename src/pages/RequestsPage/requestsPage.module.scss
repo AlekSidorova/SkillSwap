@@ -1,0 +1,57 @@
+@use "/src/styles/variables" as *;
+
+.wrapper {
+  display: flex;
+  gap: 24px;
+  padding: 32px 0 60px;
+}
+
+.content {
+  flex: 1;
+
+  .requestsContainer {
+    box-sizing: border-box;
+    min-block-size: 752px;
+    inline-size: 1020px;
+  }
+}
+
+.title {
+  font-family: Jost, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 150%;
+  color: $color-text;
+  margin-block-end: 16px;
+}
+
+.subtitle {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 150%;
+  color: $color-caption;
+  margin-block-end: 32px;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  inline-size: 100%;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 400px;
+  padding: 60px 20px;
+}
+
+.emptyText {
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 150%;
+  color: $color-caption;
+  text-align: center;
+}

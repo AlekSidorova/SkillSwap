@@ -10,6 +10,8 @@ import { Layout } from "@/widgets/Layout/Layout";
 import { ErrorPage } from "@/pages/ErrorPage/ErrorPage";
 import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
 import { FavoritesPage } from "@/pages/FavoritesPage/FavoritesPage";
+import { ExchangesPage } from "@/pages/ExchangesPage/ExchangesPage";
+import { RequestsPage } from "@/pages/RequestsPage/RequestsPage";
 
 function CreateOffer() {
   return (
@@ -37,6 +39,22 @@ export const AppRoutes = () => (
         element={
           <ProtectedRoute>
             <FavoritesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="exchanges"
+        element={
+          <ProtectedRoute>
+            <ExchangesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="requests"
+        element={
+          <ProtectedRoute>
+            <RequestsPage />
           </ProtectedRoute>
         }
       />
