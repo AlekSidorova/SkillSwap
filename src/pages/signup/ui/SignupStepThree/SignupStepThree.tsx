@@ -35,6 +35,8 @@ import { CategorySelector } from "./CategorySelector";
 import { WelcomeSection } from "@shared/ui/WelcomeSection/WelcomeSection";
 import type z from "zod";
 import { Loader } from "@/shared/ui/Loader/Loader";
+import clsx from "clsx";
+import { SkeletonField } from "@pages/signup/ui/SignupStepThree/SkeletonField.tsx";
 
 interface ImageFile {
   id: string;
@@ -407,17 +409,14 @@ export const SignupStepThree = () => {
   }, [dispatch, navigate]);
 
   return (
-    <div className={styles.pageWrapper}>
+    <div className={clsx(styles.pageWrapper)}>
       {isSubmitting && <Loader />}
-      <div className={styles.header}>
-        <div className={styles.logo}>
-          <Logo />
-        </div>
-        <div className={styles.steps}>
-          <SignupSteps currentStep={3} />
-        </div>
+      <div className={styles.logo}>
+        <Logo />
       </div>
-
+      <div className={clsx(styles.steps)}>
+        <SignupSteps currentStep={3} />
+      </div>
       <section className={styles.section}>
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={handleContinue}>
@@ -427,7 +426,7 @@ export const SignupStepThree = () => {
                 Название навыка
               </label>
               {isLoading ? (
-                <div className={`${styles.skeleton} ${styles.skeletonInput}`} />
+                <SkeletonField type="input" count={1} />
               ) : (
                 <>
                   <input
@@ -452,9 +451,7 @@ export const SignupStepThree = () => {
             {/* Категория навыка */}
             {isLoading ? (
               <div className={styles.fieldGroup}>
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonSelect}`}
-                />
+                <SkeletonField type="select" count={1} />
               </div>
             ) : (
               <>
@@ -479,9 +476,7 @@ export const SignupStepThree = () => {
             {/* Подкатегория */}
             {isLoading ? (
               <div className={styles.fieldGroup}>
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonSelect}`}
-                />
+                <SkeletonField type="select" count={1} />
               </div>
             ) : (
               <>
@@ -510,9 +505,7 @@ export const SignupStepThree = () => {
                 Описание
               </label>
               {isLoading ? (
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonTextarea}`}
-                />
+                <SkeletonField type="input" count={1} />
               ) : (
                 <>
                   <textarea
@@ -545,9 +538,7 @@ export const SignupStepThree = () => {
               </label>
 
               {isLoading ? (
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonUploadArea}`}
-                />
+                <SkeletonField type="upload" count={1} />
               ) : (
                 <>
                   <div
