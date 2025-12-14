@@ -36,9 +36,10 @@ export const SignupStepOne = () => {
     password: step1.password || "",
   });
 
+  // Если данные уже есть (возврат на шаг 1), помечаем поля как touched
   const [touched, setTouched] = useState({
-    email: false,
-    password: false,
+    email: !!(step1.email && step1.email.length > 0),
+    password: !!(step1.password && step1.password.length > 0),
   });
 
   const [errors, setErrors] = useState<{
@@ -76,6 +77,28 @@ export const SignupStepOne = () => {
       setEmailAvailability(null);
     }
   }, [debouncedEmail, touched.email]);
+
+  // При монтировании, если email уже заполнен, запускаем проверку
+  useEffect(() => {
+    if (
+      formData.email &&
+      touched.email &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      api
+        .checkEmail(formData.email)
+        .then((response) => {
+          setEmailAvailability(response.available);
+        })
+        .catch((error) => {
+          if (error instanceof ApiError && error.status >= 500) {
+            console.error("Ошибка проверки email:", error);
+          }
+          setEmailAvailability(null);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Только при монтировании компонента
 
   // Валидация при каждом изменении формы
   useEffect(() => {

@@ -59,25 +59,14 @@ export const SignupStepThree = () => {
 
   const { step3 } = signupState;
 
-  // Проверка, что шаги 1 и 2 пройдены
-  // Данные восстанавливаются из localStorage при инициализации Redux store
-  // Если пользователь уже залогинен (зарегистрирован), но нет данных шага 2,
-  // значит регистрация уже завершена, редиректим на главную
-  if (isAuthenticated) {
-    if (
-      !signupState.step2.firstName ||
-      !signupState.step2.location ||
-      !signupState.step2.avatar ||
-      !signupState.step2.gender
-    ) {
-      return <Navigate to="/" replace />;
-    }
-  } else {
-    // Если пользователь не залогинен, проверяем наличие данных предыдущих шагов
+  // Проверка, что шаги 1 и 2 пройдены (только для незалогиненных)
+  // Если пользователь залогинен - шаг 3 доступен без проверок
+  if (!isAuthenticated) {
     // Если нет данных шага 1, редиректим на шаг 1
     if (!signupState.step1.email || !signupState.step1.password) {
       return <Navigate to="/registration/step1" replace />;
     }
+    // Если нет данных шага 2, редиректим на шаг 2
     if (
       !signupState.step2.firstName ||
       !signupState.step2.location ||
@@ -87,6 +76,7 @@ export const SignupStepThree = () => {
       return <Navigate to="/registration/step2" replace />;
     }
   }
+  // Для залогиненных пользователей шаг 3 доступен сразу
   const skillName = step3?.skillName || "";
   const description = step3?.description || "";
   const images = step3?.images || [];
