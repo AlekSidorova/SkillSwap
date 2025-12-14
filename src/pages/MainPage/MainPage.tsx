@@ -10,7 +10,6 @@ import { Loader } from "@/shared/ui/Loader/Loader";
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const [filters, setFilters] = useState<TFilterState>({
     purpose: "",
     skills: [],
@@ -18,8 +17,7 @@ export const MainPage = () => {
     cityAll: [],
   });
 
-  const { subcategories } = useAppSelector(selectCategoryData);
-  const { isLoading } = useAppSelector(selectCategoryData);
+  const { subcategories, isLoading } = useAppSelector(selectCategoryData);
 
   // Обрабатываем поисковый запрос из URL
   useEffect(() => {
@@ -45,7 +43,6 @@ export const MainPage = () => {
 
   return (
     <div className={styles.main}>
-      {isLoading && <Loader />}
       <aside className={styles.filterContainer}>
         <Filter
           filters={filters}
@@ -54,6 +51,11 @@ export const MainPage = () => {
         />
       </aside>
       <section className={styles.galleryContainer}>
+        {isLoading && (
+          <div className={styles.loaderWrapper}>
+            <Loader />
+          </div>
+        )}
         <UserCardsSection filters={filters} onFiltersChange={setFilters} />
       </section>
     </div>

@@ -14,5 +14,20 @@
 
   .galleryContainer {
     inline-size: 100%;
+    position: relative;
+
+    .loaderWrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px);
+      background-color: rgb(46 45 45 / 14.6%);
+      z-index: 9999;
+    }
   }
 }
