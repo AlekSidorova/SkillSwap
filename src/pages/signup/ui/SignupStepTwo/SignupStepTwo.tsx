@@ -33,6 +33,7 @@ import {
   selectIsRegistering,
   selectRegisterError,
   selectIsSubmitting,
+  updateStep1,
 } from "@features/signup/model/slice";
 import { setAvatarFile } from "@features/signup/model/slice";
 import {
@@ -399,10 +400,30 @@ export const SignupStepTwo = () => {
     // Регистрируем пользователя перед переходом на шаг 3
     try {
       await dispatch(registerUserAfterStep2()).unwrap();
-      // Если регистрация успешна, переходим на шаг 3
+
+      try {
+        localStorage.removeItem("signupStep1Data");
+        localStorage.removeItem("signupStep2Data");
+      } catch (error) {
+        console.error("Ошибка очистки localStorage:", error);
+      }
+
+      dispatch(updateStep1({ email: "", password: "" }));
+      dispatch(
+        updateStep2({
+          firstName: "",
+          location: "",
+          dateOfBirth: "",
+          gender: "",
+          avatar: "",
+          learnCategory: [],
+          learnSubcategory: [],
+        }),
+      );
+
+      // Переходим на шаг 3
       navigate("/registration/step3");
     } catch (error) {
-      // Ошибка уже обработана в slice, можно показать дополнительное сообщение
       console.error("Ошибка регистрации:", error);
     }
   };

@@ -38,7 +38,6 @@ interface SignupState {
 
 let avatarFileStorage: File | null = null;
 
-// Функции для работы с аватаром
 export const getAvatarFile = (): File | null => avatarFileStorage;
 export const setAvatarFile = (file: File | null) => {
   avatarFileStorage = file;
@@ -47,29 +46,114 @@ export const clearAvatarFile = () => {
   avatarFileStorage = null;
 };
 
-const getInitialState = (): SignupState => ({
-  step1: { email: "", password: "" },
-  step2: {
-    firstName: "",
-    location: "",
-    dateOfBirth: "",
-    gender: "",
-    avatar: "",
-    learnCategory: [],
-    learnSubcategory: [],
-  },
-  step3: {
-    skillName: "",
-    teachCategory: [],
-    teachSubcategory: [],
-    description: "",
-    images: [],
-  },
-  isSubmitting: false,
-  submitError: null,
-  isRegistering: false,
-  registerError: null,
-});
+const getInitialState = (): SignupState => {
+  try {
+    const savedStep1 = localStorage.getItem("signupStep1Data");
+    const savedStep2 = localStorage.getItem("signupStep2Data");
+
+    let step1Data = { email: "", password: "" };
+    let step2Data = {
+      firstName: "",
+      location: "",
+      dateOfBirth: "",
+      gender: "",
+      avatar: "",
+      learnCategory: [],
+      learnSubcategory: [],
+    };
+
+    if (savedStep1) {
+      const parsed = JSON.parse(savedStep1);
+      if (parsed && typeof parsed === "object") {
+        step1Data = { ...step1Data, ...parsed };
+      }
+    }
+
+    if (savedStep2) {
+      const parsed = JSON.parse(savedStep2);
+      if (parsed && typeof parsed === "object") {
+        step2Data = { ...step2Data, ...parsed };
+
+        // ФАЙЛ АВАТАРА ИЗ BASE64
+        if (
+          parsed.avatar &&
+          typeof parsed.avatar === "string" &&
+          parsed.avatar.startsWith("data:image")
+        ) {
+          try {
+            // Создаем File объект из base64
+            const byteString = atob(parsed.avatar.split(",")[1]);
+            const mimeString = parsed.avatar
+              .split(",")[0]
+              .split(":")[1]
+              .split(";")[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+
+            for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+            }
+
+            const blob = new Blob([ab], { type: mimeString });
+            const file = new File([blob], "avatar.jpg", { type: mimeString });
+
+            // Сохраняем File объект в хранилище
+            avatarFileStorage = file;
+          } catch (error) {
+            console.error(
+              "[signup] Ошибка восстановления аватара из base64:",
+              error,
+            );
+            avatarFileStorage = null;
+          }
+        } else {
+          avatarFileStorage = null;
+        }
+      }
+    }
+
+    return {
+      step1: step1Data,
+      step2: step2Data,
+      step3: {
+        skillName: "",
+        teachCategory: [],
+        teachSubcategory: [],
+        description: "",
+        images: [],
+      },
+      isSubmitting: false,
+      submitError: null,
+      isRegistering: false,
+      registerError: null,
+    };
+  } catch (error) {
+    console.error("[signup] Ошибка загрузки из localStorage:", error);
+    return {
+      step1: { email: "", password: "" },
+      step2: {
+        firstName: "",
+        location: "",
+        dateOfBirth: "",
+        gender: "",
+        avatar: "",
+        learnCategory: [],
+        learnSubcategory: [],
+      },
+      step3: {
+        skillName: "",
+        teachCategory: [],
+        teachSubcategory: [],
+        description: "",
+        images: [],
+      },
+      isSubmitting: false,
+      submitError: null,
+      isRegistering: false,
+      registerError: null,
+    };
+  }
+};
 
 const initialState: SignupState = getInitialState();
 
@@ -331,6 +415,9 @@ const signupSlice = createSlice({
     clearSignupData: (state) => {
       Object.assign(state, getInitialState());
       clearAvatarFile();
+      // Очищаем оба шага
+      localStorage.removeItem("signupStep1Data");
+      localStorage.removeItem("signupStep2Data");
     },
   },
   extraReducers: (builder) => {
@@ -372,11 +459,57 @@ const signupSlice = createSlice({
       .addCase(registerUserAfterStep2.fulfilled, (state) => {
         state.isRegistering = false;
         state.registerError = null;
+        // ОЧИЩАЕМ localStorage при успешной регистрации
+        try {
+          localStorage.removeItem("signupStep1Data");
+          localStorage.removeItem("signupStep2Data");
+        } catch (error) {
+          console.error("[signup] Ошибка очистки localStorage:", error);
+        }
       })
       .addCase(registerUserAfterStep2.rejected, (state, action) => {
         state.isRegistering = false;
         state.registerError = action.payload as string;
-      });
+      })
+
+      // Сохраняем шаг 1
+      .addMatcher(
+        (action) => action.type === "signup/updateStep1",
+        (state) => {
+          try {
+            localStorage.setItem(
+              "signupStep1Data",
+              JSON.stringify(state.step1),
+            );
+          } catch (error) {
+            console.error("[signup] Ошибка сохранения шага 1:", error);
+          }
+        },
+      )
+
+      // Сохраняем шаг 2
+      .addMatcher(
+        (action) =>
+          [
+            "signup/updateFirstName",
+            "signup/updateCity",
+            "signup/updateGender",
+            "signup/updateDateOfBirth",
+            "signup/updateAvatar",
+            "signup/setLearnCategories",
+            "signup/setLearnSubcategories",
+          ].includes(action.type),
+        (state) => {
+          try {
+            localStorage.setItem(
+              "signupStep2Data",
+              JSON.stringify(state.step2),
+            );
+          } catch (error) {
+            console.error("[signup] Ошибка сохранения шага 2:", error);
+          }
+        },
+      );
   },
 });
 
