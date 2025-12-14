@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import type { ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import styles from "./signupStepThree.module.scss";
 import { SignupSteps } from "@shared/ui/SignupSteps/SignupSteps";
 import { Button } from "@shared/ui/Button/Button";
@@ -17,7 +17,9 @@ import {
   selectTeachSubcategories,
   createSkills,
   selectIsSubmitting,
+  selectSignup,
 } from "@features/signup/model/slice";
+import { selectIsAuthenticated } from "@features/auth/model/slice";
 import { ModalUI } from "@shared/ui/Modal/Modal";
 import galleryAddIcon from "@images/icons/gallery-add.svg";
 import schoolBoard from "@images/png/light/school-board.png";
@@ -35,6 +37,8 @@ import { CategorySelector } from "./CategorySelector";
 import { WelcomeSection } from "@shared/ui/WelcomeSection/WelcomeSection";
 import type z from "zod";
 import { Loader } from "@/shared/ui/Loader/Loader";
+import clsx from "clsx";
+import { SkeletonField } from "@pages/signup/ui/SignupStepThree/SkeletonField.tsx";
 
 interface ImageFile {
   id: string;
@@ -47,11 +51,32 @@ export const SignupStepThree = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const signupState = useAppSelector(selectSignup);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const teachCategories = useAppSelector(selectTeachCategories);
   const teachSubcategories = useAppSelector(selectTeachSubcategories);
   const isSubmitting = useAppSelector(selectIsSubmitting);
 
-  const { step3 } = useAppSelector((state) => state.signup);
+  const { step3 } = signupState;
+
+  // Проверка, что шаги 1 и 2 пройдены (только для незалогиненных)
+  // Если пользователь залогинен - шаг 3 доступен без проверок
+  if (!isAuthenticated) {
+    // Если нет данных шага 1, редиректим на шаг 1
+    if (!signupState.step1.email || !signupState.step1.password) {
+      return <Navigate to="/registration/step1" replace />;
+    }
+    // Если нет данных шага 2, редиректим на шаг 2
+    if (
+      !signupState.step2.firstName ||
+      !signupState.step2.location ||
+      !signupState.step2.avatar ||
+      !signupState.step2.gender
+    ) {
+      return <Navigate to="/registration/step2" replace />;
+    }
+  }
+  // Для залогиненных пользователей шаг 3 доступен сразу
   const skillName = step3?.skillName || "";
   const description = step3?.description || "";
   const images = step3?.images || [];
@@ -407,17 +432,14 @@ export const SignupStepThree = () => {
   }, [dispatch, navigate]);
 
   return (
-    <div className={styles.pageWrapper}>
+    <div className={clsx(styles.pageWrapper)}>
       {isSubmitting && <Loader />}
-      <div className={styles.header}>
-        <div className={styles.logo}>
-          <Logo />
-        </div>
-        <div className={styles.steps}>
-          <SignupSteps currentStep={3} />
-        </div>
+      <div className={styles.logo}>
+        <Logo />
       </div>
-
+      <div className={clsx(styles.steps)}>
+        <SignupSteps currentStep={3} />
+      </div>
       <section className={styles.section}>
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={handleContinue}>
@@ -427,7 +449,7 @@ export const SignupStepThree = () => {
                 Название навыка
               </label>
               {isLoading ? (
-                <div className={`${styles.skeleton} ${styles.skeletonInput}`} />
+                <SkeletonField type="input" count={1} />
               ) : (
                 <>
                   <input
@@ -452,9 +474,7 @@ export const SignupStepThree = () => {
             {/* Категория навыка */}
             {isLoading ? (
               <div className={styles.fieldGroup}>
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonSelect}`}
-                />
+                <SkeletonField type="select" count={1} />
               </div>
             ) : (
               <>
@@ -479,9 +499,7 @@ export const SignupStepThree = () => {
             {/* Подкатегория */}
             {isLoading ? (
               <div className={styles.fieldGroup}>
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonSelect}`}
-                />
+                <SkeletonField type="select" count={1} />
               </div>
             ) : (
               <>
@@ -510,9 +528,7 @@ export const SignupStepThree = () => {
                 Описание
               </label>
               {isLoading ? (
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonTextarea}`}
-                />
+                <SkeletonField type="input" count={1} />
               ) : (
                 <>
                   <textarea
@@ -545,9 +561,7 @@ export const SignupStepThree = () => {
               </label>
 
               {isLoading ? (
-                <div
-                  className={`${styles.skeleton} ${styles.skeletonUploadArea}`}
-                />
+                <SkeletonField type="upload" count={1} />
               ) : (
                 <>
                   <div
@@ -617,7 +631,10 @@ export const SignupStepThree = () => {
               <Button to="/registration/step2" variant="secondary">
                 Назад
               </Button>
-              <Button onClick={handleContinue} disabled={isLoading}>
+              <Button
+                onClick={handleContinue}
+                disabled={isLoading || !isFormValid}
+              >
                 {isLoading ? "Загрузка..." : "Продолжить"}
               </Button>
             </div>

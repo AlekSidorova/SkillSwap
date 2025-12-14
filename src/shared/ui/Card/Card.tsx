@@ -25,6 +25,7 @@ export const Card: React.FC<CardProps> = memo(
     isLoading = false,
     variant = "default",
     description = "Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое",
+    buttonText,
   }) => {
     const navigate = useNavigate();
 
@@ -249,9 +250,9 @@ export const Card: React.FC<CardProps> = memo(
                 variant="primary"
                 disabled={isLoading}
                 onClick={handleDetailsClick}
-                aria-label={`Подробнее о пользователе ${user.name}`}
+                aria-label={`${buttonText || "Подробнее"} о пользователе ${user.name}`}
               >
-                Подробнее
+                {buttonText || "Подробнее"}
               </Button>
             </div>
           </div>

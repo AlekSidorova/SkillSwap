@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import clsx from "clsx";
 import styles from "./signupStepTwo.module.scss";
 import formStyles from "@shared/ui/Form/form.module.scss";
@@ -33,6 +33,8 @@ import {
   selectIsRegistering,
   selectRegisterError,
   selectIsSubmitting,
+  updateStep1,
+  selectSignup,
 } from "@features/signup/model/slice";
 import { setAvatarFile } from "@features/signup/model/slice";
 import {
@@ -53,6 +55,7 @@ export const SignupStepTwo = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const signupState = useAppSelector(selectSignup);
   const firstName = useAppSelector(selectFirstName);
   const location = useAppSelector(selectLocation);
   const gender = useAppSelector(selectGender);
@@ -63,6 +66,12 @@ export const SignupStepTwo = () => {
   const isRegistering = useAppSelector(selectIsRegistering);
   const registerError = useAppSelector(selectRegisterError);
   const isSubmitting = useAppSelector(selectIsSubmitting);
+
+  // Проверка, что шаг 1 пройден (есть email и password)
+  // Данные восстанавливаются из localStorage при инициализации Redux store
+  if (!signupState.step1.email || !signupState.step1.password) {
+    return <Navigate to="/registration/step1" replace />;
+  }
 
   const {
     categories: categoriesData,
@@ -399,10 +408,30 @@ export const SignupStepTwo = () => {
     // Регистрируем пользователя перед переходом на шаг 3
     try {
       await dispatch(registerUserAfterStep2()).unwrap();
-      // Если регистрация успешна, переходим на шаг 3
+
+      try {
+        localStorage.removeItem("signupStep1Data");
+        localStorage.removeItem("signupStep2Data");
+      } catch (error) {
+        console.error("Ошибка очистки localStorage:", error);
+      }
+
+      dispatch(updateStep1({ email: "", password: "" }));
+      dispatch(
+        updateStep2({
+          firstName: "",
+          location: "",
+          dateOfBirth: "",
+          gender: "",
+          avatar: "",
+          learnCategory: [],
+          learnSubcategory: [],
+        }),
+      );
+
+      // Переходим на шаг 3
       navigate("/registration/step3");
     } catch (error) {
-      // Ошибка уже обработана в slice, можно показать дополнительное сообщение
       console.error("Ошибка регистрации:", error);
     }
   };
@@ -511,8 +540,10 @@ export const SignupStepTwo = () => {
                     onChange={handleNameChange}
                     required
                   />
-                  {errors.name && touched.name && (
-                    <span className={formStyles.errorText}>{errors.name}</span>
+                  {errors.name && touched.name ? (
+                    <span className={styles.errorText}>{errors.name}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -535,10 +566,12 @@ export const SignupStepTwo = () => {
                             placeholder="дд.мм.гггг"
                           />
                         </div>
-                        {errors.dateOfBirth && touched.dateOfBirth && (
-                          <span className={formStyles.errorText}>
+                        {errors.dateOfBirth && touched.dateOfBirth ? (
+                          <span className={styles.errorText}>
                             {errors.dateOfBirth}
                           </span>
+                        ) : (
+                          <span className={styles.errorText}>&nbsp;</span>
                         )}
                       </div>
                     )}
@@ -566,8 +599,10 @@ export const SignupStepTwo = () => {
                         value={gender}
                       />
                     </div>
-                    {errors.sex && touched.sex && (
-                      <span className={formStyles.errorText}>{errors.sex}</span>
+                    {errors.sex && touched.sex ? (
+                      <span className={styles.errorText}>{errors.sex}</span>
+                    ) : (
+                      <span className={styles.errorText}>&nbsp;</span>
                     )}
                   </>
                 )}
@@ -598,8 +633,10 @@ export const SignupStepTwo = () => {
                       value={selectedCityName}
                     />
                   </div>
-                  {errors.city && touched.city && (
-                    <span className={formStyles.errorText}>{errors.city}</span>
+                  {errors.city && touched.city ? (
+                    <span className={styles.errorText}>{errors.city}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -623,10 +660,10 @@ export const SignupStepTwo = () => {
                     disabled={false}
                     isLoading={isLoading}
                   />
-                  {errors.category && touched.category && (
-                    <span className={formStyles.errorText}>
-                      {errors.category}
-                    </span>
+                  {errors.category && touched.category ? (
+                    <span className={styles.errorText}>{errors.category}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </div>
               )}
@@ -650,10 +687,12 @@ export const SignupStepTwo = () => {
                     disabled={learnCategories.length === 0}
                     isLoading={isLoading}
                   />
-                  {errors.subcategory && touched.subcategory && (
-                    <span className={formStyles.errorText}>
+                  {errors.subcategory && touched.subcategory ? (
+                    <span className={styles.errorText}>
                       {errors.subcategory}
                     </span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </div>
               )}
@@ -673,7 +712,7 @@ export const SignupStepTwo = () => {
               </Button>
               <Button
                 onClick={handleContinue}
-                disabled={isLoading}
+                disabled={isLoading || !isFormValid}
                 type="submit"
               >
                 {isLoading ? "Загрузка..." : "Продолжить"}

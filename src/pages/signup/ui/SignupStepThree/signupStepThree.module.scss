@@ -25,21 +25,19 @@
 }
 
 .logo {
-  padding-block-start: 33px;
+  padding-block-start: 20px;
+  padding-inline-start: 8px;
 }
 
 .steps {
-  padding-block-start: 50px;
-  position: absolute;
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
+  @include flex(row, center, center);
+  margin-block-end: 35px;
 }
 
 .section {
   @include flex(row, center, stretch, 24px);
   background-color: vars.$color-background;
   font-family: Roboto, sans-serif;
-  padding-block: 83px 80px;
   margin-block: 32px 0;
   overflow: hidden;
 }
@@ -146,7 +144,7 @@
 .descriptionTextarea {
   inline-size: 100%;
   padding-inline: 12px;
-  padding-block: 16px;
+  padding-block: 12px;
   border: 1px solid vars.$color-border-input;
   border-radius: vars.$input-border-radius;
   @include text-style($weight: 400, $size: 16px, $line: normal);
@@ -725,7 +723,7 @@
     var(--color-disabled) 75%
   );
   background-size: 200% 100%;
-  animation: loading 1.5s ease-in-out infinite;
+  animation: loading 1.5s infinite;
   border-radius: 8px;
 }
 
@@ -744,7 +742,8 @@
   inline-size: 100%;
   block-size: 45px;
   padding: 12px 16px;
-  border-radius: vars.$input-border-radius;
+  margin-block-end: 50px;
+  @extend .skeleton;
 }
 
 // Скелетон для выпадающего списка
@@ -752,7 +751,8 @@
   inline-size: 100%;
   block-size: 45px;
   padding: 12px 16px;
-  border-radius: vars.$input-border-radius;
+  margin-block-end: 50px;
+  @extend .skeleton;
 }
 
 // Скелетон для текстовой области (описание)
@@ -760,14 +760,16 @@
   inline-size: 100%;
   min-block-size: 98px;
   padding: 12px 16px;
-  border-radius: vars.$input-border-radius;
+  margin-block-end: 50px;
+  @extend .skeleton;
 }
 
 // Скелетон для области загрузки
 .skeletonUploadArea {
   inline-size: 436px;
   block-size: 96px;
-  border-radius: vars.$input-border-radius;
+  margin-block-end: 50px;
+  @extend .skeleton;
 }
 
 .errorText {
