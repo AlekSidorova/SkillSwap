@@ -540,8 +540,10 @@ export const SignupStepTwo = () => {
                     onChange={handleNameChange}
                     required
                   />
-                  {errors.name && touched.name && (
-                    <span className={formStyles.errorText}>{errors.name}</span>
+                  {errors.name && touched.name ? (
+                    <span className={styles.errorText}>{errors.name}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -564,10 +566,12 @@ export const SignupStepTwo = () => {
                             placeholder="дд.мм.гггг"
                           />
                         </div>
-                        {errors.dateOfBirth && touched.dateOfBirth && (
-                          <span className={formStyles.errorText}>
+                        {errors.dateOfBirth && touched.dateOfBirth ? (
+                          <span className={styles.errorText}>
                             {errors.dateOfBirth}
                           </span>
+                        ) : (
+                          <span className={styles.errorText}>&nbsp;</span>
                         )}
                       </div>
                     )}
@@ -595,8 +599,10 @@ export const SignupStepTwo = () => {
                         value={gender}
                       />
                     </div>
-                    {errors.sex && touched.sex && (
-                      <span className={formStyles.errorText}>{errors.sex}</span>
+                    {errors.sex && touched.sex ? (
+                      <span className={styles.errorText}>{errors.sex}</span>
+                    ) : (
+                      <span className={styles.errorText}>&nbsp;</span>
                     )}
                   </>
                 )}
@@ -627,8 +633,10 @@ export const SignupStepTwo = () => {
                       value={selectedCityName}
                     />
                   </div>
-                  {errors.city && touched.city && (
-                    <span className={formStyles.errorText}>{errors.city}</span>
+                  {errors.city && touched.city ? (
+                    <span className={styles.errorText}>{errors.city}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </>
               )}
@@ -652,10 +660,10 @@ export const SignupStepTwo = () => {
                     disabled={false}
                     isLoading={isLoading}
                   />
-                  {errors.category && touched.category && (
-                    <span className={formStyles.errorText}>
-                      {errors.category}
-                    </span>
+                  {errors.category && touched.category ? (
+                    <span className={styles.errorText}>{errors.category}</span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </div>
               )}
@@ -679,10 +687,12 @@ export const SignupStepTwo = () => {
                     disabled={learnCategories.length === 0}
                     isLoading={isLoading}
                   />
-                  {errors.subcategory && touched.subcategory && (
-                    <span className={formStyles.errorText}>
+                  {errors.subcategory && touched.subcategory ? (
+                    <span className={styles.errorText}>
                       {errors.subcategory}
                     </span>
+                  ) : (
+                    <span className={styles.errorText}>&nbsp;</span>
                   )}
                 </div>
               )}
