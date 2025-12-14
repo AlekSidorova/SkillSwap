@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CardsSection } from "@shared/ui/CardsSection/CardsSection";
 import { UserCardsList } from "@shared/ui/UserCardsList/UserCardsList";
+import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import type { UserWithLikes } from "@entities/user/types";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
@@ -91,7 +92,7 @@ export const UserCardsSection = ({
     return [...users].slice(0, recommendationsCount);
   }, [users, recommendationsCount]);
 
-  // Бесконечный скролл
+  // Бесконечный скролл для популярных пользователей
   const { loadMoreList: loadMorePopular, hideMoreList: hideMorePopular } =
     useInfinityScroll({
       triggerArray: allPopularUsers,
@@ -103,6 +104,7 @@ export const UserCardsSection = ({
       sentinelRef: popularSentinelRef,
     });
 
+  // Бесконечный скролл для новых пользователей
   const { loadMoreList: loadMoreNew, hideMoreList: hideMoreNew } =
     useInfinityScroll({
       triggerArray: allNewUsers,
@@ -114,6 +116,7 @@ export const UserCardsSection = ({
       sentinelRef: newSentinelRef,
     });
 
+  // Бесконечный скролл для рекомендаций
   useInfinityScroll({
     triggerArray: users,
     nextNumber: 6,
@@ -204,7 +207,7 @@ export const UserCardsSection = ({
 
     return (
       <div className={styles.container}>
-        <CardsSection headerContent={headerContent}>
+        <CardsSection title="" headerContent={headerContent}>
           <UserCardsList
             users={sortedUsers}
             cities={cities}
@@ -221,7 +224,7 @@ export const UserCardsSection = ({
       {/* Секция "Популярное" */}
       <CardsSection
         title="Популярное"
-        showViewAll
+        showViewAll={!isInfinityScrollActivated.popular}
         viewAllProps={{
           behavior: "hide",
           initialCount: 3,
@@ -240,10 +243,23 @@ export const UserCardsSection = ({
         />
       </CardsSection>
 
+      {/* Кнопка "Свернуть" для секции "Популярное" */}
+      {isInfinityScrollActivated.popular && (
+        <div className={styles.collapseButtonContainer}>
+          <ViewAllButton
+            behavior="2-way"
+            initialCount={3}
+            currentCount={popularCount}
+            totalCount={allPopularUsers.length}
+            onLoadMore={hideMorePopular}
+          />
+        </div>
+      )}
+
       {/* Секция "Новое" */}
       <CardsSection
         title="Новое"
-        showViewAll
+        showViewAll={!isInfinityScrollActivated.new}
         viewAllProps={{
           behavior: "hide",
           initialCount: 3,
@@ -260,6 +276,19 @@ export const UserCardsSection = ({
         />
       </CardsSection>
 
+      {/* Кнопка "Свернуть" для секции "Новое" */}
+      {isInfinityScrollActivated.new && (
+        <div className={styles.collapseButtonContainer}>
+          <ViewAllButton
+            behavior="2-way"
+            initialCount={3}
+            currentCount={newCount}
+            totalCount={allNewUsers.length}
+            onLoadMore={hideMoreNew}
+          />
+        </div>
+      )}
+
       {/* Секция "Рекомендуем" */}
       <CardsSection
         title="Рекомендуем"
@@ -272,6 +301,7 @@ export const UserCardsSection = ({
         />
       </CardsSection>
 
+      {/* Кнопка "К началу страницы" */}
       {recommendationsCount >= users.length && (
         <div className={styles.backToTop}>
           <Button variant="secondary" onClick={handleHideAll}>
