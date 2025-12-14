@@ -12,4 +12,5 @@ export type CardProps = {
   isLoading?: boolean;
   variant?: CardVariant;
   description?: string; // Описание для variant="profile"
+  buttonText?: string;
 };
