@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Card } from "@shared/ui/Card/Card";
-import { CardSkeleton } from "@shared/ui/CardSkeleton/CardSkeleton";
+import { CardsSection } from "@shared/ui/CardsSection/CardsSection";
+import { UserCardsList } from "@shared/ui/UserCardsList/UserCardsList";
+import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import type { UserWithLikes } from "@entities/user/types";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
@@ -10,7 +11,6 @@ import { fetchSkillsData, selectSkillsData } from "@entities/skill/model/slice";
 import { useFilteredUsers } from "@features/filter-users/model/useFilteredUsers";
 import type { TFilterState } from "@features/filter-users/types";
 import { ActiveFilters } from "@widgets/ActiveFilters/ActiveFilters";
-import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
 import styles from "./userCardsSection.module.scss";
 import { Button } from "@/shared/ui/Button/Button";
 import { useInfinityScroll } from "@/shared/hooks/useInfinityScroll";
@@ -114,7 +114,7 @@ export const UserCardsSection = ({
       sentinelRef: popularSentinelRef,
     });
 
-  //Бесконечный скролл для новых пользователей
+  // Бесконечный скролл для новых пользователей
   const { loadMoreList: loadMoreNew, hideMoreList: hideMoreNew } =
     useInfinityScroll({
       triggerArray: allNewUsers,
@@ -163,45 +163,46 @@ export const UserCardsSection = ({
     return (
       <div className={styles.container}>
         {hasActiveFilters ? (
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Подходящие предложения: 0</h2>
-            <div className={styles.cardsGrid}>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <CardSkeleton key={index} />
-              ))}
-            </div>
-          </section>
+          <CardsSection title={`Подходящие предложения: 0`}>
+            <UserCardsList
+              users={[]}
+              cities={cities}
+              isLoading={true}
+              emptyMessage=""
+              onUserClick={handleDetailsClick}
+            />
+          </CardsSection>
         ) : (
           <>
             {/* Скелетоны для секции "Популярное" */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Популярное</h2>
-              <div className={styles.cardsGrid}>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <CardSkeleton key={index} />
-                ))}
-              </div>
-            </section>
+            <CardsSection title="Популярное">
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
+            </CardsSection>
 
             {/* Скелетоны для секции "Новое" */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Новое</h2>
-              <div className={styles.cardsGrid}>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <CardSkeleton key={index} />
-                ))}
-              </div>
-            </section>
+            <CardsSection title="Новое">
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
+            </CardsSection>
 
             {/* Скелетоны для секции "Рекомендуем" */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Рекомендуем</h2>
-              <div className={styles.cardsGrid}>
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <CardSkeleton key={index} />
-                ))}
-              </div>
-            </section>
+            <CardsSection title="Рекомендуем">
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
+            </CardsSection>
           </>
         )}
       </div>
@@ -210,162 +211,143 @@ export const UserCardsSection = ({
 
   // Если есть активные фильтры, показываем отфильтрованные предложения
   if (hasActiveFilters) {
+    const sortButton = (
+      <Button
+        variant={sortByDate ? "primary" : "tertiary"}
+        otherClassNames={styles.buttonSort}
+        onClick={() => setSortByDate(!sortByDate)}
+      >
+        <SortSvg
+          aria-label={sortByDate ? "Без сортировки" : "Сначала новые"}
+          aria-hidden="true"
+        />
+        {sortByDate ? "Без сортировки" : "Сначала новые"}
+      </Button>
+    );
+
+    const headerContent = (
+      <>
+        <div className={styles.sectionTitleWrapper}>
+          <h2 className={styles.sectionTitle}>
+            Подходящие предложения: {filteredOffers.length}
+          </h2>
+          {sortButton}
+        </div>
+        <ActiveFilters
+          filters={filters}
+          subcategories={subcategories}
+          cities={cities}
+          onFiltersChange={onFiltersChange}
+        />
+      </>
+    );
+
     return (
       <div className={styles.container}>
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionTitleWrapper}>
-              <h2 className={styles.sectionTitle}>
-                Подходящие предложения: {filteredOffers.length}
-              </h2>
-              <Button
-                variant={sortByDate ? "primary" : "tertiary"}
-                otherClassNames={styles.buttonSort}
-                onClick={() => setSortByDate(!sortByDate)}
-              >
-                <SortSvg
-                  aria-label={sortByDate ? "Без сортировки" : "Сначала новые"}
-                  aria-hidden="true"
-                />
-                {sortByDate ? "Без сортировки" : "Сначала новые"}
-              </Button>
-            </div>
-            <ActiveFilters
-              filters={filters}
-              subcategories={subcategories}
-              cities={cities}
-              onFiltersChange={onFiltersChange}
-            />
-          </div>
-          <div className={styles.cardsGrid}>
-            {sortedUsers.length > 0 ? (
-              sortedUsers.map((user) => (
-                <Card
-                  key={user.id}
-                  user={user}
-                  cities={cities}
-                  onDetailsClick={handleDetailsClick}
-                  isLoading={isLoading}
-                />
-              ))
-            ) : (
-              <p className={styles.noResults}>
-                По выбранным фильтрам ничего не найдено
-              </p>
-            )}
-          </div>
-        </section>
+        <CardsSection title="" headerContent={headerContent}>
+          <UserCardsList
+            users={sortedUsers}
+            cities={cities}
+            emptyMessage="По выбранным фильтрам ничего не найдено"
+            onUserClick={handleDetailsClick}
+          />
+        </CardsSection>
       </div>
     );
   }
 
   // Если фильтров нет, показываем стандартные секции
   return (
-    <div
-      className={styles.container}
-      onScroll={(e) => {
-        console.log(e.target);
-      }}
-    >
+    <div className={styles.container}>
       {/* Секция "Популярное" */}
-      <section className={styles.section}>
-        <div className={styles.sectionTitleRow}>
-          <h2 className={styles.sectionTitle}>Популярное</h2>
+      <CardsSection
+        title="Популярное"
+        showViewAll={!isInfinityScrollActivated.popular}
+        viewAllProps={{
+          behavior: "hide",
+          initialCount: 3,
+          currentCount: popularCount,
+          totalCount: allPopularUsers.length,
+          onLoadMore: loadMorePopular,
+        }}
+        sentinelRef={
+          isInfinityScrollActivated.popular ? popularSentinelRef : undefined
+        }
+      >
+        <UserCardsList
+          users={popularUsers}
+          cities={cities}
+          onUserClick={handleDetailsClick}
+        />
+      </CardsSection>
+
+      {/* Кнопка "Свернуть" для секции "Популярное" (после активации бесконечного скролла) */}
+      {isInfinityScrollActivated.popular && (
+        <div className={styles.collapseButtonContainer}>
           <ViewAllButton
-            behavior="hide"
+            behavior="2-way"
             initialCount={3}
             currentCount={popularCount}
             totalCount={allPopularUsers.length}
-            onLoadMore={loadMorePopular}
+            onLoadMore={hideMorePopular}
           />
         </div>
-        <div className={styles.cardsGrid}>
-          {popularUsers.map((user) => (
-            <Card
-              key={user.id}
-              user={user}
-              cities={cities}
-              onDetailsClick={handleDetailsClick}
-              isLoading={isLoading}
-            />
-          ))}
-        </div>
-        {isInfinityScrollActivated.popular && (
-          <>
-            <div ref={popularSentinelRef} className={styles.sentinel}></div>
-            <ViewAllButton
-              behavior="2-way"
-              initialCount={3}
-              currentCount={popularCount}
-              totalCount={allPopularUsers.length}
-              onLoadMore={hideMorePopular}
-            />
-          </>
-        )}
-      </section>
+      )}
 
       {/* Секция "Новое" */}
-      <section className={styles.section}>
-        <div className={styles.sectionTitleRow}>
-          <h2 className={styles.sectionTitle}>Новое</h2>
+      <CardsSection
+        title="Новое"
+        showViewAll={!isInfinityScrollActivated.new}
+        viewAllProps={{
+          behavior: "hide",
+          initialCount: 3,
+          currentCount: newCount,
+          totalCount: allNewUsers.length,
+          onLoadMore: loadMoreNew,
+        }}
+        sentinelRef={isInfinityScrollActivated.new ? newSentinelRef : undefined}
+      >
+        <UserCardsList
+          users={newUsers}
+          cities={cities}
+          onUserClick={handleDetailsClick}
+        />
+      </CardsSection>
+
+      {/* Кнопка "Свернуть" для секции "Новое" (после активации бесконечного скролла) */}
+      {isInfinityScrollActivated.new && (
+        <div className={styles.collapseButtonContainer}>
           <ViewAllButton
-            behavior="hide"
+            behavior="2-way"
             initialCount={3}
             currentCount={newCount}
             totalCount={allNewUsers.length}
-            onLoadMore={loadMoreNew}
+            onLoadMore={hideMoreNew}
           />
         </div>
-        <div className={styles.cardsGrid}>
-          {newUsers.map((user) => (
-            <Card
-              key={user.id}
-              user={user}
-              cities={cities}
-              onDetailsClick={handleDetailsClick}
-              isLoading={isLoading}
-            />
-          ))}
-        </div>
-        {isInfinityScrollActivated.new && (
-          <>
-            <div ref={newSentinelRef} className={styles.sentinel}></div>
-            <ViewAllButton
-              behavior="2-way"
-              initialCount={3}
-              currentCount={newCount}
-              totalCount={allNewUsers.length}
-              onLoadMore={hideMoreNew}
-            />
-          </>
-        )}
-      </section>
+      )}
 
       {/* Секция "Рекомендуем" */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Рекомендуем</h2>
-        <div className={styles.cardsGrid}>
-          {recommendedUsers.map((user) => (
-            <Card
-              key={user.id}
-              user={user}
-              cities={cities}
-              onDetailsClick={handleDetailsClick}
-              isLoading={isLoading}
-            />
-          ))}
-          <div
-            ref={recommendationsSentinelRef}
-            className={styles.sentinel}
-          ></div>
-        </div>
-        {recommendationsCount >= users.length && (
+      <CardsSection
+        title="Рекомендуем"
+        sentinelRef={recommendationsSentinelRef}
+      >
+        <UserCardsList
+          users={recommendedUsers}
+          cities={cities}
+          onUserClick={handleDetailsClick}
+        />
+      </CardsSection>
+
+      {/* Кнопка "К началу страницы" (для секции "Рекомендуем") */}
+      {recommendationsCount >= users.length && (
+        <div className={styles.backToTop}>
           <Button variant="secondary" onClick={() => hideAllSection(3)}>
             К началу страницы
             <Arrow isOpen={true} />
           </Button>
-        )}
-      </section>
+        </div>
+      )}
     </div>
   );
 };

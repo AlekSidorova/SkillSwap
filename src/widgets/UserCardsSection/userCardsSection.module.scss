@@ -78,3 +78,16 @@
   inline-size: 100%;
   block-size: 1px;
 }
+
+.collapseButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: -24px; // Поднимаем кнопку ближе к предыдущей секции
+  margin-bottom: 24px;
+}
+
+.backToTop {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
