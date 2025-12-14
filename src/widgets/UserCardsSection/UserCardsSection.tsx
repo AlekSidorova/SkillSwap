@@ -38,6 +38,7 @@ export const UserCardsSection = ({
   const newSentinelRef = useRef<HTMLDivElement | null>(null);
   const recommendationsSentinelRef = useRef<HTMLDivElement | null>(null);
 
+  // Состояния для отслеживания, сколько элементов показывать (по умолчанию 3)
   const [popularCount, setPopularCount] = useState(3);
   const [newCount, setNewCount] = useState(3);
   const [recommendationsCount, setRecommendationsCount] = useState(3);
@@ -45,10 +46,12 @@ export const UserCardsSection = ({
     popular: false,
     new: false,
   });
+
   const [sortByDate, setSortByDate] = useState(false);
 
-  // Загрузка данных
+  // Загрузка данных при монтировании компонента
   useEffect(() => {
+    // Загружаем данные только если они еще не загружены
     if (users.length === 0 && !usersLoading) {
       dispatch(fetchUsersData());
     }
@@ -67,11 +70,20 @@ export const UserCardsSection = ({
     cities.length,
   ]);
 
-  // Все популярные пользователи
-  const allPopularUsers = useMemo(() => {
-    return [...users].sort((a, b) => b.likesCount - a.likesCount);
-  }, [users]);
+  // Пользователи уже приходят с информацией о лайках из API
+  const usersWithLikes = users;
 
+  // Все популярные пользователи (по количеству лайков)
+  const allPopularUsers = useMemo(() => {
+    return [...usersWithLikes].sort((a, b) => b.likesCount - a.likesCount);
+  }, [usersWithLikes]);
+
+  // Популярные пользователи для отображения
+  const popularUsers = useMemo(() => {
+    return allPopularUsers.slice(0, popularCount);
+  }, [allPopularUsers, popularCount]);
+
+  // Все новые пользователи (по дате регистрации)
   const allNewUsers = useMemo(() => {
     return [...users].sort(
       (a, b) =>
@@ -80,14 +92,12 @@ export const UserCardsSection = ({
     );
   }, [users]);
 
-  const popularUsers = useMemo(() => {
-    return allPopularUsers.slice(0, popularCount);
-  }, [allPopularUsers, popularCount]);
-
+  // Новые пользователи для отображения
   const newUsers = useMemo(() => {
     return allNewUsers.slice(0, newCount);
   }, [allNewUsers, newCount]);
 
+  // Рекомендуемые пользователи для отображения
   const recommendedUsers = useMemo(() => {
     return [...users].slice(0, recommendationsCount);
   }, [users, recommendationsCount]);
@@ -126,22 +136,27 @@ export const UserCardsSection = ({
     currentCount: recommendationsCount,
   });
 
+  // Используем хук для фильтрации пользователей
   const { filteredOffers, sortedUsers, hasActiveFilters } = useFilteredUsers({
     filters,
-    usersWithLikes: users,
+    usersWithLikes,
     skills,
     sortByDate,
   });
 
-  const handleHideAll = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    hideMorePopular(3);
-    hideMoreNew(3);
-    setRecommendationsCount(3);
+  const hideAllSection = (count: number) => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    hideMorePopular(count);
+    hideMoreNew(count);
+    setRecommendationsCount(count);
   };
 
-  const handleUserClick = (user: UserWithLikes) => {
+  const handleDetailsClick = (user: UserWithLikes) => {
     console.log("User details clicked:", user);
+    // TODO: Реализовать навигацию к детальной странице пользователя
   };
 
   if (isLoading) {
@@ -154,18 +169,39 @@ export const UserCardsSection = ({
               cities={cities}
               isLoading={true}
               emptyMessage=""
+              onUserClick={handleDetailsClick}
             />
           </CardsSection>
         ) : (
           <>
+            {/* Скелетоны для секции "Популярное" */}
             <CardsSection title="Популярное">
-              <UserCardsList users={[]} cities={cities} isLoading={true} />
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
             </CardsSection>
+
+            {/* Скелетоны для секции "Новое" */}
             <CardsSection title="Новое">
-              <UserCardsList users={[]} cities={cities} isLoading={true} />
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
             </CardsSection>
+
+            {/* Скелетоны для секции "Рекомендуем" */}
             <CardsSection title="Рекомендуем">
-              <UserCardsList users={[]} cities={cities} isLoading={true} />
+              <UserCardsList
+                users={[]}
+                cities={cities}
+                isLoading={true}
+                onUserClick={handleDetailsClick}
+              />
             </CardsSection>
           </>
         )}
@@ -173,6 +209,7 @@ export const UserCardsSection = ({
     );
   }
 
+  // Если есть активные фильтры, показываем отфильтрованные предложения
   if (hasActiveFilters) {
     const sortButton = (
       <Button
@@ -212,13 +249,14 @@ export const UserCardsSection = ({
             users={sortedUsers}
             cities={cities}
             emptyMessage="По выбранным фильтрам ничего не найдено"
-            onUserClick={handleUserClick}
+            onUserClick={handleDetailsClick}
           />
         </CardsSection>
       </div>
     );
   }
 
+  // Если фильтров нет, показываем стандартные секции
   return (
     <div className={styles.container}>
       {/* Секция "Популярное" */}
@@ -239,11 +277,11 @@ export const UserCardsSection = ({
         <UserCardsList
           users={popularUsers}
           cities={cities}
-          onUserClick={handleUserClick}
+          onUserClick={handleDetailsClick}
         />
       </CardsSection>
 
-      {/* Кнопка "Свернуть" для секции "Популярное" */}
+      {/* Кнопка "Свернуть" для секции "Популярное" (после активации бесконечного скролла) */}
       {isInfinityScrollActivated.popular && (
         <div className={styles.collapseButtonContainer}>
           <ViewAllButton
@@ -272,11 +310,11 @@ export const UserCardsSection = ({
         <UserCardsList
           users={newUsers}
           cities={cities}
-          onUserClick={handleUserClick}
+          onUserClick={handleDetailsClick}
         />
       </CardsSection>
 
-      {/* Кнопка "Свернуть" для секции "Новое" */}
+      {/* Кнопка "Свернуть" для секции "Новое" (после активации бесконечного скролла) */}
       {isInfinityScrollActivated.new && (
         <div className={styles.collapseButtonContainer}>
           <ViewAllButton
@@ -297,14 +335,14 @@ export const UserCardsSection = ({
         <UserCardsList
           users={recommendedUsers}
           cities={cities}
-          onUserClick={handleUserClick}
+          onUserClick={handleDetailsClick}
         />
       </CardsSection>
 
-      {/* Кнопка "К началу страницы" */}
+      {/* Кнопка "К началу страницы" (для секции "Рекомендуем") */}
       {recommendationsCount >= users.length && (
         <div className={styles.backToTop}>
-          <Button variant="secondary" onClick={handleHideAll}>
+          <Button variant="secondary" onClick={() => hideAllSection(3)}>
             К началу страницы
             <Arrow isOpen={true} />
           </Button>
