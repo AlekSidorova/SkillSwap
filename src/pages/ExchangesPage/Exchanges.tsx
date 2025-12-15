@@ -1,17 +1,37 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "@shared/ui/Card/Card";
 import type { UserWithLikes } from "@entities/user/types";
-import { useAppSelector } from "@app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { selectUser as selectAuthUser } from "@features/auth/model/slice";
+import { selectUsers, fetchUsersData } from "@entities/user/model/slice";
+import { fetchSkillsData, selectSkillsData } from "@entities/skill/model/slice";
+import { fetchCities, selectCities } from "@entities/city/model/slice";
 import { api } from "@shared/api/api";
 import type { Exchange } from "@entities/exchange/types";
 import styles from "./exchangesPage.module.scss";
 
 export const Exchanges = () => {
+  const dispatch = useAppDispatch();
   const authUser = useAppSelector(selectAuthUser);
+  const users = useAppSelector(selectUsers);
+  const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
+  const { cities } = useAppSelector(selectCities);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Загружаем данные пользователей, навыков и городов, если они еще не загружены
+  useEffect(() => {
+    if (users.length === 0) {
+      dispatch(fetchUsersData());
+    }
+    if (skills.length === 0 && !skillsLoading) {
+      dispatch(fetchSkillsData());
+    }
+    if (cities.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [dispatch, users.length, skills.length, skillsLoading, cities.length]);
 
   useEffect(() => {
     const loadExchanges = async () => {
@@ -20,11 +40,18 @@ export const Exchanges = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api.getUserExchanges(authUser.id, {
-          status: "completed",
-          direction: "all",
-        });
-        setExchanges(data);
+        // Загружаем активные и завершенные обмены
+        const [acceptedExchanges, completedExchanges] = await Promise.all([
+          api.getUserExchanges(authUser.id, {
+            status: "accepted",
+            direction: "all",
+          }),
+          api.getUserExchanges(authUser.id, {
+            status: "completed",
+            direction: "all",
+          }),
+        ]);
+        setExchanges([...acceptedExchanges, ...completedExchanges]);
       } catch (err: any) {
         console.error("Ошибка загрузки обменов:", err);
         setError(err?.message || "Не удалось загрузить обмены");
@@ -41,28 +68,19 @@ export const Exchanges = () => {
 
     return exchanges
       .map((ex) => {
-        const otherUser =
-          ex.fromUserId === authUser.id ? ex.toUser : ex.fromUser;
-        if (!otherUser) return null;
+        const otherUserId =
+          ex.fromUserId === authUser.id ? ex.toUserId : ex.fromUserId;
+
+        // Берем пользователя из Redux store по ID
+        const user = users.find((u) => u.id === otherUserId);
+        if (!user) return null;
 
         const fromSkillName = ex.fromSkill?.name || "Навык";
         const toSkillName = ex.toSkill?.name || "Навык";
         const offerTitle = `${fromSkillName} ↔ ${toSkillName}`;
 
         return {
-          id: otherUser.id,
-          name: otherUser.name,
-          username: "",
-          email: "",
-          avatarUrl: otherUser.avatarUrl || "",
-          likes: 0,
-          likesCount: 0,
-          isLikedByCurrentUser: false,
-          cityId: 0,
-          dateOfBirth: new Date(),
-          gender: "M",
-          dateOfRegistration: new Date(),
-          lastLoginDatetime: new Date(),
+          ...user,
           exchangeId: ex.id.toString(),
           exchangeStatus: ex.status,
           offerTitle,
@@ -81,7 +99,26 @@ export const Exchanges = () => {
           offerTitle: string;
         } => Boolean(u),
       );
-  }, [exchanges, authUser?.id]);
+  }, [exchanges, authUser?.id, users]);
+
+  const handleCompleteExchange = async (exchangeId: string) => {
+    if (!authUser?.id) return;
+
+    try {
+      const updatedExchange = await api.updateExchangeStatus(
+        parseInt(exchangeId, 10),
+        "completed",
+      );
+
+      // Обновляем статус в списке
+      setExchanges((prev) =>
+        prev.map((ex) => (ex.id === updatedExchange.id ? updatedExchange : ex)),
+      );
+    } catch (err: any) {
+      console.error("Ошибка при завершении обмена:", err);
+      alert(err?.message || "Не удалось завершить обмен");
+    }
+  };
 
   const handleDeleteExchange = async (exchangeId: string) => {
     if (!authUser?.id) return;
@@ -129,7 +166,7 @@ export const Exchanges = () => {
       <>
         <h1 className={styles.title}>Мои обмены</h1>
         <div className={styles.emptyState}>
-          <p className={styles.emptyText}>У вас пока нет завершенных обменов</p>
+          <p className={styles.emptyText}>У вас пока нет обменов</p>
         </div>
       </>
     );
@@ -138,16 +175,29 @@ export const Exchanges = () => {
   return (
     <>
       <h1 className={styles.title}>Мои обмены</h1>
-      <p className={styles.subtitle}>
-        Завершенных обменов: {usersWithExchanges.length}
-      </p>
+      <p className={styles.subtitle}>Обменов: {usersWithExchanges.length}</p>
       <div className={styles.cardsGrid}>
         {usersWithExchanges.map((user) => {
+          // Для активных обменов показываем кнопку "Завершить"
+          if (user.exchangeStatus === "accepted") {
+            return (
+              <Card
+                key={`${user.id}-${user.exchangeId}`}
+                user={user}
+                cities={cities}
+                description={user.offerTitle}
+                buttonDeleteText="Завершить"
+                onDeleteClick={() => handleCompleteExchange(user.exchangeId)}
+              />
+            );
+          }
+
+          // Для завершенных обменов показываем кнопку "Удалить"
           return (
             <Card
               key={`${user.id}-${user.exchangeId}`}
               user={user}
-              cities={[]}
+              cities={cities}
               description={user.offerTitle}
               buttonDeleteText="Удалить"
               onDeleteClick={() => handleDeleteExchange(user.exchangeId)}

@@ -27,8 +27,14 @@ export const Card: React.FC<CardProps> = memo(
     description = "Привет! Люблю ритм, кофе по утрам и людей, которые не боятся пробовать новое",
     buttonText,
     buttonDeleteText,
+    buttonAcceptText,
+    buttonRejectText,
+    buttonCancelText,
     onDetailsClick,
     onDeleteClick,
+    onAcceptClick,
+    onRejectClick,
+    onCancelClick,
   }) => {
     const navigate = useNavigate();
 
@@ -243,10 +249,48 @@ export const Card: React.FC<CardProps> = memo(
           </div>
         </div>
 
-        {/* кнопка "Подробнее" (не показываем для variant="profile") */}
+        {/* кнопки действий (не показываем для variant="profile") */}
         {variant !== "profile" && (
           <div className={styles.actions}>
-            {onDeleteClick ? (
+            {/* Кнопки для заявок: Принять и Отклонить */}
+            {onAcceptClick && onRejectClick ? (
+              <div className={styles.actionsRow}>
+                <div className={styles.acceptButton}>
+                  <Button
+                    variant="primary"
+                    disabled={isLoading}
+                    onClick={() => onAcceptClick?.(user)}
+                    aria-label={`${buttonAcceptText || "Принять"} заявку от ${user.name}`}
+                  >
+                    {buttonAcceptText || "Принять"}
+                  </Button>
+                </div>
+                <div className={styles.rejectButton}>
+                  <Button
+                    variant="secondary"
+                    disabled={isLoading}
+                    onClick={() => onRejectClick?.(user)}
+                    aria-label={`${buttonRejectText || "Отклонить"} заявку от ${user.name}`}
+                    style={{ color: "var(--color-error)" }}
+                  >
+                    {buttonRejectText || "Отклонить"}
+                  </Button>
+                </div>
+              </div>
+            ) : onCancelClick ? (
+              // Кнопка для отзыва заявки
+              <div className={styles.detailsButton}>
+                <Button
+                  variant="secondary"
+                  disabled={isLoading}
+                  onClick={() => onCancelClick?.(user)}
+                  aria-label={`${buttonCancelText || "Отозвать заявку"} пользователю ${user.name}`}
+                >
+                  {buttonCancelText || "Отозвать заявку"}
+                </Button>
+              </div>
+            ) : onDeleteClick ? (
+              // Кнопки: Подробнее и Удалить
               <div className={styles.actionsRow}>
                 <div className={styles.detailsButton}>
                   <Button
@@ -271,6 +315,7 @@ export const Card: React.FC<CardProps> = memo(
                 </div>
               </div>
             ) : (
+              // Только кнопка "Подробнее"
               <div className={styles.detailsButton}>
                 <Button
                   variant="primary"

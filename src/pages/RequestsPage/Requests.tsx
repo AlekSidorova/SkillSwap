@@ -1,17 +1,37 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "@shared/ui/Card/Card";
 import type { UserWithLikes } from "@entities/user/types";
-import { useAppSelector } from "@app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { selectUser as selectAuthUser } from "@features/auth/model/slice";
+import { selectUsers, fetchUsersData } from "@entities/user/model/slice";
+import { fetchSkillsData, selectSkillsData } from "@entities/skill/model/slice";
+import { fetchCities, selectCities } from "@entities/city/model/slice";
 import { api } from "@shared/api/api";
 import type { Exchange } from "@entities/exchange/types";
 import styles from "./requestsPage.module.scss";
 
 export const Requests = () => {
+  const dispatch = useAppDispatch();
   const authUser = useAppSelector(selectAuthUser);
+  const users = useAppSelector(selectUsers);
+  const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
+  const { cities } = useAppSelector(selectCities);
   const [requests, setRequests] = useState<Exchange[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Загружаем данные пользователей, навыков и городов, если они еще не загружены
+  useEffect(() => {
+    if (users.length === 0) {
+      dispatch(fetchUsersData());
+    }
+    if (skills.length === 0 && !skillsLoading) {
+      dispatch(fetchSkillsData());
+    }
+    if (cities.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [dispatch, users.length, skills.length, skillsLoading, cities.length]);
 
   useEffect(() => {
     const loadRequests = async () => {
@@ -21,7 +41,7 @@ export const Requests = () => {
       setError(null);
       try {
         const data = await api.getUserExchanges(authUser.id, {
-          status: "accepted",
+          status: "pending",
           direction: "all",
         });
         setRequests(data);
@@ -41,34 +61,28 @@ export const Requests = () => {
 
     return requests
       .map((req) => {
-        const fromUser = req.fromUser;
-        if (!fromUser) return null;
+        const isIncoming = req.toUserId === authUser.id;
+        const otherUserId = isIncoming ? req.fromUserId : req.toUserId;
+
+        // Берем пользователя из Redux store по ID
+        const user = users.find((u) => u.id === otherUserId);
+        if (!user) return null;
 
         const fromSkillName = req.fromSkill?.name || "Навык";
         const toSkillName = req.toSkill?.name || "Навык";
         const offerTitle = `${fromSkillName} ↔ ${toSkillName}`;
 
         return {
-          id: fromUser.id,
-          name: fromUser.name,
-          username: "",
-          email: "",
-          avatarUrl: fromUser.avatarUrl || "",
-          likes: 0,
-          likesCount: 0,
-          isLikedByCurrentUser: false,
-          cityId: 0,
-          dateOfBirth: new Date(),
-          gender: "M",
-          dateOfRegistration: new Date(),
-          lastLoginDatetime: new Date(),
+          ...user,
           exchangeId: req.id.toString(),
           exchangeStatus: req.status,
           offerTitle,
+          isIncoming,
         } as UserWithLikes & {
           exchangeId: string;
           exchangeStatus: string;
           offerTitle: string;
+          isIncoming: boolean;
         };
       })
       .filter(
@@ -78,27 +92,63 @@ export const Requests = () => {
           exchangeId: string;
           exchangeStatus: string;
           offerTitle: string;
+          isIncoming: boolean;
         } => Boolean(u),
       );
-  }, [requests, authUser?.id]);
+  }, [requests, authUser?.id, users]);
 
-  const handleAction = async (exchangeId: string, currentStatus: string) => {
+  const handleAccept = async (exchangeId: string) => {
     if (!authUser?.id) return;
 
     try {
-      if (currentStatus === "accepted") {
-        const updatedExchange = await api.updateExchangeStatus(
-          parseInt(exchangeId, 10),
-          "completed",
-        );
+      const updatedExchange = await api.updateExchangeStatus(
+        parseInt(exchangeId, 10),
+        "accepted",
+      );
 
-        setRequests((prev) =>
-          prev.filter((req) => req.id !== updatedExchange.id),
-        );
-      }
+      // Удаляем из списка (принятые заявки переходят в активные обмены)
+      setRequests((prev) =>
+        prev.filter((req) => req.id !== updatedExchange.id),
+      );
     } catch (err: any) {
-      console.error("Ошибка при завершении обмена:", err);
-      alert(err?.message || "Не удалось завершить обмен");
+      console.error("Ошибка при принятии заявки:", err);
+      alert(err?.message || "Не удалось принять заявку");
+    }
+  };
+
+  const handleReject = async (exchangeId: string) => {
+    if (!authUser?.id) return;
+
+    try {
+      await api.deleteExchange(parseInt(exchangeId, 10));
+
+      // Удаляем из списка
+      setRequests((prev) =>
+        prev.filter((req) => req.id.toString() !== exchangeId),
+      );
+    } catch (err: any) {
+      console.error("Ошибка при отклонении заявки:", err);
+      alert(err?.message || "Не удалось отклонить заявку");
+    }
+  };
+
+  const handleCancel = async (exchangeId: string) => {
+    if (!authUser?.id) return;
+
+    if (!confirm("Вы уверены, что хотите отозвать эту заявку?")) {
+      return;
+    }
+
+    try {
+      await api.deleteExchange(parseInt(exchangeId, 10));
+
+      // Удаляем из списка
+      setRequests((prev) =>
+        prev.filter((req) => req.id.toString() !== exchangeId),
+      );
+    } catch (err: any) {
+      console.error("Ошибка при отзыве заявки:", err);
+      alert(err?.message || "Не удалось отозвать заявку");
     }
   };
 
@@ -129,7 +179,7 @@ export const Requests = () => {
       <>
         <h1 className={styles.title}>Заявки</h1>
         <div className={styles.emptyState}>
-          <p className={styles.emptyText}>У вас пока нет активных обменов</p>
+          <p className={styles.emptyText}>У вас пока нет заявок на обмен</p>
         </div>
       </>
     );
@@ -139,20 +189,35 @@ export const Requests = () => {
     <>
       <h1 className={styles.title}>Заявки</h1>
       <p className={styles.subtitle}>
-        Активных обменов: {usersWithRequests.length}
+        Заявок на обмен: {usersWithRequests.length}
       </p>
       <div className={styles.cardsGrid}>
         {usersWithRequests.map((user) => {
+          // Для входящих заявок показываем кнопки "Принять" и "Отклонить" внутри карточки
+          if (user.isIncoming) {
+            return (
+              <Card
+                key={`${user.id}-${user.exchangeId}`}
+                user={user}
+                cities={cities}
+                description={user.offerTitle}
+                onAcceptClick={() => handleAccept(user.exchangeId)}
+                onRejectClick={() => handleReject(user.exchangeId)}
+                buttonAcceptText="Принять"
+                buttonRejectText="Отклонить"
+              />
+            );
+          }
+
+          // Для исходящих заявок показываем кнопку "Отозвать заявку" внутри карточки
           return (
             <Card
               key={`${user.id}-${user.exchangeId}`}
               user={user}
-              cities={[]}
+              cities={cities}
               description={user.offerTitle}
-              buttonText="Завершить"
-              onDetailsClick={() =>
-                handleAction(user.exchangeId, user.exchangeStatus)
-              }
+              onCancelClick={() => handleCancel(user.exchangeId)}
+              buttonCancelText="Отозвать заявку"
             />
           );
         })}

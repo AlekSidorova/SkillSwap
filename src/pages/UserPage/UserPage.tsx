@@ -5,11 +5,7 @@ import { OfferPreview } from "@widgets/OfferPreview/OfferPreview";
 import { Button } from "@shared/ui/Button/Button";
 import styles from "./userPage.module.scss";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
-import {
-  fetchUsersData,
-  selectUsers,
-  selectUsersData,
-} from "@entities/user/model/slice";
+import { fetchUsersData, selectUsers } from "@entities/user/model/slice";
 import { fetchCities, selectCities } from "@entities/city/model/slice";
 import { fetchSkillsData } from "@entities/skill/model/slice";
 import { fetchCategories } from "@entities/category/model/slice";

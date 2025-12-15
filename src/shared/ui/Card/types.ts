@@ -8,6 +8,9 @@ export type CardProps = {
   cities: TCity[];
   onDetailsClick?: (user?: UserWithLikes) => void;
   onDeleteClick?: (user?: UserWithLikes) => void;
+  onAcceptClick?: (user?: UserWithLikes) => void;
+  onRejectClick?: (user?: UserWithLikes) => void;
+  onCancelClick?: (user?: UserWithLikes) => void;
   onExchangeClick?: (user: UserWithLikes) => void;
   className?: string;
   isLoading?: boolean;
@@ -15,4 +18,7 @@ export type CardProps = {
   description?: string; // Описание для variant="profile"
   buttonText?: string;
   buttonDeleteText?: string;
+  buttonAcceptText?: string;
+  buttonRejectText?: string;
+  buttonCancelText?: string;
 };

@@ -362,7 +362,9 @@
   }
 }
 
-.deleteButton {
+.deleteButton,
+.acceptButton,
+.rejectButton {
   flex: 1;
   min-inline-size: 0;
   block-size: 48px;
