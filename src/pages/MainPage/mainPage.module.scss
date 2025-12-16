@@ -1,8 +1,8 @@
 .main {
   display: grid;
-  grid-template-columns: 324px 1020px;
+  grid-template-columns: 334px 1020px;
   justify-items: center;
-  gap: 24px;
+  gap: 14px;
   margin: 0 auto;
   padding: 32px 36px 60px;
   inline-size: 100%;
@@ -35,7 +35,7 @@
   .filterWrap {
     position: sticky;
     top: 15px;
-    block-size: 100vh;
+    block-size: 84vh;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
