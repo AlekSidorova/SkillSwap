@@ -5,6 +5,7 @@ import { Layout } from "@/widgets/Layout/Layout";
 import { ErrorPage } from "@/pages/ErrorPage/ErrorPage";
 import { lazy } from "react";
 import { PageMeta } from "@/shared/ui/PageMeta/PageMeta";
+import { LayoutUserPage } from "@/widgets/LayoutUserPage/LayoutUserPage";
 
 function CreateOffer() {
   return (
@@ -78,111 +79,116 @@ export const AppRoutes = () => (
           </PageMeta>
         }
       />
-      <Route
-        path="profile"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Личный кабинет"
-              description="Управляйте вашим профилем на SkillSwap: редактируйте информацию, просматривайте статистику, управляйте уведомлениями и настройками приватности."
-              ogTitle="Личный кабинет SkillSwap — управление профилем"
-              ogDescription="Настройте свой профиль на платформе обмена навыками SkillSwap. Станьте заметным для сообщества и находите идеальных партнеров для обучения."
-            >
-              <ProfilePage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="skills"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Мои навыки"
-              description="Просматривайте и управляйте вашими навыками на SkillSwap. Добавляйте новые умения, редактируйте описания, указывайте уровень владения и доступность для обмена."
-              ogTitle="Мои навыки на SkillSwap — ваш вклад в сообщество"
-              ogDescription="Покажите свои навыки сообществу SkillSwap! Опишите свои умения подробно и найдите тех, кто хочет научиться у вас. Взаимный обмен знаниями."
-            >
-              <MySkillsPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="skills/create"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Создание нового навыка"
-              description="Добавьте новый навык для обмена на SkillSwap. Подробно опишите ваши умения, укажите уровень владения, формат обучения и условия обмена."
-              ogTitle="Создайте новый навык на SkillSwap"
-              ogDescription="Добавьте свой уникальный навык на платформу обмена знаниями. Подробное описание увеличит шансы найти заинтересованных учеников."
-            >
-              <SkillEditPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="profile/skills/edit/:skillId"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Редактирование навыка"
-              description="Измените информацию о вашем навыке на SkillSwap: обновите описание, добавьте новые примеры работ или скорректируйте условия обмена."
-              ogTitle="Редактирование навыка на SkillSwap"
-              ogDescription="Обновите информацию о вашем навыке. Сделайте описание более привлекательным для потенциальных учеников."
-            >
-              <SkillEditPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="favorites"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Избранные предложения"
-              description="Ваша коллекция сохраненных предложений обмена на SkillSwap. Быстрый доступ к интересным навыкам, менторам и возможностям для обучения."
-              ogTitle="Избранное на SkillSwap — ваши будущие обмены"
-              ogDescription="Сохраняйте интересные предложения обмена навыками. Возвращайтесь к ним позже, когда будете готовы начать обучение."
-            >
-              <FavoritesPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="exchanges"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Активные обмены"
-              description="Управляйте текущими обменами навыками на SkillSwap. Отслеживайте прогресс, общайтесь с партнерами, подтверждайте завершение и оставляйте отзывы."
-              ogTitle="Активные обмены навыками на SkillSwap"
-              ogDescription="Следите за ходом ваших обменов знаниями. Общайтесь с партнерами, отслеживайте прогресс и завершайте обучение успешно."
-            >
-              <ExchangesPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="requests"
-        element={
-          <ProtectedRoute>
-            <PageMeta
-              title="Заявки на обмен"
-              description="Входящие и исходящие запросы на обмен навыками. Просматривайте предложения, принимайте или отклоняйте заявки, ведите переговоры об условиях."
-              ogTitle="Заявки на обмен навыками на SkillSwap"
-              ogDescription="Управляйте запросами на обмен знаниями. Отвечайте на предложения и находите идеальных партнеров для обучения."
-            >
-              <RequestsPage />
-            </PageMeta>
-          </ProtectedRoute>
-        }
-      />
+      <Route path="profile" element={<LayoutUserPage />}>
+        <Route
+          index
+          element={
+            <ProtectedRoute>
+              <PageMeta
+                title="Личный кабинет"
+                description="Управляйте вашим профилем на SkillSwap: редактируйте информацию, просматривайте статистику, управляйте уведомлениями и настройками приватности."
+                ogTitle="Личный кабинет SkillSwap — управление профилем"
+                ogDescription="Настройте свой профиль на платформе обмена навыками SkillSwap. Станьте заметным для сообщества и находите идеальных партнеров для обучения."
+              >
+                <ProfilePage />
+              </PageMeta>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="skills">
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <PageMeta
+                  title="Мои навыки"
+                  description="Просматривайте и управляйте вашими навыками на SkillSwap. Добавляйте новые умения, редактируйте описания, указывайте уровень владения и доступность для обмена."
+                  ogTitle="Мои навыки на SkillSwap — ваш вклад в сообщество"
+                  ogDescription="Покажите свои навыки сообществу SkillSwap! Опишите свои умения подробно и найдите тех, кто хочет научиться у вас. Взаимный обмен знаниями."
+                >
+                  <MySkillsPage />
+                </PageMeta>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <ProtectedRoute>
+                <PageMeta
+                  title="Создание нового навыка"
+                  description="Добавьте новый навык для обмена на SkillSwap. Подробно опишите ваши умения, укажите уровень владения, формат обучения и условия обмена."
+                  ogTitle="Создайте новый навык на SkillSwap"
+                  ogDescription="Добавьте свой уникальный навык на платформу обмена знаниями. Подробное описание увеличит шансы найти заинтересованных учеников."
+                >
+                  <SkillEditPage />
+                </PageMeta>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="edit/:skillId"
+            element={
+              <ProtectedRoute>
+                <PageMeta
+                  title="Редактирование навыка"
+                  description="Измените информацию о вашем навыке на SkillSwap: обновите описание, добавьте новые примеры работ или скорректируйте условия обмена."
+                  ogTitle="Редактирование навыка на SkillSwap"
+                  ogDescription="Обновите информацию о вашем навыке. Сделайте описание более привлекательным для потенциальных учеников."
+                >
+                  <SkillEditPage />
+                </PageMeta>
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        <Route
+          path="favorites"
+          element={
+            <ProtectedRoute>
+              <PageMeta
+                title="Избранные предложения"
+                description="Ваша коллекция сохраненных предложений обмена на SkillSwap. Быстрый доступ к интересным навыкам, менторам и возможностям для обучения."
+                ogTitle="Избранное на SkillSwap — ваши будущие обмены"
+                ogDescription="Сохраняйте интересные предложения обмена навыками. Возвращайтесь к ним позже, когда будете готовы начать обучение."
+              >
+                <FavoritesPage />
+              </PageMeta>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="exchanges"
+          element={
+            <ProtectedRoute>
+              <PageMeta
+                title="Активные обмены"
+                description="Управляйте текущими обменами навыками на SkillSwap. Отслеживайте прогресс, общайтесь с партнерами, подтверждайте завершение и оставляйте отзывы."
+                ogTitle="Активные обмены навыками на SkillSwap"
+                ogDescription="Следите за ходом ваших обменов знаниями. Общайтесь с партнерами, отслеживайте прогресс и завершайте обучение успешно."
+              >
+                <ExchangesPage />
+              </PageMeta>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="requests"
+          element={
+            <ProtectedRoute>
+              <PageMeta
+                title="Заявки на обмен"
+                description="Входящие и исходящие запросы на обмен навыками. Просматривайте предложения, принимайте или отклоняйте заявки, ведите переговоры об условиях."
+                ogTitle="Заявки на обмен навыками на SkillSwap"
+                ogDescription="Управляйте запросами на обмен знаниями. Отвечайте на предложения и находите идеальных партнеров для обучения."
+              >
+                <RequestsPage />
+              </PageMeta>
+            </ProtectedRoute>
+          }
+        />
+      </Route>
       <Route
         path="create-offer"
         element={

@@ -381,11 +381,11 @@ export const SkillForm = () => {
 
   const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);
-    navigate("/skills");
+    navigate("/profile/skills");
   };
 
   const handleCancel = () => {
-    navigate("/skills");
+    navigate("/profile/skills");
   };
 
   const showSkeletons = categoriesLoading || isLoading;

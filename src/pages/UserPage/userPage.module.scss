@@ -19,7 +19,6 @@
 
 /* Нижний ряд: похожие предложения */
 .similarSection {
-  inline-size: 100%;
   @include flex(column, flex-start, stretch, 32px);
 }
 
