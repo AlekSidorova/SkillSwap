@@ -1,21 +1,32 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "@shared/ui/Card/Card";
 import type { UserWithLikes } from "@entities/user/types";
-import { useAppSelector } from "@app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { selectUser as selectAuthUser } from "@features/auth/model/slice";
-import { selectUsers } from "@entities/user/model/slice";
-import { selectCities } from "@entities/city/model/slice";
+import { fetchUsersData, selectUsers } from "@entities/user/model/slice";
+import { fetchCities, selectCities } from "@entities/city/model/slice";
 import { api } from "@shared/api/api";
 import type { Exchange } from "@entities/exchange/types";
 import styles from "./exchangesPage.module.scss";
+import {
+  fetchCategories,
+  selectCategoryData,
+} from "@/entities/category/model/slice";
+import {
+  fetchSkillsData,
+  selectSkillsData,
+} from "@/entities/skill/model/slice";
 
 export const Exchanges = () => {
   const authUser = useAppSelector(selectAuthUser);
   const users = useAppSelector(selectUsers);
+  const { categories } = useAppSelector(selectCategoryData);
   const { cities } = useAppSelector(selectCities);
+  const { skills } = useAppSelector(selectSkillsData);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const loadExchanges = async () => {
@@ -46,6 +57,13 @@ export const Exchanges = () => {
 
     loadExchanges();
   }, [authUser?.id]);
+
+  useEffect(() => {
+    if (users.length === 0) dispatch(fetchUsersData());
+    if (categories.length === 0) dispatch(fetchCategories());
+    if (cities.length === 0) dispatch(fetchCities());
+    if (skills.length === 0) dispatch(fetchSkillsData());
+  }, [dispatch, users.length, categories.length, cities.length, skills.length]);
 
   const usersWithExchanges = useMemo(() => {
     if (!authUser?.id) return [];

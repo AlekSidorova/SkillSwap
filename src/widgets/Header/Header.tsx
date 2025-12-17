@@ -34,6 +34,10 @@ import type { TSubcategory } from "@/entities/category/types";
 import { Arrow } from "@/shared/ui/Arrow/Arrow";
 import { LogOutSvg } from "./svg/LogoutSvg";
 import defaultAvatar from "@shared/assets/images/icons/default-avatar.svg";
+import {
+  fetchCategories,
+  selectCategoryData,
+} from "@/entities/category/model/slice";
 
 interface HeaderProps {
   onFiltersChange: (filters: TFilterState) => void;
@@ -54,9 +58,26 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
   const [searchParams] = useSearchParams();
   const searchRef = useRef<HTMLDivElement>(null);
   const { toggle } = useTheme();
+  const { categories } = useAppSelector(selectCategoryData);
 
   const notifications = useAppSelector(selectNotifications);
   const notificationsCount = useAppSelector(selectUnreadNotificationsCount);
+
+  const [categoriesIsLoaded, setCategoriesIsLoaded] = useState(false);
+
+  const loadingCategory = () => {
+    if (!categoriesIsLoaded) {
+      if (categories.length === 0) {
+        dispatch(fetchCategories());
+      }
+      setCategoriesIsLoaded(true);
+    }
+  };
+
+  const handleCategoryDropDownToggle = () => {
+    setShowCategory(!showCategory);
+    loadingCategory();
+  };
 
   useEffect(() => {
     if (isAuth && isNotificationsOpen) {
@@ -151,7 +172,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
                 styles.navigationLink,
               )}
               data-trigger-dropdown="category"
-              onClick={() => setShowCategory(!showCategory)}
+              onClick={handleCategoryDropDownToggle}
               aria-expanded={showCategory}
               aria-haspopup="menu"
             >
@@ -199,7 +220,7 @@ export const Header = ({ onFiltersChange, subcategories }: HeaderProps) => {
             placeholder="Искать навык"
             value={searchValue}
             onChange={handleSearchChange}
-            onFocus={() => setShowSuggestions(true)}
+            onFocus={loadingCategory}
             id="search-input"
             aria-autocomplete="list"
             aria-expanded={showSuggestions}

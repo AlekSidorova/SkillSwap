@@ -1,12 +1,12 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CardsSection } from "@shared/ui/CardsSection/CardsSection";
 import { UserCardsList } from "@shared/ui/UserCardsList/UserCardsList";
 import { ViewAllButton } from "@shared/ui/ViewAllButton/ViewAllButton";
-import { useAppSelector } from "@app/store/hooks";
-import { selectUsersData } from "@entities/user/model/slice";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import { fetchUsersData, selectUsersData } from "@entities/user/model/slice";
 import { selectCategoryData } from "@entities/category/model/slice";
 import { selectCities } from "@entities/city/model/slice";
-import { selectSkillsData } from "@entities/skill/model/slice";
+import { fetchSkillsData, selectSkillsData } from "@entities/skill/model/slice";
 import { useFilteredUsers } from "@features/filter-users/model/useFilteredUsers";
 import type { TFilterState } from "@features/filter-users/types";
 import { ActiveFilters } from "@widgets/ActiveFilters/ActiveFilters";
@@ -30,6 +30,7 @@ export const UserCardsSection = ({
   const { subcategories } = useAppSelector(selectCategoryData);
   const { cities } = useAppSelector(selectCities);
   const { skills, isLoading: skillsLoading } = useAppSelector(selectSkillsData);
+  const dispatch = useAppDispatch();
 
   const isLoading = usersLoading || skillsLoading;
 
@@ -46,6 +47,11 @@ export const UserCardsSection = ({
   });
 
   const [sortByDate, setSortByDate] = useState(false);
+
+  useEffect(() => {
+    if (users.length === 0 && !usersLoading) dispatch(fetchUsersData());
+    if (skills.length === 0 && !skillsLoading) dispatch(fetchSkillsData());
+  }, [dispatch, users.length, usersLoading, skills.length, skillsLoading]);
 
   //добавляем селектор, чтобы автор не попадал в списки
   const authUser = useAppSelector(selectAuthUser);

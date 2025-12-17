@@ -1,10 +1,18 @@
-import { useState, type ChangeEvent, type ReactElement } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type ReactElement,
+} from "react";
 import { Input } from "@shared/ui/Input/Input";
 import styles from "./filter.module.scss";
 import { FILTER_CONFIG, type TFilterState } from "@features/filter-users/types";
-import { useAppSelector } from "@app/store/hooks";
-import { selectCategoryData } from "@entities/category/model/slice";
-import { selectCities } from "@entities/city/model/slice";
+import { useAppDispatch, useAppSelector } from "@app/store/hooks";
+import {
+  fetchCategories,
+  selectCategoryData,
+} from "@entities/category/model/slice";
+import { fetchCities, selectCities } from "@entities/city/model/slice";
 import { FilterSkeleton } from "@widgets/FilterSkeleton/FilterSkeleton";
 import { ClearSVG } from "./svg/FilterSvg";
 import { Arrow } from "@/shared/ui/Arrow/Arrow";
@@ -23,6 +31,13 @@ export const Filter = ({
   const { categories, subcategories, isLoading } =
     useAppSelector(selectCategoryData);
   const { cities } = useAppSelector(selectCities);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (categories.length === 0 && subcategories.length === 0)
+      dispatch(fetchCategories());
+    if (cities.length === 0) dispatch(fetchCities());
+  }, [dispatch, categories.length, subcategories.length, cities.length]);
 
   const purpose = ["Всё", "Хочу научиться", "Хочу научить"];
   const categorys = categories;
