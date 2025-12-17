@@ -10,18 +10,18 @@ import {
 
 export const SidebarMenu = () => {
   const location = useLocation();
-  const isFavorites = location.pathname === "/favorites";
+  const isFavorites = location.pathname === "/profile/favorites";
   const isProfile = location.pathname === "/profile";
-  const isSkills = location.pathname === "/skills";
-  const isExchanges = location.pathname === "/exchanges";
-  const isRequests = location.pathname === "/requests";
+  const isSkills = location.pathname === "/profile/skills";
+  const isExchanges = location.pathname === "/profile/exchanges";
+  const isRequests = location.pathname === "/profile/requests";
 
   return (
-    <aside>
+    <aside className={styles.sidebarWrapper}>
       <div className={styles.sidebarBackground}>
         <nav className={styles.menu} role="navigation">
           <Link
-            to="/requests"
+            to="/profile/requests"
             className={isRequests ? styles.menuItemActive : styles.menuItem}
           >
             <Request />
@@ -29,7 +29,7 @@ export const SidebarMenu = () => {
           </Link>
 
           <Link
-            to="/exchanges"
+            to="/profile/exchanges"
             className={isExchanges ? styles.menuItemActive : styles.menuItem}
           >
             <MessageText />
@@ -37,7 +37,7 @@ export const SidebarMenu = () => {
           </Link>
 
           <Link
-            to="/favorites"
+            to="/profile/favorites"
             className={isFavorites ? styles.menuItemActive : styles.menuItem}
           >
             <Like />
@@ -45,7 +45,7 @@ export const SidebarMenu = () => {
           </Link>
 
           <Link
-            to="/skills"
+            to="/profile/skills"
             className={isSkills ? styles.menuItemActive : styles.menuItem}
           >
             <IdeaLK />

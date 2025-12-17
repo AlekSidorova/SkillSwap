@@ -12,7 +12,7 @@
   .exchangesContainer {
     box-sizing: border-box;
     min-block-size: 752px;
-    inline-size: 1020px;
+    inline-size: 100%;
   }
 }
 
@@ -36,7 +36,7 @@
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 15px;
   inline-size: 100%;
 }
 

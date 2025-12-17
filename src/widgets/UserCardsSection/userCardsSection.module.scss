@@ -14,11 +14,11 @@
     inline-size: 100%;
     @include flex(row, space-between, center);
   }
+}
 
-  .buttonSort {
-    inline-size: auto;
-    @include flex(row, center, center, 8px);
-  }
+.buttonSort {
+  inline-size: auto;
+  @include flex(row, center, center, 8px);
 }
 
 .sectionHeader {
@@ -80,8 +80,9 @@
 }
 
 .collapseButtonContainer {
+  inline-size: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   margin-top: -24px;
   margin-bottom: 24px;
 }

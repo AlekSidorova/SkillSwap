@@ -5,8 +5,8 @@ import { OfferPreview } from "@widgets/OfferPreview/OfferPreview";
 import { Button } from "@shared/ui/Button/Button";
 import styles from "./userPage.module.scss";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
-import { selectUsers } from "@entities/user/model/slice";
-import { selectCities } from "@entities/city/model/slice";
+import { fetchUsersData, selectUsers } from "@entities/user/model/slice";
+import { fetchCities, selectCities } from "@entities/city/model/slice";
 import {
   selectIsAuthenticated,
   selectUser as selectAuthUser,
@@ -19,6 +19,8 @@ import {
 } from "@entities/exchange/model/slice";
 import { fetchToastNotification } from "@entities/notification/model/slice";
 import { api } from "@shared/api/api";
+import { fetchCategories } from "@/entities/category/model/slice";
+import { fetchSkillsData } from "@/entities/skill/model/slice";
 
 interface UserOffer {
   id: string;
@@ -56,7 +58,64 @@ export const UserPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(clearExchange());
-  }, [dispatch]);
+    const loadAllData = async () => {
+      try {
+        if (cities.length && skills.length && categories.length) {
+          if (isAuthenticated && authUser?.id) {
+            dispatch(fetchUsersData()).unwrap();
+          } else {
+            return;
+          }
+        } else {
+          await Promise.all([
+            dispatch(fetchUsersData()).unwrap(),
+            dispatch(fetchCities()).unwrap(),
+            dispatch(fetchSkillsData()).unwrap(),
+            dispatch(fetchCategories()).unwrap(),
+          ]);
+        }
+        if (authUser && userId && isAuthenticated) {
+          try {
+            const exchanges = await api.getUserExchanges(authUser.id);
+            const existingExchange = exchanges.find(
+              (exchange) =>
+                (exchange.fromUserId === authUser.id &&
+                  exchange.toUserId === parseInt(userId, 10)) ||
+                (exchange.toUserId === authUser.id &&
+                  exchange.fromUserId === parseInt(userId, 10)),
+            );
+
+            if (
+              existingExchange &&
+              (existingExchange.status === "pending" ||
+                existingExchange.status === "accepted")
+            ) {
+              await dispatch(getExchange(existingExchange.id)).unwrap();
+              if (existingExchange.status === "accepted") {
+                await dispatch(fetchToastNotification()).unwrap();
+              }
+            } else {
+              dispatch(clearExchange());
+            }
+          } catch (error) {
+            console.error("Error loading exchanges:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    loadAllData();
+  }, [
+    dispatch,
+    authUser,
+    userId,
+    isAuthenticated,
+    cities.length,
+    skills.length,
+    categories.length,
+  ]);
 
   useEffect(() => {
     if (userId) {
